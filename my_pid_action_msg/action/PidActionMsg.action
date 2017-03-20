@@ -1,0 +1,8 @@
+# goal: aim of the call to the server (run to a specific velocity)
+float velocity
+---
+# result: for debug, maybe?
+std_msgs/Empty result
+---
+# feedback: feedback signal -> actual velocity
+float velocity
