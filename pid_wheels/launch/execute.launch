@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!--
+  TODO: Insert parameters just for practice
+-->
+
+<launch>
+  <node 
+  	pkg="pid_wheels" 
+  	type="PID_Server" 
+  	name="PID_Server" 
+  	output="screen"/>
+  <node 
+  	pkg="pid_wheels" 
+  	type="PID_Client" 
+  	name="PID_Client" 
+  	output="screen"/>
+</launch>

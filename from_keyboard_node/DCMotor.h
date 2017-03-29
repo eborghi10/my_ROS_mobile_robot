@@ -16,7 +16,6 @@ private:
 
 DCMotor::DCMotor()
   : DCMotor::DCMotor(4, 5) {
-  	DCMotor::initPins();
   }
 
 DCMotor::DCMotor(int INL, int INH) {
@@ -26,9 +25,10 @@ DCMotor::DCMotor(int INL, int INH) {
 }
 
 void DCMotor::initPins() {
-	  pinMode(this->INH, OUTPUT);
-  	pinMode(this->INL, OUTPUT);
-   DCMotor::Stop();
+
+	pinMode(this->INH, OUTPUT);
+  pinMode(this->INL, OUTPUT);
+  DCMotor::Stop();
 }
 
 void DCMotor::CW() {
