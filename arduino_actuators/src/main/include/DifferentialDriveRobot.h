@@ -16,9 +16,7 @@ ros::Publisher pub("/encoder", &msg_angle);
 
 void ddr_callback(const geometry_msgs::Twist& msg_motor);
 
-ros::Subscriber<geometry_msgs::Twist> sub(
-  "/cmd_vel_mux/input/teleop", 
-  ddr_callback);
+ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel_mux/input/teleop", ddr_callback);
 
 ros::Time prevTime(0,0);
 double dT;
@@ -46,9 +44,11 @@ public:
 	void UpdatePhysicalParameters(float, float);
 	char* GetEncoderTopicName(uint8_t);
 	double GetEncoderAngle(uint8_t);
+	void SendAngles();
 	void Stop();
 
-	ros::NodeHandle nh;
+	//ros::NodeHandle nh;
+	ros::NodeHandle_<ArduinoHardware, 2, 2, 80, 105> nh;
 };
 
 DifferentialDriveRobot::DifferentialDriveRobot()
@@ -58,12 +58,14 @@ DifferentialDriveRobot::DifferentialDriveRobot()
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right)
 	: wheel_radius(0.032), wheel_distance(0.1) {
+
 	this->motor_left = motor_left;
 	this->motor_right = motor_right;
 }
 
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist) {
+
 	this->motor_left = motor_left;
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
@@ -84,9 +86,9 @@ int DifferentialDriveRobot::Move(const double lin, const double ang) {
 
 	int var_test = map(static_cast<int>(u_r), 0, this->bound_right, 0, 255);
 
-	motor_right->PWM(var_test);
+	motor_right->CW(var_test);
 	
-	motor_left->PWM(map(static_cast<int>(u_l), 0, this->bound_left, 0, 255));
+	motor_left->CW(map(static_cast<int>(u_l), 0, this->bound_left, 0, 255));
 
 	return var_test;
 }
@@ -127,4 +129,28 @@ void DifferentialDriveRobot::Stop() {
 
 	motor_left->Stop();
 	motor_right->Stop();
+}
+
+void DifferentialDriveRobot::SendAngles() {
+
+	msg_angle.header.stamp  = this->nh.now();
+
+    dT = msg_angle.header.stamp.toSec() - prevTime.toSec();
+ 
+   msg_angle.name[LEFT]      = this->GetEncoderTopicName(LEFT);
+   msg_angle.position[LEFT]  = this->GetEncoderAngle(LEFT);
+   msg_angle.velocity[LEFT]  
+     = (msg_angle.position[LEFT] - prevPosition[LEFT]) / dT;
+
+   msg_angle.name[RIGHT]      = this->GetEncoderTopicName(RIGHT);
+   msg_angle.position[RIGHT]  = this->GetEncoderAngle(RIGHT);
+   msg_angle.velocity[RIGHT]  
+     = (msg_angle.position[RIGHT] - prevPosition[RIGHT]) / dT;
+
+   prevPosition[LEFT]  = msg_angle.position[LEFT];
+   prevPosition[RIGHT] = msg_angle.position[RIGHT];
+
+   prevTime = msg_angle.header.stamp;
+
+   pub.publish(&msg_angle);
 }
