@@ -4,9 +4,6 @@
  * ROS standard lenght unit : meter [REP 103]
  *
  */
-#if defined(__AVR_ATmega32U4__)
-  #define USE_USBCON
-#endif
 
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
@@ -28,6 +25,24 @@ public:
 	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double);
 	int move(const double, const double);
 	void updateParameters(float, float);
+
+	void ddr_callback(const geometry_msgs::Twist& msg) {
+
+	//int var = my_robot->move(msg.linear.x, msg.angular.z);
+	
+	//	char* str1 = "";
+	//	dtostrf(lin, 2, 2, str1);
+	//	nh.loginfo(str1);
+	/*
+		char* str = "";
+		snprintf(str,sizeof(int)*2,"%d",var);
+		this->nh.loginfo(str);
+	*/
+		//  delay(1);
+	}
+
+	ros::NodeHandle nh;	
+	ros::Subscriber sub;
 };
 
 DifferentialDriveRobot::DifferentialDriveRobot()
@@ -47,6 +62,10 @@ DifferentialDriveRobot::DifferentialDriveRobot
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
 	this->wheel_distance = dist;
+
+	nh.initNode();
+	sub = nh.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::ddr_callback, this);
+	nh.subscribe(sub);
 }
 
 int DifferentialDriveRobot::move(const double lin, const double ang) {

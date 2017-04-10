@@ -26,11 +26,7 @@
 
 #include "DifferentialDriveRobot.h"
 
-void ddr_callback(const geometry_msgs::Twist&);
-
 DifferentialDriveRobot *my_robot;
-
-ros::NodeHandle nh;	
 
 void setup()
 {
@@ -39,29 +35,10 @@ void setup()
     new DCMotor(IN3, IN4));
 
   my_robot->updateParameters(0.2, 1.0);
-
-  nh.initNode();
-  ros::Subscriber <geometry_msgs::Twist> sub("/cmd_vel_mux/input/teleop", ddr_callback);
-  nh.subscribe(sub);
 }
 
 void loop() 
 {  
-    nh.spinOnce();
+    (my_robot->nh).spinOnce();
     delay(1);   
-}
-
-void ddr_callback(const geometry_msgs::Twist& msg) {
-
-	int var = my_robot->move(msg.linear.x, msg.angular.z);
-	
-//	char* str1 = "";
-//	dtostrf(lin, 2, 2, str1);
-//	nh.loginfo(str1);
-/*
-	char* str = "";
-	snprintf(str,sizeof(int)*2,"%d",var);
-	this->nh.loginfo(str);
-*/
-	//  delay(1);
 }
