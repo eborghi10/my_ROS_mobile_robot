@@ -53,7 +53,8 @@ void loop()
 
 void ddr_callback(const geometry_msgs::Twist& msg) {
 
-	int var = my_robot->move(msg.linear.x, msg.angular.z);
+	my_robot->move(msg.linear.x, msg.angular.z);
+	//int var = my_robot->move(msg.linear.x, msg.angular.z);
 	
 //	char* str1 = "";
 //	dtostrf(lin, 2, 2, str1);

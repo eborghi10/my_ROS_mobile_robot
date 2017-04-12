@@ -4,10 +4,11 @@
  * ROS standard lenght unit : meter [REP 103]
  *
  */
+/*
 #if defined(__AVR_ATmega32U4__)
   #define USE_USBCON
 #endif
-
+*/
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include "DCMotor.h"

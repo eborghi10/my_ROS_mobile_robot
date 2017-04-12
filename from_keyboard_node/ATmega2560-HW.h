@@ -2,8 +2,8 @@
 
 // DC Motor signals
 
-#define IN1	4
-#define IN2 5
-#define IN3 6
-#define IN4	7
+#define IN1	10
+#define IN2 11
+#define IN3 9
+#define IN4	8
 
