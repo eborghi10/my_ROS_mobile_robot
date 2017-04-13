@@ -2,7 +2,10 @@
 
 #include <AS5048A.h>
 #include <ros.h>
-#include <sensor_msgs/JointState.h>
+#include <std_msgs/Float32.h>
+#include "ATmega2560-HW.h"
+
+// TODO: Use PROGMEM for this #define
 
 #define LEFT 	(uint8_t)0
 #define RIGHT 	(uint8_t)1
@@ -13,11 +16,15 @@
 
 #define M_PI 	3.14159265359
 
+/**
+ * TODO: "position" is not used
+ *
+ */
 
 class MagneticEncoder
 {
-	double read2angle(uint16_t);
-	double normalize(double);
+	float read2angle(uint16_t);
+	float normalize(float);
 
 	uint8_t angleMode;
 	uint8_t position;
@@ -29,19 +36,17 @@ public:
 	MagneticEncoder(uint8_t, uint8_t);
 	MagneticEncoder(uint8_t, uint8_t, uint8_t);
 
-	double GetAngle();
-
-	char* topic_name;
+	float GetAngle();
 };
 
 ///////////////////////////////////////////////////////////////
 
 MagneticEncoder::MagneticEncoder()
-	: MagneticEncoder(10, NONE, PLUS_MINUS_PI) {}
+	: MagneticEncoder::MagneticEncoder(CS1, NONE, PLUS_MINUS_PI) {}
 
 MagneticEncoder::MagneticEncoder(
 	uint8_t digitalPin, uint8_t position)
-	: MagneticEncoder(digitalPin, position, PLUS_MINUS_PI) {}
+	: MagneticEncoder::MagneticEncoder(digitalPin, position, PLUS_MINUS_PI) {}
 
 MagneticEncoder::MagneticEncoder(
 	uint8_t digitalPin, uint8_t position, uint8_t mode)
@@ -49,28 +54,24 @@ MagneticEncoder::MagneticEncoder(
 
 	Encoder->init();
 
-	if (position == LEFT)		char *topic_name = "encoder_left";
-	else if(position == RIGHT)	char *topic_name = "encoder_right";
-	else						char *topic_name = "encoder";
-
 	initial_angle = 
 		MagneticEncoder::read2angle( Encoder->getRawRotation() );
 }
 
-double MagneticEncoder::GetAngle() {
+float MagneticEncoder::GetAngle() {
 
-	double current_angle = 
+	float current_angle = 
 		MagneticEncoder::read2angle( Encoder->getRawRotation() );
 
 	return normalize(current_angle - initial_angle);
 }
 
-double MagneticEncoder::read2angle(uint16_t angle) {
+float MagneticEncoder::read2angle(uint16_t angle) {
 
-	return angle * ((double)2*M_PI / 16383);
+	return angle * ((float)2*M_PI / 16383);
 }
 
-double MagneticEncoder::normalize(double angle) 
+float MagneticEncoder::normalize(float angle) 
 {
 
 	if (angleMode == PLUS_MINUS_PI)	angle += M_PI;

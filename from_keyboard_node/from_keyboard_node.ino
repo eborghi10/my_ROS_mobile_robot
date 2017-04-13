@@ -61,11 +61,7 @@ void ddr_callback(const geometry_msgs::Twist& msg) {
 /*
 	char* str = "";
 	snprintf(str,sizeof(int)*2,"%d",var);
-<<<<<<< HEAD
 	nh.loginfo(str);
-=======
-	this->nh.loginfo(str);
->>>>>>> 32ca1b0a6e1e7a229002bdfa1d857638097df58a
 */
 	//  delay(1);
 }
