@@ -9,9 +9,6 @@
 #include <geometry_msgs/Twist.h>
 #include "DCMotor.h"
 
-void ddr_callback(const geometry_msgs::Twist& msg);
-ros::Subscriber <geometry_msgs::Twist> sub("/cmd_vel_mux/input/teleop", ddr_callback);
-
 class DifferentialDriveRobot
 {
 	DCMotor *motor_left;
@@ -26,22 +23,19 @@ public:
 	DifferentialDriveRobot();
 	DifferentialDriveRobot(DCMotor*, DCMotor*);
 	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double);
-	int move(const double, const double);
+	void move(const double, const double);
 	void updateParameters(float, float);
-
-	ros::NodeHandle nh;
 };
 
 DifferentialDriveRobot::DifferentialDriveRobot()
 	: DifferentialDriveRobot::DifferentialDriveRobot(
-		new DCMotor(4,5), new DCMotor(6,7), 0.032, 0.1) {}
+		new DCMotor(IN1,IN2), 
+		new DCMotor(IN3,IN4), 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right)
-	: wheel_radius(0.032), wheel_distance(0.1) {
-	this->motor_left = motor_left;
-	this->motor_right = motor_right;
-}
+	: DifferentialDriveRobot::DifferentialDriveRobot(
+		motor_left, motor_right, 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist) {
@@ -49,24 +43,42 @@ DifferentialDriveRobot::DifferentialDriveRobot
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
 	this->wheel_distance = dist;
-
-	nh.initNode();
-	my_robot->nh.subscribe(sub);
 }
 
-int DifferentialDriveRobot::move(const double lin, const double ang) {
+void DifferentialDriveRobot::move(const double lin, const double ang) {
+
+	/**
+	 * NOTE ON MATHEMATICAL MODEL: 
+	 * 
+	 * ang < 0: moves CW (u_l > u_r)
+	 *
+	 * To change this, you have to change the sign of the second term
+	 *
+	 */
 
 	double u_r = (lin + ang * this->wheel_distance/2.0) / this->wheel_radius;
 	double u_l = (lin - ang * this->wheel_distance/2.0) / this->wheel_radius;
 
-	int var_test = map(static_cast<int>(u_r), 0, this->bound_right, 0, 255);
+	if (u_r > 0) {
+		
 
-	motor_right->PWM(
-		var_test);
-	motor_left->PWM(
-		map(static_cast<int>(u_l), 0, this->bound_left, 0, 255));
+		motor_right->CW(
+			map(static_cast<INT_PWM>(u_r), 0, this->bound_right, 0, MAX_VALUE));
+	} else {
 
-	return var_test;
+		motor_right->CCW(
+			map(static_cast<INT_PWM>(-u_r), 0, this->bound_right, 0, MAX_VALUE));
+	}
+
+	if (u_l > 0) {
+		
+		motor_left->CCW(
+			map(static_cast<INT_PWM>(u_l), 0, this->bound_left, 0, MAX_VALUE));
+	} else {
+
+		motor_left->CW(
+			map(static_cast<INT_PWM>(-u_l), 0, this->bound_left, 0, MAX_VALUE));
+	}
 }
 
 void DifferentialDriveRobot::updateParameters(float max_speed, float max_turn) {
@@ -77,19 +89,4 @@ void DifferentialDriveRobot::updateParameters(float max_speed, float max_turn) {
 		(this->max_speed + this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
 	this->bound_left = 
 		(this->max_speed - this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
-}
-
-void ddr_callback(const geometry_msgs::Twist& msg) {
-/*
-	int var = DifferentialDriveRobot::move(msg.linear.x, msg.angular.z);
-	
-//	char* str1 = "";
-//	dtostrf(lin, 2, 2, str1);
-//	nh.loginfo(str1);
-
-	char* str = "";
-	snprintf(str,sizeof(int)*2,"%d",var);
-	this->nh.loginfo(str);
-*/
-	//  delay(1);
 }

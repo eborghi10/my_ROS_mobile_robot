@@ -1,21 +1,33 @@
 #pragma once
 
+#include "ATmega2560-HW.h"
+
+//#define _16BIT_PWM_
+
+#ifdef _16BIT_PWM_
+  #define MAX_VALUE 0xFF
+  #define INT_PWM   uint16_t
+#else
+  #define MAX_VALUE 0xFFFF
+  #define INT_PWM   uint8_t
+#endif
+
 class DCMotor {
 public:
   DCMotor();
   DCMotor(int,int);
-  void CW();
-  void CCW();
+  void CW(INT_PWM);
+  void CCW(INT_PWM);
   void Stop();
-  void PWM(uint16_t);
 private:  
   int INL; 
   int INH;
   void initPins();
+  INT_PWM protectOutput(INT_PWM);
 };
 
 DCMotor::DCMotor()
-  : DCMotor::DCMotor(4, 5) {
+  : DCMotor::DCMotor(IN1, IN2) {
   }
 
 DCMotor::DCMotor(int INL, int INH) {
@@ -31,28 +43,30 @@ void DCMotor::initPins() {
   DCMotor::Stop();
 }
 
-void DCMotor::CW() {
-  // Motor gira en un sentido
-  digitalWrite (INL, LOW); 
-  digitalWrite (INH, HIGH);
-}
-
 void DCMotor::Stop() {
   // Motor no gira
-  digitalWrite (INL, LOW); 
-  digitalWrite (INH, LOW); 
+  analogWrite (INL, LOW); 
+  analogWrite (INH, LOW); 
 }
 
-void DCMotor::CCW() {
-  // Motor gira en sentido inverso
-  digitalWrite (INL, HIGH);
-  digitalWrite (INH, LOW);
+void DCMotor::CW(INT_PWM val) {
+  
+  // Motor turns forward or CW
+  analogWrite(INL, LOW);
+  analogWrite(INH, protectOutput(val));
 }
 
-void DCMotor::PWM(uint16_t val) {
-	// For security reasons
-	val > 255? val = 255 : val;
-	
-	digitalWrite(INL, LOW);
-	analogWrite(INH, val);
+void DCMotor::CCW(INT_PWM val) {
+
+  // Motor turns in the inverse direction or CCW
+  analogWrite (INL, protectOutput(-val));
+  analogWrite (INH, LOW);
+}
+
+INT_PWM DCMotor::protectOutput(INT_PWM val) {
+
+  // For security reasons
+  val > MAX_VALUE? val = MAX_VALUE : val;
+
+  return val;
 }
