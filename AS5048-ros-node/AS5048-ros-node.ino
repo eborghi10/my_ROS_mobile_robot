@@ -14,7 +14,7 @@ ros::NodeHandle nh;
 std_msgs::Float32 msg_left;
 std_msgs::Float32 msg_right;
 ros::Publisher pub_left("/encoder/left", &msg_left);
-ros::Publisher pub_right("/encoder_right", &msg_right);
+ros::Publisher pub_right("/encoder/right", &msg_right);
 
 MagneticEncoder *encoder_left = 
 	new MagneticEncoder(

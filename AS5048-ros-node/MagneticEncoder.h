@@ -28,7 +28,7 @@ class MagneticEncoder
 
 	uint8_t angleMode;
 	uint8_t position;
-	uint16_t initial_angle;
+	float initial_angle;
 	AS5048A *Encoder;
 
 public:
@@ -66,9 +66,9 @@ float MagneticEncoder::GetAngle() {
 	return normalize(current_angle - initial_angle);
 }
 
-float MagneticEncoder::read2angle(uint16_t angle) {
+float MagneticEncoder::read2angle(uint16_t register_output) {
 
-	return angle * ((float)2*M_PI / 16383);
+	return register_output * ((float)2*M_PI / 16383);
 }
 
 float MagneticEncoder::normalize(float angle) 

@@ -2,5 +2,5 @@
 
 // DC Motor signals
 
-#define CS1	7
-#define CS2	6
+#define CS1	6
+#define CS2	7
