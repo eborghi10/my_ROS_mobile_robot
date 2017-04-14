@@ -4,6 +4,6 @@
     <!--
     	Default baud rate: 57600
     -->
-    <param name="baud" value="115200"/>
+    <param name="baud" value="57600"/>
   </node>
 </launch>

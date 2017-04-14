@@ -4,12 +4,12 @@
 #include <ros.h>
 #include <std_msgs/Float32.h>
 
+#define M_PI 3.14159265359
+
 // 0 to +2*Pi
 const boolean ZERO_TO_2PI PROGMEM = false;
 // -Pi to +Pi
 const boolean PLUS_MINUS_PI PROGMEM = true;
-
-#define M_PI 	3.14159265359
 
 class MagneticEncoder
 {
@@ -31,7 +31,7 @@ public:
 ///////////////////////////////////////////////////////////////
 
 MagneticEncoder::MagneticEncoder()
-	: MagneticEncoder::MagneticEncoder(10, PLUS_MINUS_PI) {}
+	: MagneticEncoder::MagneticEncoder(CS1, PLUS_MINUS_PI) {}
 
 MagneticEncoder::MagneticEncoder(uint8_t digitalPin)
 	: MagneticEncoder::MagneticEncoder(digitalPin, PLUS_MINUS_PI) {}

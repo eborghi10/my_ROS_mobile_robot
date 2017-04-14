@@ -11,6 +11,10 @@
 
 //////////////////////////////////////////////////////////////////
 
+void ddr_callback(const geometry_msgs::Twist&);
+
+//////////////////////////////////////////////////////////////////
+
 const boolean LEFT PROGMEM = false;
 const boolean RIGHT PROGMEM = true;
 
@@ -21,8 +25,6 @@ std_msgs::Float32 angle_right;
 
 ros::Publisher pub_left("/encoder/left", &angle_left);
 ros::Publisher pub_right("/encoder/right", &angle_right);
-
-void ddr_callback(const geometry_msgs::Twist&);
 
 ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel_mux/input/teleop", ddr_callback);
 
@@ -84,21 +86,9 @@ void DifferentialDriveRobot::Move(const double lin, const double ang) {
 	INT_PWM left_map = 
 		map(static_cast<INT_PWM>(u_l), 0, this->bound_left, 0, MAX_VALUE);
 
-	if (u_r > 0) {
-		
-		motor_right->CW(right_map);
-	} else {
 
-		motor_right->CCW(right_map);
-	}
-
-	if (u_l > 0) {
-		
-		motor_left->CCW(left_map);
-	} else {
-
-		motor_left->CW(left_map);
-	}
+	u_r? motor_right->CW(right_map) : motor_right->CCW(right_map);
+	u_l? motor_left->CCW(left_map) : motor_left->CW(left_map);
 }
 
 void DifferentialDriveRobot::UpdatePhysicalParameters(float max_speed, float max_turn) {

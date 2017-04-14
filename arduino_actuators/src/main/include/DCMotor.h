@@ -8,11 +8,11 @@
 //#define _16BIT_PWM_
 
 #ifdef _16BIT_PWM_
-  #define MAX_VALUE 0xFFFF
   #define INT_PWM   uint16_t
+  const INT_PWM MAX_VALUE PROGMEM = 0xFFFF;
 #else
-  #define MAX_VALUE 0xFF
   #define INT_PWM   uint8_t
+  const INT_PWM MAX_VALUE PROGMEM = 0xFF;
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ public:
 //////////////////////////////////////////////////////////////////
 
 DCMotor::DCMotor()
-  : DCMotor::DCMotor((MagneticEncoder *)NULL) {}
+  : DCMotor::DCMotor((MagneticEncoder*)NULL) {}
 
 DCMotor::DCMotor(int INL, int INH) 
   : DCMotor::DCMotor(INL, INH, (MagneticEncoder*)NULL) {}
