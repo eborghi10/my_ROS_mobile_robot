@@ -11,16 +11,20 @@
 
 //////////////////////////////////////////////////////////////////
 
-sensor_msgs::JointState msg_angle;
-ros::Publisher pub("/encoder", &msg_angle);
+const boolean LEFT PROGMEM = false;
+const boolean RIGHT PROGMEM = true;
 
-void ddr_callback(const geometry_msgs::Twist& msg_motor);
+ros::NodeHandle nh;
+
+std_msgs::Float32 angle_left;
+std_msgs::Float32 angle_right;
+
+ros::Publisher pub_left("/encoder/left", &angle_left);
+ros::Publisher pub_right("/encoder/right", &angle_right);
+
+void ddr_callback(const geometry_msgs::Twist&);
 
 ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel_mux/input/teleop", ddr_callback);
-
-ros::Time prevTime(0,0);
-double dT;
-double prevPosition[] = {0, 0};
 
 //////////////////////////////////////////////////////////////////
 
@@ -40,28 +44,23 @@ public:
 	DifferentialDriveRobot();
 	DifferentialDriveRobot(DCMotor*, DCMotor*);
 	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double);
-	int Move(const double, const double);
+
+	void Move(const double, const double);
 	void UpdatePhysicalParameters(float, float);
-	char* GetEncoderTopicName(uint8_t);
-	double GetEncoderAngle(uint8_t);
+	float GetEncoderAngle(boolean);
 	void SendAngles();
 	void Stop();
-
-	//ros::NodeHandle nh;
-	ros::NodeHandle_<ArduinoHardware, 2, 2, 80, 105> nh;
 };
 
 DifferentialDriveRobot::DifferentialDriveRobot()
 	: DifferentialDriveRobot::DifferentialDriveRobot(
-		new DCMotor(4,5), new DCMotor(6,7), 0.032, 0.1) {}
+		new DCMotor(IN1,IN2), 
+		new DCMotor(IN3,IN4), 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right)
-	: wheel_radius(0.032), wheel_distance(0.1) {
-
-	this->motor_left = motor_left;
-	this->motor_right = motor_right;
-}
+	: DifferentialDriveRobot::DifferentialDriveRobot(
+		motor_left, motor_right, 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist) {
@@ -70,27 +69,36 @@ DifferentialDriveRobot::DifferentialDriveRobot
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
 	this->wheel_distance = dist;
-
-	nh.initNode();
-
-	nh.subscribe(sub);
-	nh.advertise(pub);
 }
 
 //////////////////////////////////////////////////////////////////
 
-int DifferentialDriveRobot::Move(const double lin, const double ang) {
+void DifferentialDriveRobot::Move(const double lin, const double ang) {
 
 	double u_r = (lin + ang * this->wheel_distance/2.0) / this->wheel_radius;
 	double u_l = (lin - ang * this->wheel_distance/2.0) / this->wheel_radius;
 
-	int var_test = map(static_cast<int>(u_r), 0, this->bound_right, 0, 255);
-
-	motor_right->CW(var_test);
+	INT_PWM right_map = 
+		map(static_cast<INT_PWM>(u_r), 0, this->bound_right, 0, MAX_VALUE);
 	
-	motor_left->CW(map(static_cast<int>(u_l), 0, this->bound_left, 0, 255));
+	INT_PWM left_map = 
+		map(static_cast<INT_PWM>(u_l), 0, this->bound_left, 0, MAX_VALUE);
 
-	return var_test;
+	if (u_r > 0) {
+		
+		motor_right->CW(right_map);
+	} else {
+
+		motor_right->CCW(right_map);
+	}
+
+	if (u_l > 0) {
+		
+		motor_left->CCW(left_map);
+	} else {
+
+		motor_left->CW(left_map);
+	}
 }
 
 void DifferentialDriveRobot::UpdatePhysicalParameters(float max_speed, float max_turn) {
@@ -104,53 +112,28 @@ void DifferentialDriveRobot::UpdatePhysicalParameters(float max_speed, float max
 		(this->max_speed - this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
 }
 
-char* DifferentialDriveRobot::GetEncoderTopicName(uint8_t position) {
-
-	if (position == LEFT) {
-		return motor_left->GetEncoderTopicName();
-	} else if(position == RIGHT) {
-		return motor_right->GetEncoderTopicName();
-	} else {
-		char* topic_name = "encoder";
-		return topic_name;
-	}
-}
-
-double DifferentialDriveRobot::GetEncoderAngle(uint8_t position) {
-
-	if (position == LEFT) {
-		return motor_left->GetEncoderAngle();
-	} else if(position == RIGHT) {
-		return motor_right->GetEncoderAngle();
-	}
-}
-
 void DifferentialDriveRobot::Stop() {
 
 	motor_left->Stop();
 	motor_right->Stop();
 }
 
+float DifferentialDriveRobot::GetEncoderAngle(boolean motor) {
+
+	if (motor == LEFT) {
+		return motor_left->GetEncoderAngle();
+	} else if(motor == RIGHT) {
+		return motor_right->GetEncoderAngle();
+	}
+}
+
 void DifferentialDriveRobot::SendAngles() {
 
-	msg_angle.header.stamp  = this->nh.now();
+	angle_left.data = 
+		DifferentialDriveRobot::GetEncoderAngle(LEFT);
+	angle_right.data = 
+		DifferentialDriveRobot::GetEncoderAngle(RIGHT);
 
-    dT = msg_angle.header.stamp.toSec() - prevTime.toSec();
- 
-   msg_angle.name[LEFT]      = this->GetEncoderTopicName(LEFT);
-   msg_angle.position[LEFT]  = this->GetEncoderAngle(LEFT);
-   msg_angle.velocity[LEFT]  
-     = (msg_angle.position[LEFT] - prevPosition[LEFT]) / dT;
-
-   msg_angle.name[RIGHT]      = this->GetEncoderTopicName(RIGHT);
-   msg_angle.position[RIGHT]  = this->GetEncoderAngle(RIGHT);
-   msg_angle.velocity[RIGHT]  
-     = (msg_angle.position[RIGHT] - prevPosition[RIGHT]) / dT;
-
-   prevPosition[LEFT]  = msg_angle.position[LEFT];
-   prevPosition[RIGHT] = msg_angle.position[RIGHT];
-
-   prevTime = msg_angle.header.stamp;
-
-   pub.publish(&msg_angle);
+	pub_left.publish(&angle_left);
+	pub_right.publish(&angle_right);
 }

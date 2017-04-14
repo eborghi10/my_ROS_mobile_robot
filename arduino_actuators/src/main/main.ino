@@ -26,33 +26,34 @@ DifferentialDriveRobot *my_robot;
 void setup()
 {
   my_robot = new DifferentialDriveRobot(
-    new DCMotor(4,5, new MagneticEncoder(10, LEFT, ZERO_TO_2PI), LEFT),
-    new DCMotor(6,7, new MagneticEncoder(11, RIGHT, ZERO_TO_2PI), RIGHT)
+    new DCMotor(IN1, IN2, new MagneticEncoder(CS1)),
+    new DCMotor(IN3, IN4, new MagneticEncoder(CS2))
   );
 
   my_robot->UpdatePhysicalParameters(0.2, 1.0);
+
+  nh.initNode();
+
+  nh.subscribe(sub);
+  nh.advertise(pub_left);
+  nh.advertise(pub_right);
 }
 
 //////////////////////////////////////////////////////////////////
 
 void loop() 
 {
-	(my_robot->nh).loginfo("Initializing program...");
-	(my_robot->nh).spinOnce();
+	nh.logdebug("Initializing program...");
+	nh.spinOnce();
 
-  	my_robot->SendAngles();
+  my_robot->SendAngles();
 
-  	if( !(my_robot->nh).connected() )  my_robot->Stop();
+  if( !nh.connected() )  my_robot->Stop();
 }
 
 //////////////////////////////////////////////////////////////////
 
-// TODO: IT'S NECESSARY TO DECLARE THE CALLBACK IN THE MAIN LOOP?
-//		 TRY TO PUT INTO DifferentialDriveRobot.h
-
 void ddr_callback(const geometry_msgs::Twist& msg_motor) {
 
-	// TODO: WHAT IS THE PURPOSE OF var??? For testing...
-
-  int var = my_robot->Move(msg_motor.linear.x, msg_motor.angular.z);
+  my_robot->Move(msg_motor.linear.x, msg_motor.angular.z);
 }

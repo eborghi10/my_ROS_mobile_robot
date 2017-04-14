@@ -5,10 +5,10 @@
 //#define _16BIT_PWM_
 
 #ifdef _16BIT_PWM_
-  #define MAX_VALUE 0xFF
+  #define MAX_VALUE 0xFFFF
   #define INT_PWM   uint16_t
 #else
-  #define MAX_VALUE 0xFFFF
+  #define MAX_VALUE 0xFF
   #define INT_PWM   uint8_t
 #endif
 
@@ -38,8 +38,8 @@ DCMotor::DCMotor(int INL, int INH) {
 
 void DCMotor::initPins() {
 
-	pinMode(this->INH, OUTPUT);
   pinMode(this->INL, OUTPUT);
+  pinMode(this->INH, OUTPUT);
   DCMotor::Stop();
 }
 
@@ -59,7 +59,7 @@ void DCMotor::CW(INT_PWM val) {
 void DCMotor::CCW(INT_PWM val) {
 
   // Motor turns in the inverse direction or CCW
-  analogWrite (INL, protectOutput(-val));
+  analogWrite (INL, protectOutput(val));
   analogWrite (INH, LOW);
 }
 
