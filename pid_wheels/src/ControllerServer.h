@@ -10,9 +10,9 @@
 // actionlib::SimpleActionServer API
 #include <actionlib/server/simple_action_server.h>
 
-#include "std_msgs/Float32.h"			// To move the motors (PWM)
-#include "geometry_msgs/Vector3.h"		// Position error
-#include "sensor_msgs/JointState.h"		// Sensor readings
+#include "geometry_msgs/Twist.h"	// To move the motors (PWM)
+#include "geometry_msgs/Vector3.h"	// Position error
+#include "std_msgs/Float32.h"		// Sensor readings
 
 #define M_PI 3.14159265358979323846
 
@@ -20,7 +20,7 @@
 class ControllerServer{
 public:
 	
-	ControllerServer(std::string);
+	ControllerServer(std::string, std::string);
 
 	// Callbacks
 	void preemptCB();
@@ -29,7 +29,7 @@ public:
 	void Initialize(float, float);
 	void setOutputLimits(float, float);
 	float PIDController(float, float);
-	void SensorCallBack(const sensor_msgs::JointState&);
+	void SensorCallBack(const std_msgs::Float32&);
 
 protected:
 	ros::NodeHandle n;

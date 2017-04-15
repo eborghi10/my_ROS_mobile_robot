@@ -2,7 +2,7 @@
 
 #include <string>
 
-ControllerServer::ControllerServer(std::string name):
+ControllerServer::ControllerServer(std::string name, std::string encoder_topic):
 	/** Constructor for the SimpleActionServer:
 	 * 	- ros::nodeHandle n
 	 *  - std::string name
@@ -20,10 +20,10 @@ ControllerServer::ControllerServer(std::string name):
 		as.start();	  
 		
 		//Subscriber current positon of servo
-		positionservosub = n2.subscribe("/encoder", 1, &ControllerServer::SensorCallBack, this);
+		positionservosub = n2.subscribe(encoder_topic, 1, &ControllerServer::SensorCallBack, this);
 		
 		//Publisher setpoint, current position and error of control
-		error_controlpub = n2.advertise<geometry_msgs::Vector3>("/control/error", 1);		
+		error_controlpub = n2.advertise<geometry_msgs::Vector3>(encoder_topic + "/error", 1);		
 		
 		//Publisher PID output in servo
 		positionservopub = n2.advertise<std_msgs::Float32>("/dc_motor", 1);
@@ -37,13 +37,13 @@ ControllerServer::ControllerServer(std::string name):
   	}
 
 
-void ControllerServer::SensorCallBack(const sensor_msgs::JointState& msg)
+void ControllerServer::SensorCallBack(const std_msgs::Float32& msg)
 {
 	/**
 	 * This is a PID for controlling the position, not velocity
 	 *
 	 */
-	position_encoder = msg.position[0];
+	position_encoder = msg.data;
 }
 
 float ControllerServer::PIDController(float setpoint, float PV)
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 	}
 	
 	//Spawn the server
-	ControllerServer server(ros::this_node::getName());
+	ControllerServer server(ros::this_node::getName(), "/encoder/left");
   
 	ros::spin();
 
