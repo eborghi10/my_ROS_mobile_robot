@@ -16,11 +16,6 @@
 
 #define M_PI 	3.14159265359
 
-/**
- * TODO: "position" is not used
- *
- */
-
 class MagneticEncoder
 {
 	float read2angle(uint16_t);
@@ -35,8 +30,14 @@ public:
 	MagneticEncoder();
 	MagneticEncoder(uint8_t, uint8_t);
 	MagneticEncoder(uint8_t, uint8_t, uint8_t);
+	MagneticEncoder(uint8_t, uint8_t, uint8_t, char*);
 
 	float GetAngle();
+	void PublishAngle();
+
+	ros::NodeHandle nh;
+	std_msgs::Float32 msg;
+	ros::Publisher pub;
 };
 
 ///////////////////////////////////////////////////////////////
@@ -50,13 +51,23 @@ MagneticEncoder::MagneticEncoder(
 
 MagneticEncoder::MagneticEncoder(
 	uint8_t digitalPin, uint8_t position, uint8_t mode)
-	: Encoder(new AS5048A(digitalPin)), angleMode(mode) {
+	: MagneticEncoder::MagneticEncoder(digitalPin, position, mode, "/encoder") {}
+
+MagneticEncoder::MagneticEncoder(
+	uint8_t digitalPin, uint8_t position, uint8_t mode, char* topic)
+	: Encoder(new AS5048A(digitalPin)), angleMode(mode),
+	  pub(topic, &msg) {
 
 	Encoder->init();
 
 	initial_angle = 
 		MagneticEncoder::read2angle( Encoder->getRawRotation() );
+
+	nh.initNode();
+  	nh.advertise(pub);
 }
+
+///////////////////////////////////////////////////////////////
 
 float MagneticEncoder::GetAngle() {
 
@@ -83,4 +94,10 @@ float MagneticEncoder::normalize(float angle)
 	if (angleMode == PLUS_MINUS_PI)	angle -= M_PI;
 
 	return angle;
+}
+
+void MagneticEncoder::PublishAngle(void) {
+
+	msg.data  = MagneticEncoder::GetAngle();
+	pub.publish(&msg);
 }

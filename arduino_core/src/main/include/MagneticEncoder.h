@@ -36,17 +36,14 @@ MagneticEncoder::MagneticEncoder()
 MagneticEncoder::MagneticEncoder(uint8_t digitalPin)
 	: MagneticEncoder::MagneticEncoder(digitalPin, PLUS_MINUS_PI) {}
 
-MagneticEncoder::MagneticEncoder(uint8_t digitalPin, boolean mode) 
-	: Encoder(new AS5048A(digitalPin)), 
-	  angleMode(mode) {
+MagneticEncoder::MagneticEncoder(uint8_t digitalPin, boolean mode)
+	: Encoder(new AS5048A(digitalPin)), angleMode(mode) {
 
 	Encoder->init();
 
 	initial_angle = 
 		MagneticEncoder::read2angle( Encoder->getRawRotation() );
 }
-
-///////////////////////////////////////////////////////////////
 
 float MagneticEncoder::GetAngle() {
 

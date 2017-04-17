@@ -18,6 +18,16 @@ void ddr_callback(const geometry_msgs::Twist&);
 const boolean LEFT PROGMEM = false;
 const boolean RIGHT PROGMEM = true;
 
+ros::NodeHandle nh;
+
+std_msgs::Float32 angle_left;
+std_msgs::Float32 angle_right;
+
+ros::Publisher pub_left("/encoder/left", &angle_left);
+ros::Publisher pub_right("/encoder/right", &angle_right);
+
+ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel_mux/input/teleop", ddr_callback);
+
 //////////////////////////////////////////////////////////////////
 
 class DifferentialDriveRobot
@@ -36,28 +46,18 @@ public:
 	DifferentialDriveRobot();
 	DifferentialDriveRobot(DCMotor*, DCMotor*);
 	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double);
-	DifferentialDriveRobot(DCMotor*, DCMotor*, char*, char*);
-	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double, char*, char*);
-
-	void ddr_callback(const geometry_msgs::Twist&);
 
 	void Move(const double, const double);
 	void UpdatePhysicalParameters(float, float);
 	float GetEncoderAngle(boolean);
 	void SendAngles();
 	void Stop();
-
-	ros::NodeHandle nh;
-	std_msgs::Float32 angle;
-	ros::Publisher pub_left;
-	ros::Publisher pub_right;
-	ros::Subscriber<geometry_msgs::Twist, DifferentialDriveRobot> sub;
 };
 
 DifferentialDriveRobot::DifferentialDriveRobot()
 	: DifferentialDriveRobot::DifferentialDriveRobot(
 		new DCMotor(IN1,IN2), 
-		new DCMotor(IN3,IN4)) {}
+		new DCMotor(IN3,IN4), 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right)
@@ -65,29 +65,14 @@ DifferentialDriveRobot::DifferentialDriveRobot
 		motor_left, motor_right, 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist)
-	: DifferentialDriveRobot::DifferentialDriveRobot(
-		motor_left, motor_right, rad, dist, "/encoder/left", "/encoder/right") {}
-
-DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, char *topic_left, char *topic_right)
-	: DifferentialDriveRobot::DifferentialDriveRobot(
-		motor_left, motor_right, 0.032, 0.1, "/encoder/left", "/encoder/right") {}
-
-DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist, char* topic_left, char* topic_right)
-	: sub("/cmd_vel_mux/input/teleop", &DifferentialDriveRobot::ddr_callback, this),
-	  pub_left(topic_left, &angle),
-	  pub_right(topic_right, &angle) {
+	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist) {
 
 	this->motor_left = motor_left;
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
 	this->wheel_distance = dist;
 
-	nh.subscribe(sub);
-	nh.advertise(pub_left);
-	nh.advertise(pub_right);
+	ControllerClient client();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -136,16 +121,11 @@ float DifferentialDriveRobot::GetEncoderAngle(boolean motor) {
 
 void DifferentialDriveRobot::SendAngles() {
 
-	angle.data = DifferentialDriveRobot::GetEncoderAngle(LEFT);
-	pub_left.publish(&angle);
+	angle_left.data = 
+		DifferentialDriveRobot::GetEncoderAngle(LEFT);
+	angle_right.data = 
+		DifferentialDriveRobot::GetEncoderAngle(RIGHT);
 
-	angle.data = DifferentialDriveRobot::GetEncoderAngle(RIGHT);
-	pub_right.publish(&angle);
-}
-
-//////////////////////////////////////////////////////////////////
-
-void DifferentialDriveRobot::ddr_callback(const geometry_msgs::Twist& msg_motor) {
-
-  DifferentialDriveRobot::Move(msg_motor.linear.x, msg_motor.angular.z);
+	pub_left.publish(&angle_left);
+	pub_right.publish(&angle_right);
 }

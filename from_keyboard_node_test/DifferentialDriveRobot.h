@@ -27,9 +27,13 @@ public:
 	DifferentialDriveRobot();
 	DifferentialDriveRobot(DCMotor*, DCMotor*);
 	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double);
-
 	void move(const double, const double);
 	void updateParameters(float, float);
+
+	void ddr_callback(const geometry_msgs::Twist&);
+
+	ros::NodeHandle nh;
+	ros::Subscriber <geometry_msgs::Twist, DifferentialDriveRobot> sub;
 };
 
 DifferentialDriveRobot::DifferentialDriveRobot()
@@ -43,14 +47,16 @@ DifferentialDriveRobot::DifferentialDriveRobot
 		motor_left, motor_right, 0.032, 0.1) {}
 
 DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist) {
+	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist)
+	: sub("/cmd_vel_mux/input/teleop", &DifferentialDriveRobot::ddr_callback, this) {
 	this->motor_left = motor_left;
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
 	this->wheel_distance = dist;
-}
 
-//////////////////////////////////////////////////////////////////
+	nh.initNode();
+  	nh.subscribe(sub);
+}
 
 void DifferentialDriveRobot::move(const double lin, const double ang) {
 
@@ -96,4 +102,19 @@ void DifferentialDriveRobot::updateParameters(float max_speed, float max_turn) {
 		(this->max_speed + this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
 	this->bound_left = 
 		(this->max_speed - this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
+}
+
+void DifferentialDriveRobot::ddr_callback(const geometry_msgs::Twist& msg) {
+
+	DifferentialDriveRobot::move(msg.linear.x, msg.angular.z);
+	
+//	char* str1 = "";
+//	dtostrf(lin, 2, 2, str1);
+//	nh.loginfo(str1);
+/*
+	char* str = "";
+	snprintf(str,sizeof(int)*2,"%d",var);
+	nh.loginfo(str);
+*/
+	//  delay(1);
 }

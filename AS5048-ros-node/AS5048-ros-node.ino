@@ -10,40 +10,31 @@
  *
  */
 
-ros::NodeHandle nh;
-std_msgs::Float32 msg_left;
-std_msgs::Float32 msg_right;
-ros::Publisher pub_left("/encoder/left", &msg_left);
-ros::Publisher pub_right("/encoder/right", &msg_right);
-
-MagneticEncoder *encoder_left = 
-	new MagneticEncoder(
-		CS1, 
-		LEFT,
-		ZERO_TO_2PI
-	);
-
-MagneticEncoder *encoder_right = 
-	new MagneticEncoder(
-		CS2, 
-		RIGHT,
-		ZERO_TO_2PI
-	);
+MagneticEncoder *encoder_left;
+MagneticEncoder *encoder_right;
 
 void setup()
 {	
-	nh.initNode();
-  	nh.advertise(pub_left);
-  	nh.advertise(pub_right);
+	encoder_left = new MagneticEncoder(
+		CS1, 
+		LEFT,
+		ZERO_TO_2PI,
+		"/encoder/left"
+	);
+
+	encoder_right = new MagneticEncoder(
+		CS2, 
+		RIGHT,
+		ZERO_TO_2PI,
+		"/encoder/right"
+	);
 }
 
 void loop()
 {
-	nh.spinOnce();
+	(encoder_left->nh).spinOnce();
+	(encoder_right->nh).spinOnce();
 
-	msg_left.data = encoder_left->GetAngle();
-	pub_left.publish(&msg_left);
-
-	msg_right.data  = encoder_right->GetAngle();
-	pub_right.publish(&msg_right);
+	encoder_left->PublishAngle();
+	encoder_right->PublishAngle();
 }

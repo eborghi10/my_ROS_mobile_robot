@@ -1,0 +1,10 @@
+# Define the goal
+float32 angle
+string motor
+---
+# Define the result
+int32 ok
+---
+# Define a feedback message
+float32 angle
+string motor
