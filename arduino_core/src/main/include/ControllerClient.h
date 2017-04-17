@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ros.h>
-//#include <pid_wheels/PIDAction.h>
+#include "action_controller/PIDAction.h"
 //#include <actionlib/client/simple_action_client.h>
 #include "std_msgs/Float32.h"
 
@@ -12,34 +12,36 @@ class ControllerClient{
   	ControllerClient();
     ControllerClient(char* name);
 
-    void doneCb(const actionlib::SimpleClientGoalState&, const pid_wheels::PIDResultConstPtr&);
+    void doneCb(const actionlib::SimpleClientGoalState&, const action_controller::PIDResultConstPtr&);
     void activeCb();
-    void feedbackCb(const pid_wheels::PIDFeedbackConstPtr&);
+    void feedbackCb(const action_controller::PIDFeedbackConstPtr&);
     void GoalCallback(const std_msgs::Float32&);
 
 private:
-	actionlib::SimpleActionClient<pid_wheels::PIDAction> ac;
+	actionlib::SimpleActionClient<action_controller::PIDAction> ac;
 	char* action_name;	
-	pid_wheels::PIDGoal goal;	
-	ros::Subscriber goalsub;
-	ros::NodeHandle n;
+	action_controller::PIDGoal goal;	
+	ros::Subscriber <std_msgs::Float32, ControllerClient> goalsub;
+	ros::NodeHandle nh;
 };
 
 ControllerClient::ControllerClient():
 	//Set up the client. It's publishing to topic "pid_control", and is set to auto-spin
     ac("pid_control", true),
     //Stores the name
-    action_name("controller_action_client")
+    action_name("controller_action_client"),
+    // subscribe
+    sub("/dc_motor", &ControllerClient::GoalCallback, this)
     {
       //Get connection to a server
-      ROS_INFO("%s Waiting For Server...", action_name.c_str());
+      nh.loginfo("%s Waiting For Server...", action_name.c_str());
 
       //Wait for the connection to be valid
       ac.waitForServer();
 
-      ROS_INFO("%s Got a Server...", action_name.c_str());
+      nh.loginfo("%s Got a Server...", action_name.c_str());
 
-      goalsub = n.subscribe("/dc_motor", 100, &ControllerClient::GoalCallback, this);
+      nh.subscribe(sub);
   	}
 
 ControllerClient::ControllerClient(char* name):
@@ -49,23 +51,23 @@ ControllerClient::ControllerClient(char* name):
 	    
 
 // Called once when the goal completes
-void ControllerClient::doneCb(const actionlib::SimpleClientGoalState& state, const pid_wheels::PIDResultConstPtr& result)
+void ControllerClient::doneCb(const actionlib::SimpleClientGoalState& state, const action_controller::PIDResultConstPtr& result)
 {
-	ROS_INFO("Finished in state [%s]", state.toString().c_str());
+	nh.loginfo("Finished in state [%s]", state.toString().c_str());
 
-	ROS_INFO("Result: %i", result->ok);
+	nh.loginfo("Result: %i", result->ok);
 }
 
 // Called once when the goal becomes active
 void ControllerClient::activeCb()
 {
-	ROS_INFO("Goal just went active...");
+	nh.loginfo("Goal just went active...");
 }
 
 // Called every time feedback is received for the goal
-void ControllerClient::feedbackCb(const pid_wheels::PIDFeedbackConstPtr& feedback)
+void ControllerClient::feedbackCb(const action_controller::PIDFeedbackConstPtr& feedback)
 {
-	ROS_INFO("Got Feedback of Progress to Goal: position: %f", feedback->angle);
+	nh.loginfo("Got Feedback of Progress to Goal: position: %f", feedback->angle);
 }
 
 void ControllerClient::GoalCallback(const std_msgs::Float32& msg)
