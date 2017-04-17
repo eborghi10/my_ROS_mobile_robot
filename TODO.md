@@ -7,3 +7,12 @@ PID: crear ejemplo básico, en Raspberry o PC un action client-server. Debe reci
 #if defined(__AVR_ATmega32U4__)
   #define USE_USBCON
 #endif
+
+Cambiar PID.action a valores std_msgs::UInt16
+Cambiar result a Bool
+
+Modificar el ControllerServer
+
+ControllerServer.cpp (line 131): PIDController() returns float and then round().
+
+La acción recibe el ángulo objetivo, pero para poder controlar el motor, tiene que poder leer los angulos!!

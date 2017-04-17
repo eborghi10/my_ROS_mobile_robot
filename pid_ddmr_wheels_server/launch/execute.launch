@@ -1,9 +1,0 @@
-<launch>
-	
-	<node 
-		pkg    = "pid_ddmr_wheels_server"
-		type   = "pid_ddmr_wheels_server_node"
-		name   = "pid_ddmr_wheels_server_node"
-		output = "screen"/>
-
-</launch>

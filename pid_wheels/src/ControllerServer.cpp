@@ -2,7 +2,7 @@
 
 #include <string>
 
-ControllerServer::ControllerServer(std::string name, std::string encoder_topic):
+ControllerServer::ControllerServer(std::string name):
 	/** Constructor for the SimpleActionServer:
 	 * 	- ros::nodeHandle n
 	 *  - std::string name
@@ -10,7 +10,7 @@ ControllerServer::ControllerServer(std::string name, std::string encoder_topic):
 	 *  - bool auto_start
 	 * 
 	 */
-	as(n, "pid_control", boost::bind(&ControllerServer::executeCB, this, _1), false),
+	as(nh, "pid_control", boost::bind(&ControllerServer::executeCB, this, _1), false),
 	action_name(name)
 	{
 		// Register callback for preemption
@@ -19,14 +19,14 @@ ControllerServer::ControllerServer(std::string name, std::string encoder_topic):
 		//Start the server because auto_start=false
 		as.start();	  
 		
-		//Subscriber current positon of servo
-		positionservosub = n2.subscribe(encoder_topic, 1, &ControllerServer::SensorCallBack, this);
+		//Subscriber current position of DC motor
+		positionservosub = nh2.subscribe("/encoder", 1, &ControllerServer::PositionCb, this);
 		
 		//Publisher setpoint, current position and error of control
-		error_controlpub = n2.advertise<geometry_msgs::Vector3>(encoder_topic + "/error", 1);		
+		error_controlpub = nh2.advertise<std_msgs::UInt16>("/encoder/error", 1);		
 		
 		//Publisher PID output in servo
-		positionservopub = n2.advertise<std_msgs::Float32>("/dc_motor", 1);
+		positionservopub = nh2.advertise<std_msgs::UInt16>("/dc_motor", 1);
 		
 		//Max and Min Output PID Controller (-Pi to +Pi)
 		float max = M_PI;
@@ -37,7 +37,7 @@ ControllerServer::ControllerServer(std::string name, std::string encoder_topic):
   	}
 
 
-void ControllerServer::SensorCallBack(const std_msgs::Float32& msg)
+void ControllerServer::PositionCb(const std_msgs::Float32& msg)
 {
 	/**
 	 * This is a PID for controlling the position, not velocity
@@ -119,13 +119,13 @@ void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
 		/*
 		 * NOTE in .action file:
 		 *
-		 * - goal: 		float32 angle, string motor
-		 * - feedback: 	float32 angle, string motor
-		 * - result: 	int32 ok
+		 * - goal: 		uint16 angle, string motor
+		 * - feedback: 	uint16 angle, string motor
+		 * - result: 	bool ok
 		 *
 		 */
 
-		std_msgs::Float32 msg_pos;
+		std_msgs::UInt16 msg_pos;
 		
 		//PID Controller
 		msg_pos.data = PIDController(goal->angle, position_encoder);
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 	}
 	
 	//Spawn the server
-	ControllerServer server(ros::this_node::getName(), "/encoder/left");
+	ControllerServer server(ros::this_node::getName());
   
 	ros::spin();
 

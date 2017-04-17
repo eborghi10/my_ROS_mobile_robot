@@ -16,7 +16,7 @@ const boolean RIGHT PROGMEM = true;
 
 //////////////////////////////////////////////////////////////////
 
-class DifferentialDriveRobot
+class DifferentialDriveRobot : public ActionBridge
 {
 	DCMotor *motor_left;
 	DCMotor *motor_right;
@@ -38,6 +38,9 @@ public:
 	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double, char*, char*);
 
 	void ddr_callback(const geometry_msgs::Twist&);
+
+	void FeedbackLeftCb(const std_msgs::UInt16 &);
+	void FeedbackRightCb(const std_msgs::UInt16 &);
 
 	void Move(const double, const double);
 	void UpdatePhysicalParameters(float, float);
@@ -75,18 +78,19 @@ DifferentialDriveRobot::DifferentialDriveRobot
 	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist, char* topic_left, char* topic_right)
 	: sub("/cmd_vel_mux/input/teleop", &DifferentialDriveRobot::ddr_callback, this),
 	  pub_left(topic_left, &angle),
-	  pub_right(topic_right, &angle)  {
+	  pub_right(topic_right, &angle),
+	  ActionBridge(nh) {
 
 	this->motor_left = motor_left;
 	this->motor_right = motor_right;
 	this->wheel_radius = rad;
 	this->wheel_distance = dist;
 
+	nh.initNode();
+
 	nh.subscribe(sub);
 	nh.advertise(pub_left);
 	nh.advertise(pub_right);
-
-	ControllerClient client();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -102,9 +106,11 @@ void DifferentialDriveRobot::Move(const double lin, const double ang) {
 	INT_PWM left_map = 
 		map(static_cast<INT_PWM>(u_l), 0, this->bound_left, 0, MAX_VALUE);
 
-
-	u_r? motor_right->CW(right_map) : motor_right->CCW(right_map);
-	u_l? motor_left->CCW(left_map) : motor_left->CW(left_map);
+	ActionBridge::SendGoal(right_map);
+	ActionBridge::SendGoal(left_map);
+	
+	//u_r? motor_right->CW(right_map) : motor_right->CCW(right_map);
+	//u_l? motor_left->CCW(left_map) : motor_left->CW(left_map);
 }
 
 void DifferentialDriveRobot::UpdatePhysicalParameters(float max_speed, float max_turn) {
@@ -147,4 +153,14 @@ void DifferentialDriveRobot::SendAngles() {
 void DifferentialDriveRobot::ddr_callback(const geometry_msgs::Twist& msg_motor) {
 
   DifferentialDriveRobot::Move(msg_motor.linear.x, msg_motor.angular.z);
+}
+
+void DifferentialDriveRobot::FeedbackLeftCb(const std_msgs::UInt16 &msg) {
+
+	msg.data? motor_left->CW(msg.data) : motor_left->CCW(msg.data);
+}
+
+void DifferentialDriveRobot::FeedbackRightCb(const std_msgs::UInt16 &msg) {
+
+	msg.data? motor_right->CW(msg.data) : motor_right->CCW(msg.data);
 }

@@ -1,10 +1,10 @@
 # Define the goal
-float32 angle
+uint16 angle
 string motor
 ---
 # Define the result
-int32 ok
+bool ok
 ---
 # Define a feedback message
-float32 angle
+uint16 angle
 string motor

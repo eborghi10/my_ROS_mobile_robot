@@ -6,10 +6,8 @@
 
 3) **from_keyboard_node_test**: lightweight implementation of the code _from_keyboard_node_. It uses local variables inside the class instead of global variables.
 
-3) **pid_wheels**: example of an action client & server.
+4) **pid_wheels**: example of an action client & server. Will be hosted in the Raspberry.
 
-4) **arduino_actuators**: integration of the first two packages (_AS5048-ros-node_ and _from_keyboard_node_) into a single package.
+5) **arduino_actuators**: integration of the first two packages (_AS5048-ros-node_ and _from_keyboard_node_) into a single package.
 
-5) **pid_ddmr_wheels_server**: action server for the PID control of the DC motor of the differential drive mobile robot.
-
-6) **arduino_core**: merging the _arduino_actuators_ code and the action client of the _pid_wheels_ package.
+6) **arduino_core**: using _arduino_actuators_ as base package, implements a "_bridge_" between _rosserial_ and the actions package _pid_wheels_.

@@ -20,7 +20,7 @@
 class ControllerServer{
 public:
 	
-	ControllerServer(std::string, std::string);
+	ControllerServer(std::string);
 
 	// Callbacks
 	void preemptCB();
@@ -29,11 +29,11 @@ public:
 	void Initialize(float, float);
 	void setOutputLimits(float, float);
 	float PIDController(float, float);
-	void SensorCallBack(const std_msgs::Float32&);
+	void PositionCb(const std_msgs::Float32&);
 
 protected:
-	ros::NodeHandle n;
-	ros::NodeHandle n2;
+	ros::NodeHandle nh;
+	ros::NodeHandle nh2;
 	
 	//Subscriber
 	ros::Subscriber positionservosub;
