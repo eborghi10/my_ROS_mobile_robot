@@ -16,31 +16,39 @@
 
 #define M_PI 3.14159265358979323846
 
+// Max and Min Output PID Controller (-Pi to +Pi)
+const uint16_t MAX_CONTROL_INPUT = 0xFFFF;
+const uint16_t MIN_CONTROL_INPUT = 0;
+
+
 //Class for containing the server
 class ControllerServer{
 public:
-	
+	// Constructor
+	ControllerServer();
 	ControllerServer(std::string);
 
 	// Callbacks
 	void preemptCB();
 	void executeCB(const pid_wheels::PIDGoalConstPtr&);
 
-	void Initialize(float, float);
+	void Initialize();
 	void setOutputLimits(float, float);
 	float PIDController(float, float);
-	void PositionCb(const std_msgs::Float32&);
+	// Subscribers callbacks
+	void PositionLeftCb(const std_msgs::Float32&);
+	void PositionRightCb(const std_msgs::Float32&);
 
 protected:
 	ros::NodeHandle nh;
 	ros::NodeHandle nh2;
 	
 	//Subscriber
-	ros::Subscriber positionservosub;
+	ros::Subscriber controlInput;
 	
 	//Publishers
 	ros::Publisher positionservopub;
-	ros::Publisher error_controlpub;
+	ros::Publisher pubErrorControl;
 	
 	//Actionlib variables
 	actionlib::SimpleActionServer<pid_wheels::PIDAction> as;
@@ -48,11 +56,17 @@ protected:
 	pid_wheels::PIDResult result;
 	std::string action_name;
 	
-	//Control variables
-	float position_encoder;
+	/*
+	 * Control variables
+	 *
+	 */
+	// Encoder readings (control input)
+	float encoderAngle;
+	std::string encoderCb;
+	// PID parameters
+	float lastEncoderAngle;
 	float errSum;
 	float lastError;
-	float minLimit, maxLimit;
 	ros::Time prevTime;
 	float kp;
 	float ki;

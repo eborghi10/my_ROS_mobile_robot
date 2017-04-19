@@ -1,6 +1,21 @@
+/**
+ * Base code: https://github.com/air-lasca/tutorial_controller
+ *
+ */
+
 #include "ControllerServer.h"
 
 #include <string>
+
+/**
+ * This is a PID for controlling the position, not velocity
+ *
+ */
+
+//////////////////////////////////////////////////////////////////
+
+ControllerServer::ControllerServer() :
+	ControllerServer::ControllerServer("pid_wheel_control_as") {}
 
 ControllerServer::ControllerServer(std::string name):
 	/** Constructor for the SimpleActionServer:
@@ -10,83 +25,79 @@ ControllerServer::ControllerServer(std::string name):
 	 *  - bool auto_start
 	 * 
 	 */
-	as(nh, "pid_control", boost::bind(&ControllerServer::executeCB, this, _1), false),
+	as(nh, "pid_wheel_control_node", boost::bind(&ControllerServer::executeCB, this, _1), false),
 	action_name(name)
 	{
 		// Register callback for preemption
 		as.registerPreemptCallback(boost::bind(&ControllerServer::preemptCB, this));
 
-		//Start the server because auto_start=false
+		// Start the server because auto_start=false
 		as.start();	  
 		
-		//Subscriber current position of DC motor
-		positionservosub = nh2.subscribe("/encoder", 1, &ControllerServer::PositionCb, this);
+		// Subscriber current position of DC motor
+		controlInput = nh2.subscribe("/encoder", 1, &ControllerServer::EncoderAngleCb, this);
+
+		// Tracking control error
+		pubCurrentError = nh2.advertise<robot_msgs::Arduino>("/PID/control_error",1);
 		
-		//Publisher setpoint, current position and error of control
-		error_controlpub = nh2.advertise<std_msgs::UInt16>("/encoder/error", 1);		
+		// Publisher PID output in servo
+		pubCurrentVelocity = nh2.advertise<robot_msgs::Arduino>("/dc_motor", 1);
 		
-		//Publisher PID output in servo
-		positionservopub = nh2.advertise<std_msgs::UInt16>("/dc_motor", 1);
-		
-		//Max and Min Output PID Controller (-Pi to +Pi)
-		float max = M_PI;
-		float min = -M_PI;
-		
-		//Initializing PID Controller
-		Initialize(min,max);
+		// Initializing PID Controller
+		Initialize();
   	}
 
+//////////////////////////////////////////////////////////////////
 
-void ControllerServer::PositionCb(const std_msgs::Float32& msg)
-{
-	/**
-	 * This is a PID for controlling the position, not velocity
-	 *
-	 */
-	position_encoder = msg.data;
+void ControllerServer::EncoderAngleCb(const robot_msgs::Arduino& msg) {
+	
+	encoderCb = msg.encoder;
+	encoderAngle = msg.angle;
 }
 
-float ControllerServer::PIDController(float setpoint, float PV)
-{
-	ros::Time now = ros::Time::now();
-	ros::Duration change = now - prevTime;
+//////////////////////////////////////////////////////////////////
 
-	// For the proportional term
-	float error = setpoint - PV;
+uint16_t ControllerServer::PIDController(uint16_t velSetPoint, float angleReading)
+{
+	double dT = (ros::Time::now() - prevTime).toSec();
+
+	double dAngle = angleReading - lastEncoderAngle;
+
+	double currentVelocity = dAngle / dT;
+
+	// TODO: PRINT dAngle and casted variable
+
+	// For the proportional term (also, casting angleReading)
+	uint16_t error = velSetPoint - static_cast<uint16_t>(currentVelocity);
+
+	// TODO: toSec() returns double!!!
 	
 	// For the integral term
-	errSum += error * change.toSec();
-	errSum = std::min(errSum, maxLimit);
-	errSum = std::max(errSum, minLimit);	
+	errSum += error * dT;
+	errSum = std::min(errSum, MAX_CONTROL_INPUT);
+	errSum = std::max(errSum, MIN_CONTROL_INPUT);
 
 	// For the derivative term
-	float dErr = (error - lastError) / change.toSec();
+	uint16_t dErr = (error - lastError) / dT;
 	
-	//Do the full calculation
-	float output = (kp * error) + (ki * errSum) + (kd * dErr);
+	// Do the full calculation
+	uint16_t output = (kp * error) + (ki * errSum) + (kd * dErr);
    
 	//Clamp output to bounds
-	output = std::min(output, maxLimit);
-	output = std::max(output, minLimit);  
+	output = std::min(output, MAX_CONTROL_INPUT);
+	output = std::max(output, MIN_CONTROL_INPUT);  
 
 	//Required values for next round
 	lastError = error;
+	lastEncoderAngle = angleReading;
 	
 	return output;
 }
 
-void ControllerServer::setOutputLimits(float min, float max)
+void ControllerServer::Initialize()
 {
-	if (min > max) return;
-    
-	minLimit = min;
-	maxLimit = max;
-}
-
-void ControllerServer::Initialize( float min, float max)
-{
-	setOutputLimits(min, max);
   	lastError = 0;
+  	lastEncoderAngle = 0;
   	errSum = 0;
     
 	kp = 1.5;
@@ -98,6 +109,7 @@ void ControllerServer::Initialize( float min, float max)
 //	kd = 0;   
 }
 
+//////////////////////////////////////////////////////////////////
 
 //Callback for processing a goal
 void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
@@ -119,16 +131,16 @@ void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
 		/*
 		 * NOTE in .action file:
 		 *
-		 * - goal: 		uint16 angle, string motor
-		 * - feedback: 	uint16 angle, string motor
+		 * - goal: 		uint16_t angle, string motor
+		 * - feedback: 	uint16_t angle, string motor
 		 * - result: 	bool ok
 		 *
 		 */
 
-		std_msgs::UInt16 msg_pos;
+		robot_msgs::Motor msg_pos;
 		
 		//PID Controller
-		msg_pos.data = PIDController(goal->angle, position_encoder);
+		msg_pos.data = PIDController(goal->angle, encoderAngle);
 		
 		//Publishing PID output in servo
 		positionservopub.publish(msg_pos);
@@ -137,13 +149,13 @@ void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
 		geometry_msgs::Vector3 msg_error;
 		
 		msg_error.x = goal->angle;
-		msg_error.y = position_encoder;
-		msg_error.z = goal->angle - position_encoder;
+		msg_error.y = encoderAngleLeft;
+		msg_error.z = goal->angle - encoderAngleLeft;
 		
 		//Publishing setpoint, feedback and error control
-		error_controlpub.publish(msg_error);
+		pubErrorControl.publish(msg_error);
 		
-		feedback.angle = position_encoder;
+		feedback.angle = encoderAngleLeft;
     
 	    //Publish feedback to action client
 	    as.publishFeedback(feedback);

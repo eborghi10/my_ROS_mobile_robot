@@ -11,3 +11,13 @@
 5) **arduino_actuators**: integration of the first two packages (_AS5048-ros-node_ and _from_keyboard_node_) into a single package.
 
 6) **arduino_core**: using _arduino_actuators_ as base package, implements a "_bridge_" between _rosserial_ and the actions package _pid_wheels_.
+
+----
+
+7) **robot_msgs**: custom messages for motors and encoders. From here, I'll implement a new approach.
+
+## New approach
+
+![NewApproach](INSERTO_PHOTO_HERE)
+
+Detailed text
