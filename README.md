@@ -10,14 +10,22 @@
 
 5) **arduino_actuators**: integration of the first two packages (_AS5048-ros-node_ and _from_keyboard_node_) into a single package.
 
-6) **arduino_core**: using _arduino_actuators_ as base package, implements a "_bridge_" between _rosserial_ and the actions package _pid_wheels_.
-
 ----
 
 7) **robot_msgs**: custom messages for motors and encoders. From here, I'll implement a new approach.
 
 ## New approach
 
-![NewApproach](INSERTO_PHOTO_HERE)
+![NewApproach](software.png)
 
-Detailed text
+The _turtlebot_teleop_ package is used to send, from the keyboard, the linear and angular velocity needed.
+
+This data is sent via _/cmd_vel_mux/input/teleop_ topic and received by the **control node**. This node, transforms the data into wheel velocities (left and right from a differential drive mobile robot).
+
+This modificated information is given to the **action client** who operates with the **action server** in order to perform the PID calculations.
+
+The closed loop system needs the encoder data provided by the Arduino via the _/encoder_ topic in order to work fine.
+
+Besides, the action server sends the current velocity for each loop, also known as PWM values for the DC motors.
+
+All the information managed by the Arduino is a custom message package (_robot_msgs::Arduino_) which consists of two parameters: a string (left or right, wheel or encoder indistinctly), and a float32 data value.
