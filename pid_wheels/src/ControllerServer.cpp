@@ -4,18 +4,13 @@
  */
 
 #include "ControllerServer.h"
-
 #include <string>
+#include "std_msgs/Bool.h"
 
-/**
- * This is a PID for controlling the position, not velocity
- *
- */
+	//////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-
-ControllerServer::ControllerServer() :
-	ControllerServer::ControllerServer("pid_wheel_control_as") {}
+ControllerServer::ControllerServer() 
+	: ControllerServer::ControllerServer("pid_wheel_control") {}
 
 ControllerServer::ControllerServer(std::string name):
 	/** Constructor for the SimpleActionServer:
@@ -25,8 +20,8 @@ ControllerServer::ControllerServer(std::string name):
 	 *  - bool auto_start
 	 * 
 	 */
-	as(nh, "pid_wheel_control_node", boost::bind(&ControllerServer::executeCB, this, _1), false),
-	action_name(name)
+	as(nh, "pid_wheel_control", boost::bind(&ControllerServer::executeCB, this, _1), false),
+	actionName(name)
 	{
 		// Register callback for preemption
 		as.registerPreemptCallback(boost::bind(&ControllerServer::preemptCB, this));
@@ -51,13 +46,13 @@ ControllerServer::ControllerServer(std::string name):
 
 void ControllerServer::EncoderAngleCb(const robot_msgs::Arduino& msg) {
 	
-	encoderCb = msg.encoder;
-	encoderAngle = msg.angle;
+	encoderName = msg.name;
+	encoderAngle = msg.data;
 }
 
 //////////////////////////////////////////////////////////////////
 
-uint16_t ControllerServer::PIDController(uint16_t velSetPoint, float angleReading)
+float ControllerServer::PIDController(float velSetPoint, float angleReading)
 {
 	double dT = (ros::Time::now() - prevTime).toSec();
 
@@ -65,12 +60,10 @@ uint16_t ControllerServer::PIDController(uint16_t velSetPoint, float angleReadin
 
 	double currentVelocity = dAngle / dT;
 
-	// TODO: PRINT dAngle and casted variable
+	ROS_INFO("> Current velocity = %f", currentVelocity);
 
 	// For the proportional term (also, casting angleReading)
-	uint16_t error = velSetPoint - static_cast<uint16_t>(currentVelocity);
-
-	// TODO: toSec() returns double!!!
+	error = velSetPoint - currentVelocity;
 	
 	// For the integral term
 	errSum += error * dT;
@@ -78,16 +71,16 @@ uint16_t ControllerServer::PIDController(uint16_t velSetPoint, float angleReadin
 	errSum = std::max(errSum, MIN_CONTROL_INPUT);
 
 	// For the derivative term
-	uint16_t dErr = (error - lastError) / dT;
+	float dErr = (error - lastError) / dT;
 	
 	// Do the full calculation
-	uint16_t output = (kp * error) + (ki * errSum) + (kd * dErr);
+	float output = (_kp * error) + (_ki * errSum) + (_kd * dErr);
    
-	//Clamp output to bounds
+	// Clamp output to bounds
 	output = std::min(output, MAX_CONTROL_INPUT);
 	output = std::max(output, MIN_CONTROL_INPUT);  
 
-	//Required values for next round
+	// Required values for next round
 	lastError = error;
 	lastEncoderAngle = angleReading;
 	
@@ -100,13 +93,13 @@ void ControllerServer::Initialize()
   	lastEncoderAngle = 0;
   	errSum = 0;
     
-	kp = 1.5;
-	ki = 0.1;
-	kd = 0;
+	_kp = 1.5;
+	_ki = 0.1;
+	_kd = 0;
 	
-//	kp = 1;
-//	ki = 2.3;
-//	kd = 0;   
+//	_kp = 1;
+//	_ki = 2.3;
+//	_kd = 0;   
 }
 
 //////////////////////////////////////////////////////////////////
@@ -116,83 +109,82 @@ void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
 {
   	prevTime = ros::Time::now();
 	
-	//If the server has been killed, don't process
+	// If the server has been killed, don't process
 	if(!as.isActive()||as.isPreemptRequested()) return;
 
-	//Run the processing at 100Hz
+	// Run the processing at 100Hz
 	ros::Rate rate(100);
 
-	//Setup some local variables
+	// Setup some local variables
 	bool success = true;	
 	
 	//Loop control
-	while(1)
-	{
+	while(1) {
 		/*
 		 * NOTE in .action file:
 		 *
-		 * - goal: 		uint16_t angle, string motor
-		 * - feedback: 	uint16_t angle, string motor
+		 * - goal: 		float velocity, string motor
+		 * - feedback: 	float velocity, string motor
 		 * - result: 	bool ok
 		 *
 		 */
 
-		robot_msgs::Motor msg_pos;
+		robot_msgs::Arduino VelMsg;
 		
-		//PID Controller
-		msg_pos.data = PIDController(goal->angle, encoderAngle);
+		// PID Controller
+		VelMsg.name = goal->motor;
+		VelMsg.data = PIDController(goal->velocity, encoderAngle);
 		
-		//Publishing PID output in servo
-		positionservopub.publish(msg_pos);
+		// Publishing PID output in servo
+		pubCurrentVelocity.publish(VelMsg);
 		
-		//Auxiliary Message
-		geometry_msgs::Vector3 msg_error;
+		// Auxiliary Message
+		robot_msgs::Arduino ErrorMsg;
 		
-		msg_error.x = goal->angle;
-		msg_error.y = encoderAngleLeft;
-		msg_error.z = goal->angle - encoderAngleLeft;
+		ErrorMsg.name = goal->motor;
+		ErrorMsg.data = error;
 		
-		//Publishing setpoint, feedback and error control
-		pubErrorControl.publish(msg_error);
+		// Publishing current error
+		pubCurrentError.publish(ErrorMsg);
 		
-		feedback.angle = encoderAngleLeft;
-    
-	    //Publish feedback to action client
+		// Filling the feedback message
+		feedback.encoder = encoderName;
+		feedback.angle = encoderAngle;
+	    // Publish feedback to action client
 	    as.publishFeedback(feedback);
 		
-		//Check for ROS kill
-		if(!ros::ok())
-		{
+		// Check for ROS kill
+		if(!ros::ok()) {
+
 			success = false;
-			ROS_INFO("%s Shutting Down", action_name.c_str());
+			ROS_INFO("%s Shutting Down", actionName.c_str());
 			break;
 		}
 
-		//If the server has been killed/preempted, stop processing
+		// If the server has been killed/preempted, stop processing
 		if(!as.isActive()||as.isPreemptRequested()) return;
 		
 		//Sleep for rate time
 		rate.sleep();
 	}
 	
-	//Publish the result if the goal wasn't preempted
-	if(success)
-	{
-		result.ok = 1;
+	// Publish the result if the goal wasn't preempted
+	result.ok = success;
+
+	if(success) {
+
 		as.setSucceeded(result);
-	}
-	else
-	{
-		result.ok = 0;
+	} else {
+
 		as.setAborted(result,"I Failed!");
 	}
 }
 
-//Callback for handling preemption. Reset your helpers here.
-//Note that you still have to check for preemption in your work method to break it off
+// Callback for handling preemption. Reset your helpers here.
+// Note that you still have to check for preemption in your work method to break it off
 void ControllerServer::preemptCB()
 {
-	ROS_INFO("%s got preempted!", action_name.c_str());
+	ROS_INFO("%s got preempted!", actionName.c_str());
 	result.ok = 0;
 	as.setPreempted(result, "I got Preempted!");
 }
@@ -200,15 +192,15 @@ void ControllerServer::preemptCB()
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "pid_server");
+	ros::init(argc, argv, "pid_wheel_control");
 
-	if(argc != 1)
-	{
+	if(argc != 1) {
+
 		ROS_INFO("Usage: pid_server");
 		return 1;
 	}
 	
-	//Spawn the server
+	// Spawn the server
 	ControllerServer server(ros::this_node::getName());
   
 	ros::spin();

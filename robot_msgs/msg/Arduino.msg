@@ -1,2 +1,4 @@
-string motor
-uint16 velocity
+# name: "left", "right" [encoder, motor] 
+string name
+# angle, velocity
+float32 data

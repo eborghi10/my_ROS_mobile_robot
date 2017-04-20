@@ -2,7 +2,7 @@
 
 int main (int argc, char **argv)
 {
-	ros::init(argc, argv, "pid_client");
+	ros::init(argc, argv, "pid_wheel_control");
 	
 	// create the action client
 	// true causes the client to spin its own thread

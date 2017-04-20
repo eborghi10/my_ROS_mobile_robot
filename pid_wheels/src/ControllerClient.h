@@ -1,7 +1,8 @@
 #include <ros/ros.h>
 #include <pid_wheels/PIDAction.h>
 #include <actionlib/client/simple_action_client.h>
-#include "std_msgs/UInt16.h"
+
+#include "robot_msgs/Arduino.h"
 #include "std_msgs/Bool.h"
 #include "std_msgs/Empty.h"
 
@@ -9,50 +10,51 @@
 class ControllerClient{
 
   public:
+  	ControllerClient();
     ControllerClient(std::string name);
 
     void doneCb(const actionlib::SimpleClientGoalState&, const pid_wheels::PIDResultConstPtr&);
     void activeCb();
     void feedbackCb(const pid_wheels::PIDFeedbackConstPtr&);
 
-    void GoalBridgeCb(const std_msgs::UInt16&);
+    void GoalBridgeCb(const robot_msgs::Arduino&);
     void CancelBridgeCb(const std_msgs::Empty&);
 
 private:
 	actionlib::SimpleActionClient<pid_wheels::PIDAction> ac;
-	std::string action_name;	
-	pid_wheels::PIDGoal goal;	
+	std::string actionName;	
+	pid_wheels::PIDGoal goal;
+
 	ros::NodeHandle nh;
 
-	ros::Subscriber sub_goal;
-	ros::Subscriber sub_cancel;
-	ros::Publisher pub_left_feedback;
-	ros::Publisher pub_right_feedback;
-	ros::Publisher pub_result;
+	ros::Subscriber subGoalBridge;
+	ros::Subscriber subCancelBridge;
+	ros::Publisher pubFeedbackBridge;
+	ros::Publisher pubResultBridge;
 };
+
+ControllerClient::ControllerClient()
+	: ControllerClient::ControllerClient("pid_wheel_control") {}
 
 ControllerClient::ControllerClient(std::string name):
 
-	    // Set up the client. It's publishing to topic "pid_control", 
-		// and is set to auto-spin
-	    ac("pid_control", true),
+	    // Set up the client and is set to auto-spin
+	    ac("pid_wheel_control", true),
 	    //Stores the name
-	    action_name(name)
+	    actionName(name)
 	    {
-	      //Get connection to a server
-	      ROS_INFO("%s Waiting For Server...", action_name.c_str());
+	      // Get connection to a server
+	      ROS_INFO("%s Waiting For Server...", actionName.c_str());
 
 	      //Wait for the connection to be valid
 	      ac.waitForServer();
 
-	      ROS_INFO("%s Got a Server...", action_name.c_str());
+	      ROS_INFO("%s Got a Server...", actionName.c_str());
 
-	      sub_goal = nh.subscribe("/bridge/goal", 5, &ControllerClient::GoalBridgeCb, this);
-	      sub_cancel = nh.subscribe("/bridge/cancel", 5, &ControllerClient::CancelBridgeCb, this);
-
-	      pub_left_feedback = nh.advertise<std_msgs::UInt16>("/bridge/feedback/left", 5);
-	      pub_right_feedback = nh.advertise<std_msgs::UInt16>("/bridge/feedback/right", 5);
-	      pub_result = nh.advertise<std_msgs::Bool>("/bridge/result", 5);
+	      subGoalBridge = nh.subscribe("/bridge/goal", 1, &ControllerClient::GoalBridgeCb, this);
+	      subCancelBridge = nh.subscribe("/bridge/cancel", 1, &ControllerClient::CancelBridgeCb, this);
+	      pubFeedbackBridge = nh.advertise<robot_msgs::Arduino>("/bridge/feedback", 1);
+	      pubResultBridge = nh.advertise<std_msgs::Bool>("/bridge/result", 1);
       }
 
 // Called once when the goal completes
@@ -62,7 +64,7 @@ void ControllerClient::doneCb(const actionlib::SimpleClientGoalState& state, con
 
 	ROS_INFO("Result: %d", result->ok);
 
-	pub_result.publish(result->ok);
+	pubResultBridge.publish(result);
 }
 
 // Called once when the goal becomes active
@@ -74,20 +76,20 @@ void ControllerClient::activeCb()
 // Called every time feedback is received for the goal
 void ControllerClient::feedbackCb(const pid_wheels::PIDFeedbackConstPtr& feedback)
 {
-	ROS_INFO("Got Feedback of Progress to Goal: position: %d", feedback->angle);
+	ROS_INFO("feedback [%s]: %f", (feedback->encoder).c_str(), feedback->angle);
 
-	if (strcmp((feedback->motor).c_str(),"Left") == 0)
-	{
-		pub_left_feedback.publish(feedback->angle);
-	} else {
-
-		pub_right_feedback.publish(feedback->angle);
-	}
+	pubFeedbackBridge.publish(feedback);
 }
 
-void ControllerClient::GoalBridgeCb(const std_msgs::UInt16& msg) {
+/**
+ * Bridge callbacks
+ *
+ */
 
-	goal.angle = msg.data;
+void ControllerClient::GoalBridgeCb(const robot_msgs::Arduino& msg) {
+
+	goal.motor = msg.name;
+	goal.velocity = msg.data;
 
 	ac.sendGoal(
 		goal,
