@@ -15,38 +15,33 @@
  * 3) $ roslaunch arduino_actuators execute.launch
  */
 
-#include "include/ATmega2560-HW.h"
-
-#include "include/DCMotor.h"
+#include "include/DifferentialDriveRobot.h"
 
 //////////////////////////////////////////////////////////////////
 
-DCMotor *motor_left;
-DCMotor *motor_right;
+DifferentialDriveRobot *my_robot;
 
 //////////////////////////////////////////////////////////////////
 
 void setup()
 {
-    nh.initNode();
+  my_robot = new DifferentialDriveRobot(
+    new DCMotor(IN1, IN2, new MagneticEncoder(CS1)),
+    new DCMotor(IN3, IN4, new MagneticEncoder(CS2)),
+    "/encoder/left", "/encoder/right"
+  );
 
-    motor_left = new DCMotor(IN1, IN2, 
-                 new MagneticEncoder(CS1),
-                 "left");
-
-    motor_right = new DCMotor(IN3, IN4,
-                  new MagneticEncoder(CS2),
-                  "right");
+  my_robot->UpdatePhysicalParameters(0.2, 1.0);
 }
 
 //////////////////////////////////////////////////////////////////
 
 void loop() 
 {
-	nh.spinOnce();
+	(my_robot->nh).logdebug("Initializing program...");
+	(my_robot->nh).spinOnce();
 
-  motor_left->PublishAngle();
-  motor_right->PublishAngle();
+  my_robot->SendAngles();
 
-  delay(50);
+  if( !(my_robot->nh).connected() )  my_robot->Stop();
 }

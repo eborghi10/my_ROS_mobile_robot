@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ATmega2560-HW.h"
 #include "MagneticEncoder.h"
 
 //////////////////////////////////////////////////////////////////
@@ -23,9 +22,17 @@ class DCMotor {
 
   int INL; 
   int INH;
+  char* name;
 
   void initPins();
+  void Stop();
+  void CW(INT_PWM);
+  void CCW(INT_PWM);
   INT_PWM protectOutput(INT_PWM);
+
+  void motorCb(const robot_msgs::Arduino&);
+
+  ros::Subscriber<robot_msgs::Arduino, DCMotor> sub;
 
 public:
 
@@ -33,18 +40,15 @@ public:
   DCMotor(int,int);
   DCMotor(MagneticEncoder*);
   DCMotor(int,int,MagneticEncoder*);
+  DCMotor(int,int,MagneticEncoder*,char*);
 
-  void Stop();
-  void CW(INT_PWM);
-  void CCW(INT_PWM);
-
-  float GetEncoderAngle();
+  void PublishAngle();
 };
 
 //////////////////////////////////////////////////////////////////
 
 DCMotor::DCMotor()
-  : DCMotor::DCMotor((MagneticEncoder*)NULL) {}
+  : DCMotor::DCMotor(new MagneticEncoder(CS1)) {}
 
 DCMotor::DCMotor(int INL, int INH) 
   : DCMotor::DCMotor(INL, INH, (MagneticEncoder*)NULL) {}
@@ -53,9 +57,15 @@ DCMotor::DCMotor(MagneticEncoder* encoder)
   : DCMotor::DCMotor(IN1, IN2, encoder) {}
 
 DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder)
-  : INL(INL), INH(INH), encoder(encoder) {
+  : DCMotor::DCMotor(INL, INH, encoder, "left") {}
+    
 
+DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder, char* name)
+  : INL(INL), INH(INH), encoder(encoder), name(name),
+    sub("/cmd_vel_mux/input/teleop", &DCMotor::motorCb, this) 
+    {
       DCMotor::initPins();
+      nh.subscribe(sub);
     }
 
 //////////////////////////////////////////////////////////////////
@@ -68,7 +78,7 @@ void DCMotor::initPins() {
 }
 
 void DCMotor::Stop() {
-  // Motor no gira
+  // Motor don't stop
   analogWrite (INL, LOW); 
   analogWrite (INH, LOW);
 }
@@ -93,7 +103,21 @@ INT_PWM DCMotor::protectOutput(INT_PWM val) {
   return val;
 }
 
-float DCMotor::GetEncoderAngle() {
+void DCMotor::PublishAngle() {
 
-  return encoder->GetAngle();
+  encoder->PublishAngle(name);
+}
+
+//////////////////////////////////////////////////////////////////
+
+void DCMotor::motorCb(const robot_msgs::Arduino& msg) {
+
+  if (strcmp(msg.name, "left") == 0) {
+    
+    msg.data? DCMotor::CW(msg.data) : DCMotor::CCW(msg.data);
+  
+  } else {
+
+    msg.data? DCMotor::CCW(msg.data) : DCMotor::CW(msg.data);
+  }
 }

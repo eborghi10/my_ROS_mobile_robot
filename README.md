@@ -6,25 +6,25 @@
 
 3) **from_keyboard_node_test**: lightweight implementation of the code _from_keyboard_node_. It uses local variables inside the class instead of global variables.
 
-4) **pid_wheels**: example of an action client & server. Will be hosted in the Raspberry.
+4) **pid_wheels_action_server**: the action server do the math for the PID. The action client interacts with the PID action server and receives the keyboard commands in order to translate into wheel velocities. This package will be hosted in the Raspberry Pi.
 
 5) **arduino_actuators**: integration of the first two packages (_AS5048-ros-node_ and _from_keyboard_node_) into a single package.
 
-----
+6) **robot_msgs**: custom messages for motors and encoders. From here, I'll implement a new approach.
 
-7) **robot_msgs**: custom messages for motors and encoders. From here, I'll implement a new approach.
+----
 
 ## New approach
 
 ![NewApproach](software.png)
 
-The _turtlebot_teleop_ package is used to send, from the keyboard, the linear and angular velocity needed.
+The _turtlebot_teleop_ package is used to send, from the keyboard, the linear and angular velocity needed (_geometry_msgs::Twist_).
 
 This data is sent via _/cmd_vel_mux/input/teleop_ topic and received by the **control node**. This node, transforms the data into wheel velocities (left and right from a differential drive mobile robot).
 
 This modificated information is given to the **action client** who operates with the **action server** in order to perform the PID calculations.
 
-The closed loop system needs the encoder data provided by the Arduino via the _/encoder_ topic in order to work fine.
+The closed loop system needs the encoder data provided by the **Arduino rosserial node** via the _/encoder_ topic in order to work fine.
 
 Besides, the action server sends the current velocity for each loop, also known as PWM values for the DC motors.
 
