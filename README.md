@@ -16,7 +16,7 @@
 
 ## New approach
 
-![NewApproach](software.png)
+![NewApproach](resources/software.png)
 
 The _turtlebot_teleop_ package is used to send, from the keyboard, the linear and angular velocity needed (_geometry_msgs::Twist_).
 
