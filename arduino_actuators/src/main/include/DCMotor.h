@@ -50,7 +50,7 @@ DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder)
 
 DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder, char* name)
   : INL(INL), INH(INH), encoder(encoder), name(name),
-    sub("/cmd_vel_mux/input/teleop", &DCMotor::motorCb, this) 
+    sub("/dc_motor", &DCMotor::motorCb, this) 
     {
       DCMotor::initPins();
       nh.subscribe(sub);

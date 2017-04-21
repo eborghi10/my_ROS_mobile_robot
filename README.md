@@ -1,5 +1,11 @@
 # Differential drive mobile robot using ROS
 
+``
+To launch the robot use:
+
+`$ roslaunch pid_wheels execute.launch`
+``
+
 1) **AS5048-ros-node**: rosserial package for read data from two AS5048's magnetic encoder using Arduino MEGA2560, and publish to "_/encoder/left_" and "_/encoder/right_" topics.
 
 2) **from_keyboard_node**: node that reads a _Twist_ message from the topic "_/cmd_vel_mux/input/teleop_" and moves the DC motors of the differential drive robot.
