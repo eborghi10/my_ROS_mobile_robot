@@ -10,7 +10,9 @@
 // actionlib::SimpleActionServer API
 #include <actionlib/server/simple_action_server.h>
 
-#include "robot_msgs/Arduino.h"
+#include <robot_msgs/Arduino.h>
+#include <std_msgs/Bool.h>
+#include <string>
 
 #define M_PI 3.14159265358979323846
 
@@ -27,8 +29,8 @@ public:
 	ControllerServer(std::string);
 
 	// Callbacks
-	void preemptCB();
-	void executeCB(const pid_wheels::PIDGoalConstPtr&);
+	void preemptCb();
+	void executeCb(const pid_wheels::PIDGoalConstPtr&);
 
 	void Initialize();
 	float PIDController(float, float);

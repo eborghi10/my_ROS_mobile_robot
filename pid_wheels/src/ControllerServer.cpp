@@ -4,10 +4,8 @@
  */
 
 #include "ControllerServer.h"
-#include <string>
-#include "std_msgs/Bool.h"
 
-	//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 
 ControllerServer::ControllerServer() 
 	: ControllerServer::ControllerServer("pid_wheel_control") {}
@@ -20,11 +18,11 @@ ControllerServer::ControllerServer(std::string name):
 	 *  - bool auto_start
 	 * 
 	 */
-	as(nh, "pid_wheel_control", boost::bind(&ControllerServer::executeCB, this, _1), false),
+	as(nh, "pid_wheel_control", boost::bind(&ControllerServer::executeCb, this, _1), false),
 	actionName(name)
 	{
 		// Register callback for preemption
-		as.registerPreemptCallback(boost::bind(&ControllerServer::preemptCB, this));
+		as.registerPreemptCallback(boost::bind(&ControllerServer::preemptCb, this));
 
 		// Start the server because auto_start=false
 		as.start();	  
@@ -105,7 +103,7 @@ void ControllerServer::Initialize()
 //////////////////////////////////////////////////////////////////
 
 //Callback for processing a goal
-void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
+void ControllerServer::executeCb(const pid_wheels::PIDGoalConstPtr& goal)
 {
   	prevTime = ros::Time::now();
 	
@@ -182,7 +180,7 @@ void ControllerServer::executeCB(const pid_wheels::PIDGoalConstPtr& goal)
 
 // Callback for handling preemption. Reset your helpers here.
 // Note that you still have to check for preemption in your work method to break it off
-void ControllerServer::preemptCB()
+void ControllerServer::preemptCb()
 {
 	ROS_INFO("%s got preempted!", actionName.c_str());
 	result.ok = 0;

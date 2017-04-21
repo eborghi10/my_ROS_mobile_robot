@@ -1,4 +1,5 @@
 #include "ControllerClient.h"
+#include "DifferentialDriveRobot.h"
 
 int main (int argc, char **argv)
 {
@@ -8,8 +9,9 @@ int main (int argc, char **argv)
 	// true causes the client to spin its own thread
 	ControllerClient client(ros::this_node::getName());
 
+	DifferentialDriveRobot mobileRobot();
+
 	ros::spin();
 	
-	//exit
 	return 0;
 }

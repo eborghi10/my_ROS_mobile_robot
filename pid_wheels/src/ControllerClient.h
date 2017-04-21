@@ -2,9 +2,7 @@
 #include <pid_wheels/PIDAction.h>
 #include <actionlib/client/simple_action_client.h>
 
-#include "robot_msgs/Arduino.h"
-#include "std_msgs/Bool.h"
-#include "std_msgs/Empty.h"
+#include <robot_msgs/Arduino.h>
 
 //class containing the client
 class ControllerClient{
@@ -13,13 +11,6 @@ class ControllerClient{
   	ControllerClient();
     ControllerClient(std::string name);
 
-    void doneCb(const actionlib::SimpleClientGoalState&, const pid_wheels::PIDResultConstPtr&);
-    void activeCb();
-    void feedbackCb(const pid_wheels::PIDFeedbackConstPtr&);
-
-    void GoalBridgeCb(const robot_msgs::Arduino&);
-    void CancelBridgeCb(const std_msgs::Empty&);
-
 private:
 	actionlib::SimpleActionClient<pid_wheels::PIDAction> ac;
 	std::string actionName;	
@@ -27,10 +18,11 @@ private:
 
 	ros::NodeHandle nh;
 
-	ros::Subscriber subGoalBridge;
-	ros::Subscriber subCancelBridge;
-	ros::Publisher pubFeedbackBridge;
-	ros::Publisher pubResultBridge;
+	void doneCb(const actionlib::SimpleClientGoalState&, const pid_wheels::PIDResultConstPtr&);
+    void activeCb();
+    void feedbackCb(const pid_wheels::PIDFeedbackConstPtr&);
+
+    void SetGoal(const robot_msgs::Arduino&);
 };
 
 ControllerClient::ControllerClient()
@@ -50,11 +42,6 @@ ControllerClient::ControllerClient(std::string name):
 	      ac.waitForServer();
 
 	      ROS_INFO("%s Got a Server...", actionName.c_str());
-
-	      subGoalBridge = nh.subscribe("/bridge/goal", 1, &ControllerClient::GoalBridgeCb, this);
-	      subCancelBridge = nh.subscribe("/bridge/cancel", 1, &ControllerClient::CancelBridgeCb, this);
-	      pubFeedbackBridge = nh.advertise<robot_msgs::Arduino>("/bridge/feedback", 1);
-	      pubResultBridge = nh.advertise<std_msgs::Bool>("/bridge/result", 1);
       }
 
 // Called once when the goal completes
@@ -63,8 +50,6 @@ void ControllerClient::doneCb(const actionlib::SimpleClientGoalState& state, con
 	ROS_INFO("Finished in state [%s]", state.toString().c_str());
 
 	ROS_INFO("Result: %d", result->ok);
-
-	pubResultBridge.publish(result);
 }
 
 // Called once when the goal becomes active
@@ -77,16 +62,11 @@ void ControllerClient::activeCb()
 void ControllerClient::feedbackCb(const pid_wheels::PIDFeedbackConstPtr& feedback)
 {
 	ROS_INFO("feedback [%s]: %f", (feedback->encoder).c_str(), feedback->angle);
-
-	pubFeedbackBridge.publish(feedback);
 }
 
-/**
- * Bridge callbacks
- *
- */
+/////////////////////////////////////////////////////////////////
 
-void ControllerClient::GoalBridgeCb(const robot_msgs::Arduino& msg) {
+void ControllerClient::SetGoal(const robot_msgs::Arduino& msg) {
 
 	goal.motor = msg.name;
 	goal.velocity = msg.data;
@@ -97,10 +77,4 @@ void ControllerClient::GoalBridgeCb(const robot_msgs::Arduino& msg) {
 		boost::bind(&ControllerClient::activeCb, this),
 		boost::bind(&ControllerClient::feedbackCb, this, _1)
 	);
-}
-
-void ControllerClient::CancelBridgeCb(const std_msgs::Empty& msg) {
-
-	// Cancel all previous goals
-	ac.cancelGoalsAtAndBeforeTime(ros::Time::now());
 }

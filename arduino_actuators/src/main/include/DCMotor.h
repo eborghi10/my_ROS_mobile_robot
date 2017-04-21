@@ -4,18 +4,6 @@
 
 //////////////////////////////////////////////////////////////////
 
-//#define _16BIT_PWM_
-
-#ifdef _16BIT_PWM_
-  #define INT_PWM   uint16_t
-  const INT_PWM MAX_VALUE PROGMEM = 0xFFFF;
-#else
-  #define INT_PWM   uint8_t
-  const INT_PWM MAX_VALUE PROGMEM = 0xFF;
-#endif
-
-//////////////////////////////////////////////////////////////////
-
 class DCMotor {
 
   MagneticEncoder *encoder;

@@ -5,143 +5,77 @@
  *
  */
 
-#include <ros.h>
+#include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
-#include "DCMotor.h"
 
 //////////////////////////////////////////////////////////////////
 
-const boolean LEFT PROGMEM = false;
-const boolean RIGHT PROGMEM = true;
+//#define _16BIT_PWM_
+
+#ifdef _16BIT_PWM_
+  #define INT_PWM   uint16_t
+  const INT_PWM MAX_VALUE = 0xFFFF;
+#else
+  #define INT_PWM   uint8_t
+  const INT_PWM MAX_VALUE = 0xFF;
+#endif
 
 //////////////////////////////////////////////////////////////////
 
 class DifferentialDriveRobot
 {
-	DCMotor *motor_left;
-	DCMotor *motor_right;
+	double wheelRadius;
+	double wheelDistance;
+	double boundRight;
+	double boundLeft;
+	float maxSpeed;
+	float maxTurn;
 
-	double wheel_radius;
-	double wheel_distance;
-	double bound_right;
-	double bound_left;
-	float max_speed;
-	float max_turn;
+	INT_PWM map(INT_PWM, INT_PWM, INT_PWM, INT_PWM, INT_PWM);
 
 public:
+
 	DifferentialDriveRobot();
-	DifferentialDriveRobot(DCMotor*, DCMotor*);
-	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double);
-	DifferentialDriveRobot(DCMotor*, DCMotor*, char*, char*);
-	DifferentialDriveRobot(DCMotor*, DCMotor*, double, double, char*, char*);
 
-	void ddr_callback(const geometry_msgs::Twist&);
-
-	void Move(const double, const double);
-	void UpdatePhysicalParameters(float, float);
-	float GetEncoderAngle(boolean);
-	void SendAngles();
-	void Stop();
+	void keyboardCb(const geometry_msgs::Twist&);
 
 	ros::NodeHandle nh;
-	std_msgs::Float32 angle;
-	ros::Publisher pub_left;
-	ros::Publisher pub_right;
-	ros::Subscriber<geometry_msgs::Twist, DifferentialDriveRobot> sub;
+	ros::Subscriber sub;
 };
 
+//////////////////////////////////////////////////////////////////
+
 DifferentialDriveRobot::DifferentialDriveRobot()
-	: DifferentialDriveRobot::DifferentialDriveRobot(
-		new DCMotor(IN1,IN2), 
-		new DCMotor(IN3,IN4)) {}
+	: wheelRadius(0.032), wheelDistance(0.1), 
+	  maxSpeed(0.2), maxTurn(1.0)
+	  {
+	  	boundRight = (maxSpeed + maxTurn * wheelDistance/2.0) / wheelRadius;
+	  	boundLeft  = (maxSpeed - maxTurn * wheelDistance/2.0) / wheelRadius;
 
-DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right)
-	: DifferentialDriveRobot::DifferentialDriveRobot(
-		motor_left, motor_right, 0.032, 0.1) {}
+	  	sub = nh.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::keyboardCb, this);
+	  }
 
-DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist)
-	: DifferentialDriveRobot::DifferentialDriveRobot(
-		motor_left, motor_right, rad, dist, "/encoder/left", "/encoder/right") {}
+//////////////////////////////////////////////////////////////////
 
-DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, char *topic_left, char *topic_right)
-	: DifferentialDriveRobot::DifferentialDriveRobot(
-		motor_left, motor_right, 0.032, 0.1, "/encoder/left", "/encoder/right") {}
-
-DifferentialDriveRobot::DifferentialDriveRobot
-	(DCMotor *motor_left, DCMotor *motor_right, double rad, double dist, char* topic_left, char* topic_right)
-	: sub("/cmd_vel_mux/input/teleop", &DifferentialDriveRobot::ddr_callback, this),
-	  pub_left(topic_left, &angle),
-	  pub_right(topic_right, &angle) {
-
-	this->motor_left = motor_left;
-	this->motor_right = motor_right;
-	this->wheel_radius = rad;
-	this->wheel_distance = dist;
-
-	nh.subscribe(sub);
-	nh.advertise(pub_left);
-	nh.advertise(pub_right);
+INT_PWM DifferentialDriveRobot::map(
+	INT_PWM value, INT_PWM fromLow, INT_PWM fromHigh, INT_PWM toLow, INT_PWM toHigh)
+{
+	return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
 }
 
 //////////////////////////////////////////////////////////////////
 
-void DifferentialDriveRobot::Move(const double lin, const double ang) {
+void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist& msg) {
 
-	double u_r = (lin + ang * this->wheel_distance/2.0) / this->wheel_radius;
-	double u_l = (lin - ang * this->wheel_distance/2.0) / this->wheel_radius;
+	double lin = msg.linear.x;
+	double ang = msg.angular.z;
+
+  	double u_r = (lin + ang * wheelDistance/2.0) / wheelRadius;
+	double u_l = (lin - ang * wheelDistance/2.0) / wheelRadius;
 
 	INT_PWM right_map = 
-		map(static_cast<INT_PWM>(u_r), 0, this->bound_right, 0, MAX_VALUE);
+		map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
 	
 	INT_PWM left_map = 
-		map(static_cast<INT_PWM>(u_l), 0, this->bound_left, 0, MAX_VALUE);
-
-
-	u_r? motor_right->CW(right_map) : motor_right->CCW(right_map);
-	u_l? motor_left->CCW(left_map) : motor_left->CW(left_map);
-}
-
-void DifferentialDriveRobot::UpdatePhysicalParameters(float max_speed, float max_turn) {
-	
-	this->max_speed = max_speed;
-	this->max_turn = max_turn;
-
-	this->bound_right = 
-		(this->max_speed + this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
-	this->bound_left = 
-		(this->max_speed - this->max_turn * this->wheel_distance/2.0) / this->wheel_radius;
-}
-
-void DifferentialDriveRobot::Stop() {
-
-	motor_left->Stop();
-	motor_right->Stop();
-}
-
-float DifferentialDriveRobot::GetEncoderAngle(boolean motor) {
-
-	if (motor == LEFT) {
-		return motor_left->GetEncoderAngle();
-	} else if(motor == RIGHT) {
-		return motor_right->GetEncoderAngle();
-	}
-}
-
-void DifferentialDriveRobot::SendAngles() {
-
-	angle.data = DifferentialDriveRobot::GetEncoderAngle(LEFT);
-	pub_left.publish(&angle);
-
-	angle.data = DifferentialDriveRobot::GetEncoderAngle(RIGHT);
-	pub_right.publish(&angle);
-}
-
-//////////////////////////////////////////////////////////////////
-
-void DifferentialDriveRobot::ddr_callback(const geometry_msgs::Twist& msg_motor) {
-
-  DifferentialDriveRobot::Move(msg_motor.linear.x, msg_motor.angular.z);
+		map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
 }

@@ -8,7 +8,9 @@ DIRECCION DEL MOTOR, EL float NO MANEJA VALORES NEGATIVOS!!!
 
 TODO: Check if it manages OK the different incoming messages (from left and right encoder) 
 
+max_speed y max_turn EN ACTION CLIENT. MODIFICAR EN BASE A LOS CAMBIOS DESDE EL TECLADO!!
 
+-------------------------------------
 CAMBIAR INSTRUCTIVO PARA LA GENERACION DE MENSAGES PERSONALIZADOS EN ARDUINO:
 
 MI IMPLEMENTACION:
