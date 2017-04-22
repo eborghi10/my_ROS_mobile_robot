@@ -7,6 +7,7 @@
 
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
+#include <robot_msgs/Arduino.h>
 
 //////////////////////////////////////////////////////////////////
 
@@ -31,16 +32,17 @@ class DifferentialDriveRobot
 	float maxSpeed;
 	float maxTurn;
 
+	ros::NodeHandle nh;
+	ros::Subscriber sub;
+	ros::Publisher pub;
+
 	INT_PWM map(INT_PWM, INT_PWM, INT_PWM, INT_PWM, INT_PWM);
+
+	void keyboardCb(const geometry_msgs::Twist&);
 
 public:
 
 	DifferentialDriveRobot();
-
-	void keyboardCb(const geometry_msgs::Twist&);
-
-	ros::NodeHandle nh;
-	ros::Subscriber sub;
 };
 
 //////////////////////////////////////////////////////////////////
@@ -53,6 +55,9 @@ DifferentialDriveRobot::DifferentialDriveRobot()
 	  	boundLeft  = (maxSpeed - maxTurn * wheelDistance/2.0) / wheelRadius;
 
 	  	sub = nh.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::keyboardCb, this);
+	  	pub = nh.advertise<robot_msgs::Arduino>("/wheel_velocities", 1);
+
+	  	ROS_INFO("Differential Drive Robot initialized.");
 	  }
 
 //////////////////////////////////////////////////////////////////
@@ -65,17 +70,31 @@ INT_PWM DifferentialDriveRobot::map(
 
 //////////////////////////////////////////////////////////////////
 
-void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist& msg) {
+void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist& kyb) {
 
-	double lin = msg.linear.x;
-	double ang = msg.angular.z;
+	double lin = kyb.linear.x;
+	double ang = kyb.angular.z;
 
-  	double u_r = (lin + ang * wheelDistance/2.0) / wheelRadius;
+	ROS_INFO("[lin, ang] : [%f, %f]", lin, ang);
+
 	double u_l = (lin - ang * wheelDistance/2.0) / wheelRadius;
+  	double u_r = (lin + ang * wheelDistance/2.0) / wheelRadius;
 
-	INT_PWM right_map = 
-		map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
+//	INT_PWM right_map = 
+//		map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
+
+	robot_msgs::Arduino msg;
+
+	msg.name = "left";
+	msg.data = u_l;
+	pub.publish(msg);
+
+	msg.name = "right";
+	msg.data = u_r;
+	pub.publish(msg);
+
+	ROS_INFO("[u_l, u_r] : [%f, %f]", u_l, u_r);
 	
-	INT_PWM left_map = 
-		map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
+//	INT_PWM left_map = 
+//		map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
 }

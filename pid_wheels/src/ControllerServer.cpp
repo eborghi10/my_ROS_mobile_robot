@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////////////
 
 ControllerServer::ControllerServer() 
-	: ControllerServer::ControllerServer("pid_wheel_control") {}
+	: ControllerServer::ControllerServer("pid_wheel_action_server") {}
 
 ControllerServer::ControllerServer(std::string name):
 	/** Constructor for the SimpleActionServer:
@@ -26,6 +26,8 @@ ControllerServer::ControllerServer(std::string name):
 
 		// Start the server because auto_start=false
 		as.start();	  
+
+		ROS_INFO("Action Server started");
 		
 		// Subscriber current position of DC motor
 		controlInput = nh2.subscribe("/encoder", 1, &ControllerServer::EncoderAngleCb, this);
@@ -87,6 +89,8 @@ float ControllerServer::PIDController(float velSetPoint, float angleReading)
 
 void ControllerServer::Initialize()
 {
+	ROS_INFO("Initializing PID Action Server");
+
   	lastError = 0;
   	lastEncoderAngle = 0;
   	errSum = 0;
@@ -190,7 +194,7 @@ void ControllerServer::preemptCb()
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "pid_wheel_control");
+	ros::init(argc, argv, "pid_wheel_action_server");
 
 	if(argc != 1) {
 

@@ -17,16 +17,19 @@ private:
 	pid_wheels::PIDGoal goal;
 
 	ros::NodeHandle nh;
+	ros::Subscriber sub;
 
 	void doneCb(const actionlib::SimpleClientGoalState&, const pid_wheels::PIDResultConstPtr&);
     void activeCb();
     void feedbackCb(const pid_wheels::PIDFeedbackConstPtr&);
 
+    void WheelVelocitiesCb(const robot_msgs::Arduino&);
+
     void SetGoal(const robot_msgs::Arduino&);
 };
 
 ControllerClient::ControllerClient()
-	: ControllerClient::ControllerClient("pid_wheel_control") {}
+	: ControllerClient::ControllerClient("pid_wheel_action_client") {}
 
 ControllerClient::ControllerClient(std::string name):
 
@@ -35,6 +38,8 @@ ControllerClient::ControllerClient(std::string name):
 	    //Stores the name
 	    actionName(name)
 	    {
+	    	sub = nh.subscribe("/wheel_velocities", 1, &ControllerClient::WheelVelocitiesCb, this);
+
 	      // Get connection to a server
 	      ROS_INFO("%s Waiting For Server...", actionName.c_str());
 
@@ -64,9 +69,16 @@ void ControllerClient::feedbackCb(const pid_wheels::PIDFeedbackConstPtr& feedbac
 	ROS_INFO("feedback [%s]: %f", (feedback->encoder).c_str(), feedback->angle);
 }
 
+void ControllerClient::WheelVelocitiesCb(const robot_msgs::Arduino& msg)
+{
+	ControllerClient::SetGoal(msg);
+}
+
 /////////////////////////////////////////////////////////////////
 
 void ControllerClient::SetGoal(const robot_msgs::Arduino& msg) {
+
+	ROS_INFO("[Goal] : %f", msg.data);
 
 	goal.motor = msg.name;
 	goal.velocity = msg.data;

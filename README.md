@@ -8,11 +8,13 @@ To launch the robot use: `$ roslaunch pid_wheels execute.launch`
 
 3) **from_keyboard_node_test**: lightweight implementation of the code _from_keyboard_node_. It uses local variables inside the class instead of global variables.
 
-4) **pid_wheels_action_server**: the action server do the math for the PID. The action client interacts with the PID action server and receives the keyboard commands in order to translate into wheel velocities. This package will be hosted in the Raspberry Pi.
+4) **pid_wheels_action_server**: the action server do the math for the PID. The action client interacts with the PID action server and with the _control_node_. This package will be hosted in the Raspberry Pi.
 
 5) **arduino_actuators**: integration of the first two packages (_AS5048-ros-node_ and _from_keyboard_node_) into a single package.
 
 6) **robot_msgs**: custom messages for motors and encoders. From here, I'll implement a new approach.
+
+7) **control_node**: receives the keyboard commands in order to translate into wheel velocities, then, sends them to the action client.
 
 ----
 

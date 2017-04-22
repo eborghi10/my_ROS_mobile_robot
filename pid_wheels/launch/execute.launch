@@ -1,13 +1,22 @@
 <?xml version="1.0"?>
 
+<!-- 
+  All nodes are launched in different terminal windows 
+-->
+
 <launch>
+
+  <include
+    file = "$(find turtlebot_teleop)/launch/keyboard_teleop.launch" 
+  />
 
   <!-- C++ action server node -->
   <node
   	pkg    = "pid_wheels" 
   	type   = "PID_Server" 
   	name   = "PID_Server" 
-  	output = "screen"
+  	output = "screen" 
+    launch-prefix = "gnome-terminal --command"
   />
 
   <!-- C++ action client node -->
@@ -16,6 +25,12 @@
   	type   = "PID_Client" 
   	name   = "PID_Client" 
   	output = "screen"
+    launch-prefix = "gnome-terminal --command"
+  />
+
+  <!-- Control node -->
+  <include
+    file = "$(find control_node)/launch/execute.launch"
   />
 
   <!-- Arduino node -->
