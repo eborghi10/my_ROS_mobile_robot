@@ -11,7 +11,6 @@
 #include <actionlib/server/simple_action_server.h>
 
 #include <robot_msgs/Arduino.h>
-#include <std_msgs/Bool.h>
 #include <string>
 
 #define M_PI 3.14159265358979323846

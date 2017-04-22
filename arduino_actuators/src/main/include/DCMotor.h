@@ -100,6 +100,11 @@ void DCMotor::PublishAngle() {
 
 void DCMotor::motorCb(const robot_msgs::Arduino& msg) {
 
+//  INT_PWM right_map = 
+//    map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
+//  INT_PWM left_map = 
+//    map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
+
   if (strcmp(msg.name, "left") == 0) {
     
     msg.data? DCMotor::CW(msg.data) : DCMotor::CCW(msg.data);

@@ -82,9 +82,6 @@ void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist::ConstPtr& ky
 	double u_l = (lin - ang * wheelDistance/2.0) / wheelRadius;
   	double u_r = (lin + ang * wheelDistance/2.0) / wheelRadius;
 
-//	INT_PWM right_map = 
-//		map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
-
 	robot_msgs::Arduino msg;
 
 	msg.name = "left";
@@ -96,7 +93,4 @@ void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist::ConstPtr& ky
 	pub.publish(msg);
 
 	ROS_INFO("[u_l, u_r] : [%f, %f]", u_l, u_r);
-	
-//	INT_PWM left_map = 
-//		map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
 }

@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  robot_msgs
   roslaunch
 )
 
@@ -27,7 +28,7 @@ generate_messages(
 )
 
 catkin_package(
-  CATKIN_DEPENDS actionlib actionlib_msgs message_generation roscpp rospy std_msgs
+  CATKIN_DEPENDS actionlib actionlib_msgs message_generation roscpp rospy std_msgs robot_msgs
 )
 
 include_directories(${catkin_INCLUDE_DIRS})
