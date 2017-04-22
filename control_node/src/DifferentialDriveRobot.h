@@ -27,8 +27,8 @@ class DifferentialDriveRobot
 {
 	double wheelRadius;
 	double wheelDistance;
-	double boundRight;
-	double boundLeft;
+	//double boundRight;
+	//double boundLeft;
 	float maxSpeed;
 	float maxTurn;
 
@@ -38,7 +38,7 @@ class DifferentialDriveRobot
 
 	INT_PWM map(INT_PWM, INT_PWM, INT_PWM, INT_PWM, INT_PWM);
 
-	void keyboardCb(const geometry_msgs::Twist&);
+	void keyboardCb(const geometry_msgs::Twist::ConstPtr&);
 
 public:
 
@@ -51,8 +51,8 @@ DifferentialDriveRobot::DifferentialDriveRobot()
 	: wheelRadius(0.032), wheelDistance(0.1), 
 	  maxSpeed(0.2), maxTurn(1.0)
 	  {
-	  	boundRight = (maxSpeed + maxTurn * wheelDistance/2.0) / wheelRadius;
-	  	boundLeft  = (maxSpeed - maxTurn * wheelDistance/2.0) / wheelRadius;
+	  	//boundRight = (maxSpeed + maxTurn * wheelDistance/2.0) / wheelRadius;
+	  	//boundLeft  = (maxSpeed - maxTurn * wheelDistance/2.0) / wheelRadius;
 
 	  	sub = nh.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::keyboardCb, this);
 	  	pub = nh.advertise<robot_msgs::Arduino>("/wheel_velocities", 1);
@@ -61,19 +61,20 @@ DifferentialDriveRobot::DifferentialDriveRobot()
 	  }
 
 //////////////////////////////////////////////////////////////////
-
+/*
 INT_PWM DifferentialDriveRobot::map(
 	INT_PWM value, INT_PWM fromLow, INT_PWM fromHigh, INT_PWM toLow, INT_PWM toHigh)
 {
 	return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
 }
-
+*/
 //////////////////////////////////////////////////////////////////
 
-void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist& kyb) {
+void DifferentialDriveRobot::keyboardCb(const geometry_msgs::Twist::ConstPtr& kyb) 
+{
 
-	double lin = kyb.linear.x;
-	double ang = kyb.angular.z;
+	double lin = kyb->linear.x;
+	double ang = kyb->angular.z;
 
 	ROS_INFO("[lin, ang] : [%f, %f]", lin, ang);
 
