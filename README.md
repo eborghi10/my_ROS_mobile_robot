@@ -33,3 +33,5 @@ The closed loop system needs the encoder data provided by the **Arduino rosseria
 Besides, the action server sends the current velocity for each loop, also known as PWM values for the DC motors.
 
 All the information managed by the Arduino is a custom message package (_robot_msgs::Arduino_) which consists of two parameters: a string (left or right, wheel or encoder indistinctly), and a float32 data value.
+
+![RqtGraph](resources/rqt_graph.png)

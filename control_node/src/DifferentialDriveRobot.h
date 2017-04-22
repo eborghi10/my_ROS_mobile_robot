@@ -32,7 +32,7 @@ class DifferentialDriveRobot
 	float maxSpeed;
 	float maxTurn;
 
-	ros::NodeHandle nh;
+	ros::NodeHandle nh_;
 	ros::Subscriber sub;
 	ros::Publisher pub;
 
@@ -42,20 +42,21 @@ class DifferentialDriveRobot
 
 public:
 
-	DifferentialDriveRobot();
+	DifferentialDriveRobot(ros::NodeHandle&);
 };
 
 //////////////////////////////////////////////////////////////////
 
-DifferentialDriveRobot::DifferentialDriveRobot()
+DifferentialDriveRobot::DifferentialDriveRobot(ros::NodeHandle& nh)
 	: wheelRadius(0.032), wheelDistance(0.1), 
-	  maxSpeed(0.2), maxTurn(1.0)
+	  maxSpeed(0.2), maxTurn(1.0), 
+	  nh_(nh)
 	  {
 	  	//boundRight = (maxSpeed + maxTurn * wheelDistance/2.0) / wheelRadius;
 	  	//boundLeft  = (maxSpeed - maxTurn * wheelDistance/2.0) / wheelRadius;
 
-	  	sub = nh.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::keyboardCb, this);
-	  	pub = nh.advertise<robot_msgs::Arduino>("/wheel_velocities", 1);
+	  	sub = nh_.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::keyboardCb, this);
+	  	pub = nh_.advertise<robot_msgs::Arduino>("/wheel_velocities", 1);
 
 	  	ROS_INFO("Differential Drive Robot initialized.");
 	  }
