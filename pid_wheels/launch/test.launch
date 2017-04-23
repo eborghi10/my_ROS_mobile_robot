@@ -1,0 +1,33 @@
+<!-- 
+	This is a test launch file made in order to verify the correct 	working of the packages.
+	To test it, it's necessary to publish the linear and angular velocities:
+
+	$ rostopic pub /cmd_vel_mux/input/teleop geometry_msgs/Twist TAB-TAB
+-->
+
+<launch>
+
+  <node
+  	pkg    = "pid_wheels" 
+  	type   = "PID_Server" 
+  	name   = "PID_Server" 
+  	output = "screen" 
+    launch-prefix = "gnome-terminal --command"
+  />
+
+  <node
+  	pkg    = "pid_wheels" 
+  	type   = "PID_Client" 
+  	name   = "PID_Client" 
+  	output = "screen"
+    launch-prefix = "gnome-terminal --command"
+  />
+
+  <include
+    file = "$(find control_node)/launch/execute.launch"
+  />
+
+  <include
+    file = "$(find arduino_actuators)/launch/execute.launch"
+  />
+</launch>
