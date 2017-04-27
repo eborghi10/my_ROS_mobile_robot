@@ -2,7 +2,7 @@
 	This is a test launch file made in order to verify the correct 	working of the packages.
 	To test it, it's necessary to publish the linear and angular velocities:
 
-	$ rostopic pub /cmd_vel_mux/input/teleop geometry_msgs/Twist TAB-TAB
+	$ rostopic pub /cmd_vel_mux/input/teleop TAB-TAB TAB-TAB
 -->
 
 <launch>
@@ -11,8 +11,7 @@
   	pkg    = "pid_wheels" 
   	type   = "PID_Server" 
   	name   = "PID_Server" 
-  	output = "screen" 
-    launch-prefix = "gnome-terminal --command"
+  	output = "screen"
   />
 
   <node
@@ -20,7 +19,6 @@
   	type   = "PID_Client" 
   	name   = "PID_Client" 
   	output = "screen"
-    launch-prefix = "gnome-terminal --command"
   />
 
   <include
