@@ -2,7 +2,7 @@
 	This is a test launch file made in order to verify the correct 	working of the packages.
 	To test it, it's necessary to publish the linear and angular velocities:
 
-	$ rostopic pub /cmd_vel_mux/input/teleop TAB-TAB TAB-TAB
+	$ rostopic pub /cmd_vel_mux/input/teleop TAB-TABrosto   TAB-TAB
 -->
 
 <launch>

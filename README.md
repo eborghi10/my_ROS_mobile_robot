@@ -18,6 +18,8 @@ To launch the robot use: `$ roslaunch pid_wheels execute.launch`
 
 8) **arduino_actuators_new**: similar to _arduino_actuator_ but it uses sensor_msgs::JointState for the encoder.
 
+9) **my_robot_simulator**: all the packages that involve the simulation in Gazebo.
+
 ----
 
 ## New approach
