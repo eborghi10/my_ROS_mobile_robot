@@ -16,6 +16,8 @@ To launch the robot use: `$ roslaunch pid_wheels execute.launch`
 
 7) **control_node**: receives the keyboard commands in order to translate into wheel velocities, then, sends them to the action client.
 
+8) **arduino_actuators_new**: similar to _arduino_actuator_ but it uses sensor_msgs::JointState for the encoder.
+
 ----
 
 ## New approach
