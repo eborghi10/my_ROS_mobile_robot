@@ -1,5 +1,9 @@
 <launch>
 
+	<!--
+		$ roslaunch robot_description display.launch model:=`rospack find robot_description`/urdf/my_robot.urdf
+	-->
+
   <arg name="model" 
   	   default="$(find robot_description)/urdf/my_robot.xacro"/>
 
