@@ -2,11 +2,17 @@
 
 <!--
     https://github.com/AaronMR/Learning_ROS_for_Robotics_Programming/blob/master/chapter5_tutorials/urdf/robot1.urdf
-2
-    There are31two principal fields that describe the geometry of a robot: links and joints.
+
+    There are two principal fields that describe the geometry of a robot: links and joints.
 
     To check whether the sintax is fine or whether it have errors:
     $ check_urdf my_robot.urdf
+
+    To get the Graphviz in pdf:
+    $ urdf_to_graphviz my_robot.urdf
+
+    To run:
+    $ roslaunch robot_description display.launch model:=`rospack find robot_description`/urdf/my_robot.urdf
 -->
 
 <robot name="my_robot">
@@ -46,7 +52,7 @@
                 <geometry>
                     <cylinder length="0.025" radius="0.031"/>
                 </geometry>
-                <!--Almost 86° in the attack angle (pitch)-->
+                <!--Almost 86 degrees in the attack angle (pitch)-->
             <origin rpy="0 1.5 0" xyz="0.1 0.1 0"/>
             <material name="black">
                 <color rgba="0 0 0 0.8"/>
