@@ -20,4 +20,6 @@ From the complete 3D STEP model:
 
 **CONVERT TO COLLADA**
 
-- File → Import → Collada
+- File → Import → Collada (.dae)
+
+- Pull out the right-tab in blender (look for a plus sign near the upper right of the render window). Under the Dimensions section of this tab, divide the x,y,z components by 1000.

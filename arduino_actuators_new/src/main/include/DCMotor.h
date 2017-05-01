@@ -105,12 +105,18 @@ void DCMotor::motorCb(const robot_msgs::Arduino& msg) {
 //  INT_PWM left_map = 
 //    map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
 
-  if (strcmp(msg.name, "left") == 0) {
-    
-    msg.data? DCMotor::CW(msg.data) : DCMotor::CCW(msg.data);
-  
-  } else {
+  if (strcmp(msg.name, name) == 0) 
+  {
+    INT_PWM value = static_cast<INT_PWM>(msg.data);
 
-    msg.data? DCMotor::CCW(msg.data) : DCMotor::CW(msg.data);
-  }
+    if (strcmp(msg.name, 'left') == 0) 
+    {
+      msg.data? DCMotor::CW(value) : DCMotor::CCW(value);
+    } 
+    else 
+    {
+      // right
+      msg.data? DCMotor::CCW(value) : DCMotor::CW(value);
+    }
+  } 
 }

@@ -26,6 +26,6 @@
   />
 
   <include
-    file = "$(find arduino_actuators)/launch/execute.launch"
+    file = "$(find arduino_actuators_launch)/launch/execute.launch"
   />
 </launch>

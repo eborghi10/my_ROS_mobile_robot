@@ -29,7 +29,7 @@ public:
 	MagneticEncoder(uint8_t);
 	MagneticEncoder(uint8_t, boolean);
 
-	void PublishAngle(char*);
+	void PublishAngle(const char*);
 };
 
 ///////////////////////////////////////////////////////////////
@@ -73,9 +73,10 @@ float MagneticEncoder::normalize(float angle) {
 	return angle;
 }
 
-void MagneticEncoder::PublishAngle(char* name) {
+void MagneticEncoder::PublishAngle(const char* name) {
 		
-	float currentAngle = MagneticEncoder::read2angle( Encoder->getRawRotation() );
+	float currentAngle = 
+			MagneticEncoder::read2angle(Encoder->getRawRotation());
 
 	msg.name 		 = &name;
 

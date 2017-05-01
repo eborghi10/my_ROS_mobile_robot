@@ -44,26 +44,23 @@ ControllerServer::ControllerServer(std::string name):
 
 //////////////////////////////////////////////////////////////////
 
-void ControllerServer::EncoderAngleCb(const robot_msgs::Arduino& msg) {
+void ControllerServer::EncoderAngleCb(const sensor_msgs::JointState& msg) {
 	
-	encoderName = msg.name;
-	encoderAngle = msg.data;
+	encoderName 	= msg.name[0];
+	encoderAngle 	= msg.position[0];
+	encoderVelocity = msg.velocity[0];
 }
 
 //////////////////////////////////////////////////////////////////
 
-float ControllerServer::PIDController(float velSetPoint, float angleReading)
+float ControllerServer::PIDController(float velSetPoint, float angleVelocity)
 {
 	double dT = (ros::Time::now() - prevTime).toSec();
 
-	double dAngle = angleReading - lastEncoderAngle;
+	ROS_INFO("> Current velocity = %f", angleVelocity);
 
-	double currentVelocity = dAngle / dT;
-
-	ROS_INFO("> Current velocity = %f", currentVelocity);
-
-	// For the proportional term (also, casting angleReading)
-	error = velSetPoint - currentVelocity;
+	// For the proportional term (also, casting angleVelocity)
+	error = velSetPoint - angleVelocity;
 	
 	// For the integral term
 	errSum += error * dT;
@@ -82,7 +79,6 @@ float ControllerServer::PIDController(float velSetPoint, float angleReading)
 
 	// Required values for next round
 	lastError = error;
-	lastEncoderAngle = angleReading;
 	
 	return output;
 }
@@ -92,7 +88,6 @@ void ControllerServer::Initialize()
 	ROS_INFO("Initializing PID Action Server");
 
   	lastError = 0;
-  	lastEncoderAngle = 0;
   	errSum = 0;
     
 	_kp = 1.5;
@@ -135,7 +130,7 @@ void ControllerServer::executeCb(const pid_wheels::PIDGoalConstPtr& goal)
 		
 		// PID Controller
 		VelMsg.name = goal->motor;
-		VelMsg.data = PIDController(goal->velocity, encoderAngle);
+		VelMsg.data = PIDController(goal->velocity, encoderVelocity);
 		
 		// Publishing PID output in servo
 		pubCurrentVelocity.publish(VelMsg);

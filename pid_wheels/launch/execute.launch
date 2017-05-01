@@ -7,7 +7,7 @@
 <launch>
 
   <include
-    file = "$(find turtlebot_teleop)/launch/keyboard_teleop.launch" 
+    file = "$(find my_robot_gazebo)/launch/keyboard_teleop.launch" 
   />
 
   <!-- C++ action server node -->
@@ -35,7 +35,7 @@
 
   <!-- Arduino node -->
   <include
-    file = "$(find arduino_actuators)/launch/execute.launch"
+    file = "$(find arduino_actuators_new)/launch/execute.launch"
   />
 
 </launch>

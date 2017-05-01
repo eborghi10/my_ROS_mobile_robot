@@ -11,6 +11,7 @@
 #include <actionlib/server/simple_action_server.h>
 
 #include <robot_msgs/Arduino.h>
+#include <sensor_msgs/JointState.h>
 #include <string>
 
 #define M_PI 3.14159265358979323846
@@ -34,7 +35,7 @@ public:
 	void Initialize();
 	float PIDController(float, float);
 	// Subscribers callbacks
-	void EncoderAngleCb(const robot_msgs::Arduino&);
+	void EncoderAngleCb(const sensor_msgs::JointState&);
 
 protected:
 	ros::NodeHandle nh;		// Action Server handle
@@ -59,9 +60,9 @@ protected:
 	 */
 	// Encoder readings (control input)
 	float encoderAngle;
+	float encoderVelocity;
 	std::string encoderName;
 	// PID parameters
-	float lastEncoderAngle;
 	float error;
 	float errSum;
 	float lastError;

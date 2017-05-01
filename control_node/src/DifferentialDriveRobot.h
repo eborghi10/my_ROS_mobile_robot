@@ -55,7 +55,7 @@ DifferentialDriveRobot::DifferentialDriveRobot(ros::NodeHandle& nh)
 	  	//boundRight = (maxSpeed + maxTurn * wheelDistance/2.0) / wheelRadius;
 	  	//boundLeft  = (maxSpeed - maxTurn * wheelDistance/2.0) / wheelRadius;
 
-	  	sub = nh_.subscribe("/cmd_vel_mux/input/teleop", 1, &DifferentialDriveRobot::keyboardCb, this);
+	  	sub = nh_.subscribe("/cmd_vel", 1, &DifferentialDriveRobot::keyboardCb, this);
 	  	pub = nh_.advertise<robot_msgs::Arduino>("/wheel_velocities", 1);
 
 	  	ROS_INFO("Differential Drive Robot initialized.");
