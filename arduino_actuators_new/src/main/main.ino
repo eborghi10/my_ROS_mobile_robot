@@ -10,19 +10,18 @@
  *
  * Or BETTER:
  *
- * 1) Upload to Arduino
- * 2) Compile project in the ROS workspace (catkin_make)
+ * 1) Compile project in the ROS workspace (catkin_make)
+ * 2) Upload to Arduino
  * 3) $ roslaunch arduino_actuators execute.launch
  */
 
 #include "include/ATmega2560-HW.h"
-
 #include "include/DCMotor.h"
 
 //////////////////////////////////////////////////////////////////
 
 DCMotor *motor_left;
-DCMotor *motor_right;
+//DCMotor *motor_right;
 
 //////////////////////////////////////////////////////////////////
 
@@ -33,10 +32,11 @@ void setup()
     motor_left = new DCMotor(IN1, IN2, 
                  new MagneticEncoder(CS1),
                  "left");
-
+    /*
     motor_right = new DCMotor(IN3, IN4,
                   new MagneticEncoder(CS2),
                   "right");
+    */
 }
 
 //////////////////////////////////////////////////////////////////
@@ -45,10 +45,11 @@ void loop()
 {
 	nh.spinOnce();
 
-  motor_left->PublishAngle();
-  motor_right->PublishAngle();
+  //motor_left->PublishAngle();
+  //motor_right->PublishAngle();
 
-  delay(50);
-  char* here PROGMEM = "HERE";
-  nh.loginfo(here);
+  delay(5);
+
+  //char* here PROGMEM = "HERE";
+  //nh.loginfo(here);
 }

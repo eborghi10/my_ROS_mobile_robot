@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MagneticEncoder.h"
+#include <robot_msgs/Arduino.h>
 
 //////////////////////////////////////////////////////////////////
 
@@ -24,17 +25,17 @@ class DCMotor {
 
 public:
 
-  DCMotor();
-  DCMotor(int,int);
-  DCMotor(MagneticEncoder*);
-  DCMotor(int,int,MagneticEncoder*);
+  //DCMotor();
+  //DCMotor(int,int);
+  //DCMotor(MagneticEncoder*);
+  //DCMotor(int,int,MagneticEncoder*);
   DCMotor(int,int,MagneticEncoder*,char*);
 
   void PublishAngle();
 };
 
 //////////////////////////////////////////////////////////////////
-
+/*
 DCMotor::DCMotor()
   : DCMotor::DCMotor(new MagneticEncoder(CS1)) {}
 
@@ -45,9 +46,8 @@ DCMotor::DCMotor(MagneticEncoder* encoder)
   : DCMotor::DCMotor(IN1, IN2, encoder) {}
 
 DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder)
-  : DCMotor::DCMotor(INL, INH, encoder, "left") {}
-    
-
+  : DCMotor::DCMotor(INL, INH, encoder, "left") {}  
+*/
 DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder, char* name)
   : INL(INL), INH(INH), encoder(encoder), name(name),
     sub("/dc_motor", &DCMotor::motorCb, this) 
@@ -110,24 +110,26 @@ void DCMotor::motorCb(const robot_msgs::Arduino& msg) {
 
   if (strcmp(msg.name, name) == 0) 
   {
-    char* str = "";
-    snprintf(str,sizeof(msg.data),"%f",msg.data);
-    nh.loginfo(str);
+    //char* str = "";
+    //snprintf(str,sizeof(msg.data),"%f",msg.data);
+    //nh.loginfo(str);
+
+    //nh.loginfo("motorCb");
 
     INT_PWM value = static_cast<INT_PWM>(msg.data);
 
-    str = "";
-    snprintf(str,sizeof(value),"%d",value);
-    nh.loginfo(str);
+    //str = "";
+    //snprintf(str,sizeof(value),"%d",value);
+    //nh.loginfo(str);
 
     if (strcmp(msg.name, left) == 0) 
     {
-      nh.loginfo(left);
+      //nh.loginfo(left);
       msg.data? DCMotor::CW(value) : DCMotor::CCW(value);
     } 
     else 
     {
-      nh.loginfo(right);
+      //nh.loginfo(right);
       // right
       msg.data? DCMotor::CCW(value) : DCMotor::CW(value);
     }

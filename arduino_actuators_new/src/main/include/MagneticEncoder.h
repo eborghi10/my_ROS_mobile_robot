@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AS5048A.h>
+#include <sensor_msgs/JointState.h>
 
 #define M_PI 3.14159265359
 
@@ -25,7 +26,7 @@ class MagneticEncoder
 	float normalize(float);
 
 public:
-	MagneticEncoder();
+	//MagneticEncoder();
 	MagneticEncoder(uint8_t);
 	MagneticEncoder(uint8_t, boolean);
 
@@ -33,10 +34,10 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////
-
+/*
 MagneticEncoder::MagneticEncoder()
 	: MagneticEncoder::MagneticEncoder(CS1, PLUS_MINUS_PI) {}
-
+*/
 MagneticEncoder::MagneticEncoder(uint8_t digitalPin)
 	: MagneticEncoder::MagneticEncoder(digitalPin, PLUS_MINUS_PI) {}
 
