@@ -49,4 +49,6 @@ void loop()
   motor_right->PublishAngle();
 
   delay(50);
+  char* here PROGMEM = "HERE";
+  nh.loginfo(here);
 }

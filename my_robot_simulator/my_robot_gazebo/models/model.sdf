@@ -12,7 +12,7 @@
   	<static>false</static>
 
   	<link name='chassis'>
-  		<pose frame='base_footprint'>0.03096 0.007609 0.014522 0 0 -0.02816</pose>
+  		<pose>0.03096 0.007609 0.014522 0 0 -0.02816</pose>
 
 <!--
   The <inertial> tag specifies the inertial parameters of the chassis, those are, how the mass is distributed along the surface of the chassis.
@@ -26,9 +26,9 @@
 -->
 
       <inertial>
-        <!-- mass= 1gr -->
+        <!-- mass= 500gr -->
         <mass>0.5</mass>
-        <pose frame=''>0 0 0 0 -0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <inertia>
           <ixx>0.16667</ixx>
           <iyy>0.16667</iyy>
@@ -57,12 +57,11 @@
 -->
 
   		<visual name='visual'>
-        <pose frame=''>0 0 0.037 0 -0 0</pose>
+        <pose frame=''>0 0 0.037 0 0 0</pose>
   			<geometry>
-          <mesh>
-            <uri>/home/emiliano/catkin_ws/src/my_mobile_robot/robot_description/meshes/chassis_resized.dae</uri>
-            <scale>1 1 1</scale>
-          </mesh>
+	          <mesh>
+	            <uri>file://$(find robot_description)/meshes/chassis_resized.stl</uri>
+	          </mesh>
   			</geometry>
   		</visual>
 
@@ -114,7 +113,7 @@
 -->
 
     <link name="left_wheel">
-      <pose>0.013815 -0.050215 0.033062 0 0 -0.02816</pose>
+      <pose>0.013815 0.050215 0.033062 0 0 -0.02816</pose>
 
       <inertial>
         <mass>0.01</mass>
@@ -131,19 +130,19 @@
       <kinematic>1</kinematic>
       
       <collision name="collision">
+      	<pose frame=''>0 0 0 1.57 0 0</pose>
         <geometry>
-          <cylinder>
-            <cylinder>
-            <radius>0.037</radius>
-            <length>0.026</length>
-          </cylinder>
+        	<cylinder>
+	            <radius>0.037</radius>
+	            <length>0.026</length>
+        	</cylinder>
         </geometry>
       </collision>
 
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>/home/emiliano/catkin_ws/src/my_mobile_robot/robot_description/meshes/left_wheel_resized.dae</uri>
+            <uri>file://$(find robot_description)/meshes/left_wheel_resized.stl</uri>
           </mesh>
         </geometry>
       </visual>
@@ -168,7 +167,7 @@
       <kinematic>1</kinematic>
       
       <collision name="collision">
-        <pose frame=''>0 0 0 1.57 -0 0</pose>
+        <pose frame=''>0 0 0 1.57 0 0</pose>
         <geometry>
           <cylinder>
             <radius>0.037</radius>
@@ -180,7 +179,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>/home/emiliano/catkin_ws/src/my_mobile_robot/robot_description/meshes/right_wheel_resized.dae</uri>
+            <uri>file://$(find robot_description)/meshes/right_wheel_resized.stl</uri>
           </mesh>
         </geometry>
       </visual>
