@@ -1,7 +1,7 @@
 # robot_msgs::Motor
 
 ```
-string name
+bool name
 float32 data
 ```
 

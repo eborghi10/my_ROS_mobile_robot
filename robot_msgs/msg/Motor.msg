@@ -1,4 +1,4 @@
-# name: "left", "right" [encoder, motor] 
-string name
-# angle, velocity
+# name: "left" [false], "right" [true] 
+bool name
+# velocity
 float32 data

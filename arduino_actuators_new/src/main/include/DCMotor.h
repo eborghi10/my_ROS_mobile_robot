@@ -10,7 +10,7 @@ class DCMotor {
 
   int INL; 
   int INH;
-  char* name;
+  boolean name;
 
   void initPins();
   void Stop();
@@ -28,7 +28,7 @@ public:
   //DCMotor(int,int);
   //DCMotor(MagneticEncoder*);
   //DCMotor(int,int,MagneticEncoder*);
-  DCMotor(int,int,MagneticEncoder*,char*);
+  DCMotor(int,int,MagneticEncoder*,boolean);
 
   void PublishAngle();
 };
@@ -47,7 +47,7 @@ DCMotor::DCMotor(MagneticEncoder* encoder)
 DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder)
   : DCMotor::DCMotor(INL, INH, encoder, "left") {}  
 */
-DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder, char* name)
+DCMotor::DCMotor(int INL, int INH, MagneticEncoder* encoder, boolean name)
   : INL(INL), INH(INH), encoder(encoder), name(name),
     sub("/dc_motor", &DCMotor::motorCb, this) 
     {
@@ -99,39 +99,32 @@ void DCMotor::PublishAngle() {
 
 void DCMotor::motorCb(const robot_msgs::Motor& msg) {
 
+  /**
+   * robot_msgs::Motor
+   *
+   * bool name (LEFT: false, RIGHT: true)
+   * float32 data
+   *
+   */
+
 //  INT_PWM right_map = 
 //    map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
 //  INT_PWM left_map = 
 //    map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
 
-  //char* left PROGMEM = "left";
-  //char* right PROGMEM = "right";
+  INT_PWM value = static_cast<INT_PWM>(msg.data);
 
-  if (strcmp(msg.name, name) == 0) 
+  if ((msg.name == LEFT) && (name == LEFT)) 
   {
-    //char* str = "";
-    //snprintf(str,sizeof(msg.data),"%f",msg.data);
-    //nh.loginfo(str);
-
-    //nh.loginfo("motorCb");
-
-    INT_PWM value = static_cast<INT_PWM>(msg.data);
-
-    //str = "";
-    //snprintf(str,sizeof(value),"%d",value);
-    //nh.loginfo(str);
-
-    if (strcmp(msg.name, "left") == 0) 
-    {
-      nh.loginfo("left");
-      // left
-      msg.data? DCMotor::CW(value) : DCMotor::CCW(value);
-    } 
-    else 
-    {
-      nh.loginfo("right");
-      // right
-      msg.data? DCMotor::CCW(value) : DCMotor::CW(value);
-    }
+    nh.loginfo("left");
+    // left
+    msg.data? DCMotor::CW(value) : DCMotor::CCW(value); 
+    
   } 
+  else if ((msg.name == RIGHT) && (name == RIGHT))
+  {
+    nh.loginfo("right");
+    // right
+    msg.data? DCMotor::CCW(value) : DCMotor::CW(value);
+  }
 }

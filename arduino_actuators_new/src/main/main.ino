@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////
 
 DCMotor *motor_left;
-//DCMotor *motor_right;
+DCMotor *motor_right;
 
 //////////////////////////////////////////////////////////////////
 
@@ -30,12 +30,12 @@ void setup()
 
     motor_left = new DCMotor(IN1, IN2, 
                  new MagneticEncoder(CS1),
-                 "left");
-    /*
+                 LEFT);
+    
     motor_right = new DCMotor(IN3, IN4,
                   new MagneticEncoder(CS2),
-                  "right");
-    */
+                  RIGHT);
+    
 }
 
 //////////////////////////////////////////////////////////////////
@@ -44,8 +44,8 @@ void loop()
 {
 	nh.spinOnce();
 
-  //motor_left->PublishAngle();
-  //motor_right->PublishAngle();
+  motor_left->PublishAngle();
+  motor_right->PublishAngle();
 
-  delay(50);
+  delay(100);
 }

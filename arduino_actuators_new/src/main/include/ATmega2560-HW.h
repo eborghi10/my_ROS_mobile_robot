@@ -3,6 +3,7 @@
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
 #include <robot_msgs/Motor.h>
+#include <std_msgs/String.h>
 
 ros::NodeHandle nh;
 

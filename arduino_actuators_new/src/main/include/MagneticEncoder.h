@@ -2,7 +2,6 @@
 
 #include "ATmega2560-HW.h"
 #include <AS5048A.h>
-#include <sensor_msgs/JointState.h>
 
 #define M_PI 3.14159265359
 
@@ -31,7 +30,7 @@ public:
 	MagneticEncoder(uint8_t);
 	MagneticEncoder(uint8_t, boolean);
 
-	void PublishAngle(const char*);
+	void PublishAngle(const boolean);
 };
 
 ///////////////////////////////////////////////////////////////
@@ -75,12 +74,19 @@ float MagneticEncoder::normalize(float angle) {
 	return angle;
 }
 
-void MagneticEncoder::PublishAngle(const char* name) {
+void MagneticEncoder::PublishAngle(const boolean encoder_name) {
 		
 	float currentAngle = 
 			MagneticEncoder::read2angle(Encoder->getRawRotation());
 
-	msg.name 		 = &name;
+	if (encoder_name == LEFT) {
+		
+		msg.header.frame_id = "left_wheel_frame";
+	}
+	else {
+
+		msg.header.frame_id = "right_wheel_frame";
+	}
 
 	msg.header.stamp = nh.now();
 	double dT 		 = msg.header.stamp.toSec() - lastTime;
@@ -88,7 +94,8 @@ void MagneticEncoder::PublishAngle(const char* name) {
 	msg.position[0]	 = normalize( currentAngle - initialAngles);
 	msg.velocity[0]	 = (msg.position[0] - lastPos) / dT;
 
-	msg.name_length 	= 1;
+	// setting the length
+	msg.name_length 	= 0;	// Empty because of an error (use frame_id instead)
 	msg.position_length = 1;
 	msg.velocity_length = 1;
 	msg.effort_length 	= 0;
