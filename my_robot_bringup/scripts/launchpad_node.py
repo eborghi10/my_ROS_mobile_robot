@@ -18,7 +18,7 @@ import time
 import math
 
 #This module helps to receive values from serial port
-from SerialDataGateway import SerialDataGateway
+#from SerialDataGateway import SerialDataGateway
 #Importing ROS data types
 from std_msgs.msg import Int16,Int32, Int64, Float32, String, Header, UInt64
 #Importing ROS data type for IMU
@@ -60,8 +60,8 @@ class Launchpad_Class(object):
 #######################################################################################################################
 		rospy.loginfo("Starting with serial port: " + port + ", baud rate: " + str(baudRate))
 		#Initializing SerialDataGateway with port, baudrate and callback function to handle serial data
-		self._SerialDataGateway = SerialDataGateway(port, baudRate,  self._HandleReceivedLine)
-		rospy.loginfo("Started serial communication")
+		#self._SerialDataGateway = SerialDataGateway(port, baudRate,  self._HandleReceivedLine)
+		#rospy.loginfo("Started serial communication")
 		
 
 #######################################################################################################################

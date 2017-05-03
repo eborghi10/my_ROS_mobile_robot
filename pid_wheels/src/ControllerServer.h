@@ -10,7 +10,7 @@
 // actionlib::SimpleActionServer API
 #include <actionlib/server/simple_action_server.h>
 
-#include <robot_msgs/Arduino.h>
+#include <robot_msgs/Motor.h>
 #include <sensor_msgs/JointState.h>
 #include <string>
 

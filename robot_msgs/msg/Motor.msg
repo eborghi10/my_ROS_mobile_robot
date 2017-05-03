@@ -1,4 +1,4 @@
-# name: "left" [false], "right" [true] 
-bool name
+# name: "left", "right" 
+string name
 # velocity
 float32 data

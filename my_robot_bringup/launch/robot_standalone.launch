@@ -5,11 +5,11 @@
  <arg name="simulation" default="$(optenv TURTLEBOT_SIMULATION false)"/>
  <param name="/use_sim_time" value="$(arg simulation)"/>
 
-  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find my_robot_description)/urdf/chefbot_base.xacro'" /> 
+  <arg name="urdf_file" default="$(find xacro)/xacro '$(find my_robot_description)/urdf/my_robot_base.xacro'" /> 
 <!--  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find arlobot_description)/urdf/common.urdf.xacro'" /> -->
 
 
-  <param name="my_robot_description" command="$(arg urdf_file)" />
+  <param name="robot_description" command="$(arg urdf_file)" />
 
   <!-- important generally, but specifically utilised by the current app manager -->
   <param name="robot/name" value="$(optenv ROBOT turtlebot)"/>
@@ -25,7 +25,11 @@
   <rosparam param="ticks_meter">14865</rosparam>
 
 
-  <node name="launchpad_node" pkg="my_robot_bringup" type="launchpad_node.py">
+  <!--node name="launchpad_node" pkg="my_robot_bringup" type="launchpad_node.py">
+    <rosparam file="$(find my_robot_bringup)/param/board_config.yaml" command="load" />
+  </node-->
+
+  <node name="serial_node" pkg="rosserial_python" type="serial_node.py" output="screen">
     <rosparam file="$(find my_robot_bringup)/param/board_config.yaml" command="load" />
   </node>
 
@@ -62,10 +66,7 @@
       <rosparam param="timeout_ticks">4</rosparam>
       <rosparam param="rolling_pts">5</rosparam>
 
-
-
  </node>
-
 
   <node pkg="my_robot_bringup" type="twist_to_motors.py" name="twist_to_motors" output="screen"/>
   <node pkg="my_robot_bringup" type="diff_tf.py" name="diff_tf" output="screen"/> 

@@ -2,7 +2,7 @@
 #include <pid_wheels/PIDAction.h>
 #include <actionlib/client/simple_action_client.h>
 
-#include <robot_msgs/Arduino.h>
+#include <robot_msgs/Motor.h>
 
 //class containing the client
 class ControllerClient{
@@ -23,9 +23,9 @@ private:
     void activeCb();
     void feedbackCb(const pid_wheels::PIDFeedbackConstPtr&);
 
-    void WheelVelocitiesCb(const robot_msgs::Arduino&);
+    void WheelVelocitiesCb(const robot_msgs::Motor&);
 
-    void SetGoal(const robot_msgs::Arduino&);
+    void SetGoal(const robot_msgs::Motor&);
 };
 
 ControllerClient::ControllerClient()
@@ -69,14 +69,14 @@ void ControllerClient::feedbackCb(const pid_wheels::PIDFeedbackConstPtr& feedbac
 	ROS_INFO("feedback [%s]: %f", (feedback->encoder).c_str(), feedback->angle);
 }
 
-void ControllerClient::WheelVelocitiesCb(const robot_msgs::Arduino& msg)
+void ControllerClient::WheelVelocitiesCb(const robot_msgs::Motor& msg)
 {
 	ControllerClient::SetGoal(msg);
 }
 
 /////////////////////////////////////////////////////////////////
 
-void ControllerClient::SetGoal(const robot_msgs::Arduino& msg) {
+void ControllerClient::SetGoal(const robot_msgs::Motor& msg) {
 
 	ROS_INFO("[Goal] : %f", msg.data);
 

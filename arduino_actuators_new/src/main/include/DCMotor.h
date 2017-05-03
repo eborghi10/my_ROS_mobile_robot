@@ -114,16 +114,14 @@ void DCMotor::motorCb(const robot_msgs::Motor& msg) {
 
   INT_PWM value = static_cast<INT_PWM>(msg.data);
 
-  if ((msg.name == LEFT) && (name == LEFT)) 
+  if (strcmp(msg.name, "left") == 0 && (name == LEFT)) 
   {
-    nh.loginfo("left");
     // left
     msg.data? DCMotor::CW(value) : DCMotor::CCW(value); 
     
   } 
-  else if ((msg.name == RIGHT) && (name == RIGHT))
+  else if (strcmp(msg.name, "right") && (name == RIGHT))
   {
-    nh.loginfo("right");
     // right
     msg.data? DCMotor::CCW(value) : DCMotor::CW(value);
   }

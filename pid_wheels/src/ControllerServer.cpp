@@ -33,10 +33,10 @@ ControllerServer::ControllerServer(std::string name):
 		controlInput = nh2.subscribe("/encoder", 1, &ControllerServer::EncoderAngleCb, this);
 
 		// Tracking control error
-		pubCurrentError = nh2.advertise<robot_msgs::Arduino>("/PID/control_error",1);
+		pubCurrentError = nh2.advertise<robot_msgs::Motor>("/PID/control_error",1);
 		
 		// Publisher PID output in servo
-		pubCurrentVelocity = nh2.advertise<robot_msgs::Arduino>("/dc_motor", 1);
+		pubCurrentVelocity = nh2.advertise<robot_msgs::Motor>("/dc_motor", 1);
 		
 		// Initializing PID Controller
 		Initialize();
@@ -126,7 +126,7 @@ void ControllerServer::executeCb(const pid_wheels::PIDGoalConstPtr& goal)
 		 *
 		 */
 
-		robot_msgs::Arduino VelMsg;
+		robot_msgs::Motor VelMsg;
 		
 		// PID Controller
 		VelMsg.name = goal->motor;
@@ -136,7 +136,7 @@ void ControllerServer::executeCb(const pid_wheels::PIDGoalConstPtr& goal)
 		pubCurrentVelocity.publish(VelMsg);
 		
 		// Auxiliary Message
-		robot_msgs::Arduino ErrorMsg;
+		robot_msgs::Motor ErrorMsg;
 		
 		ErrorMsg.name = goal->motor;
 		ErrorMsg.data = error;
