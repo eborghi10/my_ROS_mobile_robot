@@ -15,7 +15,6 @@
  * 3) $ roslaunch arduino_actuators execute.launch
  */
 
-#include "include/ATmega2560-HW.h"
 #include "include/DCMotor.h"
 
 //////////////////////////////////////////////////////////////////
@@ -48,8 +47,5 @@ void loop()
   //motor_left->PublishAngle();
   //motor_right->PublishAngle();
 
-  delay(5);
-
-  //char* here PROGMEM = "HERE";
-  //nh.loginfo(here);
+  delay(50);
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MagneticEncoder.h"
-#include <robot_msgs/Arduino.h>
 
 //////////////////////////////////////////////////////////////////
 
@@ -19,9 +18,9 @@ class DCMotor {
   void CCW(INT_PWM);
   INT_PWM protectOutput(INT_PWM);
 
-  void motorCb(const robot_msgs::Arduino&);
+  void motorCb(const robot_msgs::Motor&);
 
-  ros::Subscriber<robot_msgs::Arduino, DCMotor> sub;
+  ros::Subscriber<robot_msgs::Motor, DCMotor> sub;
 
 public:
 
@@ -98,15 +97,15 @@ void DCMotor::PublishAngle() {
 
 //////////////////////////////////////////////////////////////////
 
-void DCMotor::motorCb(const robot_msgs::Arduino& msg) {
+void DCMotor::motorCb(const robot_msgs::Motor& msg) {
 
 //  INT_PWM right_map = 
 //    map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
 //  INT_PWM left_map = 
 //    map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
 
-  char* left PROGMEM = "left";
-  char* right PROGMEM = "right";
+  //char* left PROGMEM = "left";
+  //char* right PROGMEM = "right";
 
   if (strcmp(msg.name, name) == 0) 
   {
@@ -122,14 +121,15 @@ void DCMotor::motorCb(const robot_msgs::Arduino& msg) {
     //snprintf(str,sizeof(value),"%d",value);
     //nh.loginfo(str);
 
-    if (strcmp(msg.name, left) == 0) 
+    if (strcmp(msg.name, "left") == 0) 
     {
-      //nh.loginfo(left);
+      nh.loginfo("left");
+      // left
       msg.data? DCMotor::CW(value) : DCMotor::CCW(value);
     } 
     else 
     {
-      //nh.loginfo(right);
+      nh.loginfo("right");
       // right
       msg.data? DCMotor::CCW(value) : DCMotor::CW(value);
     }

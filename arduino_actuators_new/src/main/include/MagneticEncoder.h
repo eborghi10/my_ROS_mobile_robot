@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ATmega2560-HW.h"
 #include <AS5048A.h>
 #include <sensor_msgs/JointState.h>
 

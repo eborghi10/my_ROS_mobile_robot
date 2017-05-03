@@ -1,4 +1,4 @@
-# robot_msgs::Arduino
+# robot_msgs::Motor
 
 ```
 string name
@@ -6,6 +6,10 @@ float32 data
 ```
 
 ## How to use custom messages in the Arduino IDE
+
+In order to know if the package was compiled successfuly:
+
+`~$ rosmsg list | grep robot_msgs`
 
 *NOTE:* _This is my personal implementation and is the only method that worked._
 

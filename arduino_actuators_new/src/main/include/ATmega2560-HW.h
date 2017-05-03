@@ -2,7 +2,7 @@
 
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
-#include <robot_msgs/Arduino.h>
+#include <robot_msgs/Motor.h>
 
 ros::NodeHandle nh;
 
