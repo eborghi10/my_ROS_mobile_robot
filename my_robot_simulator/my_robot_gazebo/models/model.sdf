@@ -12,7 +12,7 @@
   	<static>false</static>
 
   	<link name='chassis'>
-  		<pose>0.03096 0.007609 0.014522 0 0 -0.02816</pose>
+  		<pose>0 0 0.048 0 0 0</pose>
 
 <!--
   The <inertial> tag specifies the inertial parameters of the chassis, those are, how the mass is distributed along the surface of the chassis.
@@ -30,9 +30,16 @@
         <mass>0.5</mass>
         <pose>0 0 0 0 0 0</pose>
         <inertia>
-          <ixx>0.16667</ixx>
-          <iyy>0.16667</iyy>
-          <izz>0.16667</izz>
+          <!-- Inertia tensor for a cuboid of height h, width w, depth d, and mass m, with homogeneous mass distribution
+             More details: http://en.wikipedia.org/wiki/List_of_moment_of_inertia_tensors
+             m = 0.5 kg; h = 0.08 m (Z); w = 0.11 m (Y); d = 0.175 m (X); 
+             [Id] ixx = 1/12 * m * (w^2 + h^2)
+             [Iw] iyy = 1/12 * m * (d^2 + h^2)
+             [Ih] izz = 1/12 * m * (w^2 + d^2) 
+          -->
+          <ixx>0.00077</ixx>
+          <iyy>0.00154</iyy>
+          <izz>0.00178</izz>
         </inertia>
       </inertial>
 
@@ -57,10 +64,10 @@
 -->
 
   		<visual name='visual'>
-        <pose frame=''>0 0 0.037 0 0 0</pose>
+        <pose frame=''>0 0 0 0 0 0</pose>
   			<geometry>
 	          <mesh>
-	            <uri>file://$(find robot_description)/meshes/chassis_resized.stl</uri>
+	            <uri>file://$(find my_robot_description)/meshes/chassis_resized.dae</uri>
 	          </mesh>
   			</geometry>
   		</visual>
@@ -142,7 +149,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>file://$(find robot_description)/meshes/left_wheel_resized.stl</uri>
+            <uri>file://$(find my_robot_description)/meshes/left_wheel_resized.stl</uri>
           </mesh>
         </geometry>
       </visual>
@@ -179,7 +186,7 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>file://$(find robot_description)/meshes/right_wheel_resized.stl</uri>
+            <uri>file://$(find my_robot_description)/meshes/right_wheel_resized.stl</uri>
           </mesh>
         </geometry>
       </visual>
