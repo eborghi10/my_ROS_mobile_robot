@@ -6,7 +6,7 @@
 -->
 
 <sdf version='1.6'>
-  <model name="my_ROS_mobile_robot">
+  <model name="my_robot">
   	<!--If static=true, will be ignored by the physics engine so I can place the components
      properly-->
   	<static>false</static>

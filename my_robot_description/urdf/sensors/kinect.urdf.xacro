@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="sensor_kinect" xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:include filename="$(find chefbot_description)/urdf/chefbot_gazebo.urdf.xacro"/>
-  <xacro:include filename="$(find chefbot_description)/urdf/chefbot_properties.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/my_robot_gazebo.urdf.xacro"/>
+  <xacro:include filename="$(find my_robot_description)/urdf/my_robot_properties.urdf.xacro"/>
   
   <!-- Parameterised in part by the values in turtlebot_properties.urdf.xacro -->
   <xacro:macro name="sensor_kinect" params="parent">

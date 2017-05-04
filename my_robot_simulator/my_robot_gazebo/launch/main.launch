@@ -26,7 +26,7 @@
   <node name="spawn_urdf" 
         pkg="gazebo_ros" 
         type="spawn_model" 
-        args="-file $(find my_robot_gazebo)/models/model.sdf -sdf -model my_ROS_mobile_robot" />
+        args="-file $(find my_robot_gazebo)/models/model.sdf -sdf -model my_robot" />
 
 </launch>
 
