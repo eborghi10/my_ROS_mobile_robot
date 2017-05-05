@@ -1,4 +1,9 @@
-mybot:
+# .yaml config file
+#
+# The PID gains and controller settings must be saved in a yaml file that gets loaded
+# to the param server via the roslaunch file (my_robot_control.launch).
+
+my_robot:
   # Publish all joint states -----------------------------------
   joint_state_controller:
     type: joint_state_controller/JointStateController

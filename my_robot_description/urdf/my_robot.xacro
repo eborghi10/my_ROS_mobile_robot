@@ -2,25 +2,11 @@
 
 <!--
 	http://www.generationrobots.com/blog/en/2015/02/robotic-simulation-scenarios-with-gazebo-and-ros/#create your own robot model
-
-	http://gazebosim.org/tutorials?cat=guided_b&tut=guided_b3
-
-	https://github.com/HumaRobotics/mybot_gazebo_tutorial
-
-	https://github.com/jaypatravali/mybot_gazebo
 	
 	#######################################################
 
-	To check whether the sintax is fine or whether it have errors:
-    $ check_urdf my_robot.urdf
-
-    To get the Graphviz in pdf:
-    $ urdf_to_graphviz my_robot.urdf
-
-	#######################################################
-
     To run:
-    $ roslaunch my_robot_gazebo simple.launch
+    $ roslaunch my_robot_gazebo my_robot_world.launch
 
     $ rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/my_robot/cmd_vel
 
@@ -39,7 +25,8 @@
 	<xacro:property name="casterMass" value="0.1"/>
 
 	<xacro:property name="wheelWidth" value="0.026"/>
-	<xacro:property name="wheelRadius" value="0.037"/>
+	<xacro:property name="wheelRadius" value="0.05"/>
+	<!--xacro:property name="wheelRadius" value="0.037"/-->
 	<xacro:property name="wheelPos" value="0.11"/>
 	<xacro:property name="wheelMass" value="0.01"/>
 
@@ -47,15 +34,16 @@
 	<xacro:property name="cameraMass" value="0.1"/-->
 
 	<xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
+	<!-- Import Rviz colors -->
 	<xacro:include filename="$(find my_robot_description)/urdf/materials.xacro" />
 	<xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
 
 
-
-	<link name="footprint" />
+	<!-- Used for fixing robot to Gazebo 'chassis' -->
+	<link name="world" />
 
 	<joint name="base_joint" type="fixed">
-		<parent link="footprint"/>
+		<parent link="world"/>
 		<child link="chassis"/>
 	</joint>
 

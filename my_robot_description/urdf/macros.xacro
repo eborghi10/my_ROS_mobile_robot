@@ -92,13 +92,19 @@
       <joint_properties damping="0.0" friction="0.0"/>
     </joint>
 
+<!--
+  http://gazebosim.org/tutorials/?tut=ros_control
+-->
 
     <transmission name="${lr}_trans">
       <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${lr}_wheel_hinge"/>
+      <joint name="${lr}_wheel_hinge">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
       <actuator name="${lr}Motor">
-        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
         <mechanicalReduction>10</mechanicalReduction>
+        <!--mechanicalReduction>1</mechanicalReduction-->
       </actuator>
     </transmission>
 

@@ -1,0 +1,40 @@
+<launch>
+
+  <arg name="model" 
+  	   default="$(find my_robot_description)/urdf/my_robot.xacro"/>
+
+  <arg name="gui" 
+  	   default="true" />
+
+  <arg name="rvizconfig" 
+  	   default="$(find my_robot_description)/rviz/my_robot.rviz" />
+
+  <!-- ###################################################################### -->
+
+  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <param name="robot_description" 
+  		   command="$(find xacro)/xacro $(arg model)" />
+
+  <param name="use_gui" 
+  		   value="$(arg gui)"/>
+
+  <!-- ###################################################################### -->
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" 
+    		pkg="joint_state_publisher" 
+    		type="joint_state_publisher" />
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" 
+    		pkg="robot_state_publisher" 
+    		type="state_publisher" />
+
+  <!-- Show in Rviz -->
+  <node name="rviz" 
+    		pkg="rviz" 
+    		type="rviz" 
+    		args="-d $(arg rvizconfig)" 
+    		required="true" />
+
+</launch>

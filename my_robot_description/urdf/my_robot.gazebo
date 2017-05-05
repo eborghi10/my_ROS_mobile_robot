@@ -6,11 +6,42 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <!-- ros_control plugin -->
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <!--robotNamespace>/my_robot</robotNamespace-->
+      <robotNamespace>/my_robot</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
+
+
+  <!--
+    The plugin broadcasts a body's pose and rates through ROS nav_msgs::Odometry message.
+    The plugin broadcasts pose and rate of a body named "chassis" over ROS topic name "my_robot/odom".
+  -->
+  <gazebo>
+    <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
+      <frameName>map</frameName>
+      <bodyName>chassis</bodyName>
+      <topicName>my_robot/odom</topicName>
+      <updateRate>30.0</updateRate>
+    </plugin>
+  </gazebo>
+
+
+  <!-- Chassis -->
+  <gazebo reference="chassis">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+
+  <!-- Caster wheel -->
+  <gazebo reference="caster_wheel">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
 
   <gazebo>
     <plugin name="differential_drive_controller" 
@@ -23,10 +54,10 @@
       <wheelSeparation>${chassisWidth+wheelWidth}</wheelSeparation>
       <wheelDiameter>${2*wheelRadius}</wheelDiameter>
       <torque>20</torque>
-      <commandTopic>mybot/cmd_vel</commandTopic>
-      <odometryTopic>mybot/odom_diffdrive</odometryTopic>
+      <commandTopic>my_robot/cmd_vel</commandTopic>
+      <odometryTopic>my_robot/odom_diffdrive</odometryTopic>
       <odometryFrame>odom</odometryFrame>
-      <robotBaseFrame>footprint</robotBaseFrame>
+      <robotBaseFrame>world</robotBaseFrame>
       
       <legacyMode>true</legacyMode>
       
@@ -35,12 +66,9 @@
       <publishWheelJointState>false</publishWheelJointState>
       <wheelAcceleration>0</wheelAcceleration>
       <wheelTorque>5</wheelTorque>
-      <!--odometrySource>true</odometrySource-->
+      <publishTf>1</publishTf>
+      <odometrySource>encoder</odometrySource>
     </plugin>
-  </gazebo>
-
-  <gazebo reference="chassis">
-    <material>Gazebo/Orange</material>
   </gazebo>
 
 </robot>

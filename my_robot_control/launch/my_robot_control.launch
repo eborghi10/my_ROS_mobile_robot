@@ -1,21 +1,34 @@
 <launch>
 
+  <!--
+
+    roslaunch file for starting the ros_control controllers
+
+  -->
+
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find my_robot_control)/config/my_robot_control.yaml" command="load"/>
 
   <!-- load the controllers -->
-  <!-- ns="/my_robot" -->
+  <!--
+    The controller_spawner node starts the two wheel/joint position controllers for the robot by running a python script that makes a service call to the ros_control controller manager. The service calls tell the controller manager which controllers you want. It also loads a third controller that publishes the joint states of all the joints with hardware_interfaces and advertises the topic on /joint_states.
+  -->
   <node name="controller_spawner"
         pkg="controller_manager"
         type="spawner" 
         respawn="false"
-        output="screen" 
-        args="joint_state_controller     rightWheel_effort_controller
-        leftWheel_effort_controller"
+        output="screen"
+        ns="/my_robot" 
+        args="joint_state_controller 
+              rightWheel_effort_controller 
+              leftWheel_effort_controller"
   />
 
 
   <!-- convert joint states to TF transforms for rviz, etc -->
+  <!--
+    A robot_state_publisher node simply listens to /joint_states messages from the joint_state_controller then publishes the transforms to /tf. This allows you to see your simulated robot in Rviz as well as do other tasks.
+  -->
   <node name="robot_state_publisher" 
         pkg="robot_state_publisher" 
         type="robot_state_publisher" 

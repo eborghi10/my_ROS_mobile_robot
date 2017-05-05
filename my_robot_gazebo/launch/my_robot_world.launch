@@ -14,8 +14,7 @@
 	rostopic echo /my_robot/joint_states
 -->
 
-	<!-- ros_control mybot launch file -->
-	<include file="$(find my_robot_control)/launch/my_robot_control.launch" />
+
 
 	<!-- these are the arguments you can pass this launch file, for example paused:=true -->
 	<arg name="paused" default="false"/>
@@ -30,7 +29,7 @@
 
 	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<!--arg name="world_name" value="$(find my_robot_gazebo)/worlds/playground.world"/-->
+		<arg name="world_name" value="$(find my_robot_gazebo)/worlds/my_robot.world"/>
 		<arg name="debug" value="$(arg debug)" />
 		<arg name="gui" value="$(arg gui)" />
 		<arg name="paused" value="$(arg paused)"/>
@@ -44,4 +43,8 @@
 		  type="spawn_model" 
 		  output="screen"
  		  args="-urdf -model my_robot -param robot_description" />
+
+ 	<!-- ros_control mybot launch file -->
+	<include file="$(find my_robot_control)/launch/my_robot_control.launch" />
+
 </launch>
