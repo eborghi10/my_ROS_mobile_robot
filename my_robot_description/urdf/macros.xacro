@@ -54,9 +54,10 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
         <geometry>
-          <cylinder 
+          <!--cylinder 
             length="${wheelWidth}" 
-            radius="${wheelRadius}"/>
+            radius="${wheelRadius}"/-->
+          <mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" />
         </geometry>
         <material name="black"/>
       </visual>

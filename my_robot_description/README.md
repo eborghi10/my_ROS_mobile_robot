@@ -16,5 +16,5 @@ $ urdf_to_graphviz my_robot.urdf
 
 To run:
 ```
-$ roslaunch robot_description display.launch model:=`rospack find robot_description`/urdf/my_robot.urdf
+$ roslaunch my_robot_description my_robot_rviz.launch
 ```
