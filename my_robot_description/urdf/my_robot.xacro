@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+
+<!--
+	http://www.generationrobots.com/blog/en/2015/02/robotic-simulation-scenarios-with-gazebo-and-ros/#create your own robot model
+
+	http://gazebosim.org/tutorials?cat=guided_b&tut=guided_b3
+
+	https://github.com/HumaRobotics/mybot_gazebo_tutorial
+
+	https://github.com/jaypatravali/mybot_gazebo
+	
+	#######################################################
+
+	To check whether the sintax is fine or whether it have errors:
+    $ check_urdf my_robot.urdf
+
+    To get the Graphviz in pdf:
+    $ urdf_to_graphviz my_robot.urdf
+
+	#######################################################
+
+    To run:
+    $ roslaunch my_robot_gazebo simple.launch
+
+    $ rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/my_robot/cmd_vel
+
+-->
+
+<robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:property name="PI" value="3.1415926535897931"/>
+
+	<xacro:property name="chassisHeight" value="0.08"/>
+	<xacro:property name="chassisLength" value="0.175"/>
+	<xacro:property name="chassisWidth" value="0.11"/>
+	<xacro:property name="chassisMass" value="0.5"/>
+
+	<xacro:property name="casterRadius" value="0.025"/>
+	<xacro:property name="casterMass" value="0.1"/>
+
+	<xacro:property name="wheelWidth" value="0.026"/>
+	<xacro:property name="wheelRadius" value="0.037"/>
+	<xacro:property name="wheelPos" value="0.11"/>
+	<xacro:property name="wheelMass" value="0.01"/>
+
+	<!--xacro:property name="cameraSize" value="0.05"/>
+	<xacro:property name="cameraMass" value="0.1"/-->
+
+	<xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
+	<xacro:include filename="$(find my_robot_description)/urdf/materials.xacro" />
+	<xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
+
+
+
+	<link name="footprint" />
+
+	<joint name="base_joint" type="fixed">
+		<parent link="footprint"/>
+		<child link="chassis"/>
+	</joint>
+
+
+	<link name='chassis'>
+		<collision> 
+			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+			<geometry> 
+				<box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/> 
+			</geometry> 
+		</collision>
+
+		<visual> 
+			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+			<geometry> 
+				<box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/> 
+				<!--mesh>
+					<uri>
+						file://../meshes/chassis_resized.dae
+					</uri>
+				</mesh-->
+			</geometry> 
+			<material name="orange"/>
+		</visual>
+
+		<inertial> 
+			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+			<mass value="${chassisMass}"/> 
+			<box_inertia m="${chassisMass}" x="${chassisLength}" y="${chassisWidth}" z="${chassisHeight}"/>
+		</inertial>
+	</link>
+
+
+
+
+	<joint name="fixed" type="fixed">
+		<parent link="chassis"/>
+		<child link="caster_wheel"/>
+	</joint>
+
+
+
+
+	<link name="caster_wheel">
+
+		<collision>
+			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<geometry>
+				<sphere radius="${casterRadius}"/>
+	  		</geometry>
+		</collision>
+
+		<visual> 
+			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<geometry>
+				<sphere radius="${casterRadius}"/>
+			</geometry>
+		</visual>
+
+		<inertial>
+			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<mass value="${casterMass}"/>
+			<sphere_inertia m="${casterMass}" r="${casterRadius}"/>
+		</inertial>
+	</link>
+
+
+	<wheel lr="left" tY="-1"/>
+	<wheel lr="right" tY="1"/>
+
+	<!--joint name="camera_joint" type="fixed">
+		<origin xyz="${-cameraSize+chassisLength/2} 0 ${cameraSize+wheelRadius+cameraSize/2}" rpy="0 0 0"/>
+		<parent link="chassis"/>
+		<child link="camera"/>
+	</joint>
+
+	<link name="camera">
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+			</geometry>
+		</collision>
+
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+			</geometry>
+			<material name="blue"/>
+		</visual>
+
+		<inertial>
+			<mass value="${cameraMass}" />
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<box_inertia m="${cameraMass}" x="${cameraSize}" y="${cameraSize}" z="${cameraSize}" />
+		</inertial>
+	</link-->
+
+</robot>

@@ -1,8 +1,0 @@
-<!--
-	all the gazebo-specific aspects of our robot
--->
-<robot>
-	<gazebo reference="chassis">
-	  <material>Gazebo/Orange</material>
-	</gazebo>
-</robot>
