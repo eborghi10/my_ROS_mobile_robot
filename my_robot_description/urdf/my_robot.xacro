@@ -16,43 +16,30 @@
 
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
-	<xacro:property name="chassisHeight" value="0.1"/>
-	<xacro:property name="chassisLength" value="0.4"/>
-	<xacro:property name="chassisWidth" value="0.2"/>
-	<xacro:property name="chassisMass" value="50"/>
 
-	<xacro:property name="casterRadius" value="0.05"/>
-	<xacro:property name="casterMass" value="5"/>
+	<xacro:property name="chassisHeight" value="0.037"/>
+	<xacro:property name="chassisLength" value="0.175"/>
+	<xacro:property name="chassisWidth" value="0.142"/>
+	<xacro:property name="chassisMass" value="0.25"/>
 
-	<xacro:property name="wheelWidth" value="0.05"/>
-	<xacro:property name="wheelRadius" value="0.1"/>
-	<xacro:property name="wheelPos" value="0.2"/>
-	<xacro:property name="wheelMass" value="5"/>
+	<xacro:property name="casterRadius" value="0.0125"/>
+	<xacro:property name="casterMass" value="0.05"/>
+
+	<xacro:property name="wheelWidth" value="0.025"/>
+	<xacro:property name="wheelRadius" value="0.037"/>
+	<xacro:property name="wheelPos" value="0.036"/>
+	<xacro:property name="wheelMass" value="0.05"/>
 
 	<xacro:property name="cameraSize" value="0.05"/>
 	<xacro:property name="cameraMass" value="0.1"/>
 
 
-	<!--xacro:property name="chassisHeight" value="0.08"/>
-	<xacro:property name="chassisLength" value="0.175"/>
-	<xacro:property name="chassisWidth" value="0.11"/>
-	<xacro:property name="chassisMass" value="0.5"/>
-
-	<xacro:property name="casterRadius" value="0.025"/>
-	<xacro:property name="casterMass" value="0.1"/>
-
-	<xacro:property name="wheelWidth" value="0.026"/>
-	<xacro:property name="wheelRadius" value="0.037"/>
-	<xacro:property name="wheelPos" value="0.11"/>
-	<xacro:property name="wheelMass" value="0.01"/>
-
-	<xacro:property name="cameraSize" value="0.05"/>
-	<xacro:property name="cameraMass" value="0.1"/-->
 
 	<xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
 	<!-- Import Rviz colors -->
 	<xacro:include filename="$(find my_robot_description)/urdf/materials.xacro" />
 	<xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
+
 
 
 	<!-- Used for fixing robot to Gazebo 'chassis' -->
@@ -68,7 +55,9 @@
 		<collision> 
 			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
 			<geometry> 
-				<box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/> 
+				<box size="${chassisLength} 
+						   ${chassisWidth} 
+						   ${chassisHeight}"/> 
 			</geometry> 
 		</collision>
 
@@ -78,13 +67,17 @@
 				<!--box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/--> 
 				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
 			</geometry> 
-			<material name="orange"/>
+			<material name="red"/>
 		</visual>
 
 		<inertial> 
 			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
 			<mass value="${chassisMass}"/> 
-			<box_inertia m="${chassisMass}" x="${chassisLength}" y="${chassisWidth}" z="${chassisHeight}"/>
+			<box_inertia 
+				m="${chassisMass}" 
+				x="${chassisLength}" 
+				y="${chassisWidth}" 
+				z="${chassisHeight}"/>
 		</inertial>
 	</link>
 
@@ -118,7 +111,9 @@
 		<inertial>
 			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
 			<mass value="${casterMass}"/>
-			<sphere_inertia m="${casterMass}" r="${casterRadius}"/>
+			<sphere_inertia 
+				m="${casterMass}" 
+				r="${casterRadius}"/>
 		</inertial>
 	</link>
 

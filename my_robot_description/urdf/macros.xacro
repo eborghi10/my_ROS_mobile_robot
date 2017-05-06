@@ -86,10 +86,13 @@
       <parent link="chassis"/>
       <child link="${lr}_wheel"/>
       <origin 
-        xyz="${+wheelPos-chassisLength/4} ${tY*wheelWidth/2+tY*chassisWidth/2} ${wheelRadius}" 
-        rpy="0 0 0" /> 
+        xyz = "${+wheelPos-chassisLength/4}
+               ${tY*wheelWidth/2+tY*chassisWidth/2} 
+               ${wheelRadius}" 
+        rpy = "0 0 0" /> 
       <axis xyz="0 1 0" rpy="0 0 0" />
-      <limit effort="100" velocity="100"/>
+      <!--limit effort="100" velocity="100"/-->
+      <limit effort="10" velocity="10"/>
       <joint_properties damping="0.0" friction="0.0"/>
     </joint>
 
@@ -104,8 +107,8 @@
       </joint>
       <actuator name="${lr}Motor">
         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <mechanicalReduction>10</mechanicalReduction>
-        <!--mechanicalReduction>1</mechanicalReduction-->
+        <!--mechanicalReduction>10</mechanicalReduction-->
+        <mechanicalReduction>1</mechanicalReduction>
       </actuator>
     </transmission>
 
