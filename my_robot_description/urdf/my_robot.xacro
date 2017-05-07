@@ -17,12 +17,12 @@
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
 
-	<xacro:property name="chassisHeight" value="0.037"/>
+	<xacro:property name="chassisHeight" value="0.095"/>
 	<xacro:property name="chassisLength" value="0.175"/>
-	<xacro:property name="chassisWidth" value="0.142"/>
-	<xacro:property name="chassisMass" value="0.25"/>
+	<xacro:property name="chassisWidth" value="0.115"/>
+	<xacro:property name="chassisMass" value="0.15"/>
 
-	<xacro:property name="casterRadius" value="0.0125"/>
+	<xacro:property name="casterRadius" value="0.015"/>
 	<xacro:property name="casterMass" value="0.05"/>
 
 	<xacro:property name="wheelWidth" value="0.025"/>
@@ -30,8 +30,8 @@
 	<xacro:property name="wheelPos" value="0.036"/>
 	<xacro:property name="wheelMass" value="0.05"/>
 
-	<xacro:property name="cameraSize" value="0.05"/>
-	<xacro:property name="cameraMass" value="0.1"/>
+	<!--xacro:property name="cameraSize" value="0.05"/>
+	<xacro:property name="cameraMass" value="0.1"/-->
 
 
 
@@ -94,12 +94,12 @@
 
 	<link name="caster_wheel">
 
-		<collision>
-			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+		<!--collision>
+			<origin xyz="${casterRadius+chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
 	  		</geometry>
-		</collision>
+		</collision-->
 
 		<!--visual> 
 			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
@@ -109,7 +109,7 @@
 		</visual-->
 
 		<inertial>
-			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterRadius+chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
 			<mass value="${casterMass}"/>
 			<sphere_inertia 
 				m="${casterMass}" 
@@ -131,14 +131,18 @@
 		<collision>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry>
-				<box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+				<box size="${cameraSize} 
+						   ${cameraSize} 
+						   ${cameraSize}"/>
 			</geometry>
 		</collision>
 
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry>
-				<box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+				<box size="${cameraSize} 
+						   ${cameraSize} 
+						   ${cameraSize}"/>
 			</geometry>
 			<material name="blue"/>
 		</visual>
@@ -146,7 +150,10 @@
 		<inertial>
 			<mass value="${cameraMass}" />
 			<origin xyz="0 0 0" rpy="0 0 0"/>
-			<box_inertia m="${cameraMass}" x="${cameraSize}" y="${cameraSize}" z="${cameraSize}" />
+			<box_inertia m="${cameraMass}" 
+						 x="${cameraSize}" 
+						 y="${cameraSize}" 
+						 z="${cameraSize}" />
 		</inertial>
 	</link-->
 

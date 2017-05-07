@@ -43,7 +43,7 @@
 
     <link name="${lr}_wheel">
       <collision>
-        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI}" />
         <geometry>
           <cylinder 
             length="${wheelWidth}" 
@@ -52,7 +52,7 @@
       </collision>
 
       <visual>
-        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI}" />
         <geometry>
           <!--cylinder 
             length="${wheelWidth}" 
@@ -63,7 +63,7 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI}" />
         <mass value="${wheelMass}"/>
         <cylinder_inertia 
           m="${wheelMass}" 
