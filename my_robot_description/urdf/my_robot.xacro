@@ -17,27 +17,28 @@
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
 
-	<xacro:property name="chassisHeight" value="0.095"/>
+	<xacro:property name="chassisHeight" value="0.04"/>
 	<xacro:property name="chassisLength" value="0.175"/>
 	<xacro:property name="chassisWidth" value="0.115"/>
 	<xacro:property name="chassisMass" value="0.15"/>
 
-	<xacro:property name="casterRadius" value="0.015"/>
-	<xacro:property name="casterMass" value="0.05"/>
+	<xacro:property name="casterRadius" value="0.005"/>
+	<xacro:property name="casterMass" value="0.09"/>
 
-	<xacro:property name="wheelWidth" value="0.025"/>
-	<xacro:property name="wheelRadius" value="0.037"/>
-	<xacro:property name="wheelPos" value="0.036"/>
+	<xacro:property name="wheelWidth" value="0.035"/>
+	<xacro:property name="wheelRadius" value="0.03"/>
+	<!-- offset of the wheel respect to the center of the chassis -->
+	<!--xacro:property name="wheelPos" value="0"/-->
 	<xacro:property name="wheelMass" value="0.05"/>
+	<xacro:property name="wheelOffset" value="0.03"/>
 
 	<!--xacro:property name="cameraSize" value="0.05"/>
 	<xacro:property name="cameraMass" value="0.1"/-->
 
 
-
-	<xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
 	<!-- Import Rviz colors -->
 	<xacro:include filename="$(find my_robot_description)/urdf/materials.xacro" />
+	<xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
 	<xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
 
 
@@ -53,16 +54,17 @@
 
 	<link name='chassis'>
 		<collision> 
-			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+			<origin xyz="0 0 ${wheelRadius*2}" rpy="0 0 0"/> 
 			<geometry> 
-				<box size="${chassisLength} 
+				<!--box size="${chassisLength} 
 						   ${chassisWidth} 
-						   ${chassisHeight}"/> 
+						   ${chassisHeight/6}"/-->
+				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
 			</geometry> 
 		</collision>
 
 		<visual> 
-			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+			<origin xyz="0 0 ${wheelRadius*2}" rpy="0 0 0"/> 
 			<geometry> 
 				<!--box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/--> 
 				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
@@ -71,20 +73,20 @@
 		</visual>
 
 		<inertial> 
-			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+			<origin xyz="0 0 ${wheelRadius*2}" rpy="0 0 0"/> 
 			<mass value="${chassisMass}"/> 
 			<box_inertia 
 				m="${chassisMass}" 
 				x="${chassisLength}" 
 				y="${chassisWidth}" 
-				z="${chassisHeight}"/>
+				z="${chassisHeight/6}"/>
 		</inertial>
 	</link>
 
 
 
 
-	<joint name="fixed" type="fixed">
+	<!--joint name="fixed" type="fixed">
 		<parent link="chassis"/>
 		<child link="caster_wheel"/>
 	</joint>
@@ -94,19 +96,19 @@
 
 	<link name="caster_wheel">
 
-		<!--collision>
+		<collision>
 			<origin xyz="${casterRadius+chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
 	  		</geometry>
-		</collision-->
+		</collision>
 
-		<!--visual> 
+		<visual> 
 			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
 			</geometry>
-		</visual-->
+		</visual>
 
 		<inertial>
 			<origin xyz="${casterRadius+chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
@@ -115,7 +117,7 @@
 				m="${casterMass}" 
 				r="${casterRadius}"/>
 		</inertial>
-	</link>
+	</link-->
 
 
 	<wheel lr="left" tY="-1"/>

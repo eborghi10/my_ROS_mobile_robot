@@ -15,9 +15,9 @@ my_robot:
     type: effort_controllers/JointEffortController
     joint: left_wheel_hinge
     #pid: {p: 100.0, i: 0.1, d: 10.0}
-    pid: {p: 0.0, i: 0.0, d: 0.0}
+    pid: {p: 50.0, i: 0.1, d: 0.0}
   rightWheel_effort_controller:
     type: effort_controllers/JointEffortController
     joint: right_wheel_hinge
     #pid: {p: 100.0, i: 0.1, d: 10.0}
-    pid: {p: 0.0, i: 0.0, d: 0.0}
+    pid: {p: 50.0, i: 0.1, d: 0.0}

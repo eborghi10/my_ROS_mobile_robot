@@ -13,7 +13,7 @@
 
   <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
   <param name="robot_description" 
-  		   command="$(find xacro)/xacro $(arg model)" />
+  		   command="$(find xacro)/xacro --inorder $(arg model)" />
 
   <param name="use_gui" 
   		   value="$(arg gui)"/>

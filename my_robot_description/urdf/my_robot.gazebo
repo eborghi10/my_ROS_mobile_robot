@@ -10,7 +10,7 @@
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/my_robot</robotNamespace>
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <!--robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType-->
     </plugin>
   </gazebo>
 
@@ -51,9 +51,11 @@
       <updateRate>100</updateRate>
       <leftJoint>left_wheel_hinge</leftJoint>
       <rightJoint>right_wheel_hinge</rightJoint>
-      <wheelSeparation>${chassisWidth+wheelWidth}</wheelSeparation>
+      <!--wheelSeparation>${chassisWidth+wheelWidth}</wheelSeparation-->
+      <wheelSeparation>${wheelWidth/3}</wheelSeparation>
       <wheelDiameter>${2*wheelRadius}</wheelDiameter>
       <torque>20</torque>
+      <!--torque>2</torque-->
       <commandTopic>my_robot/cmd_vel</commandTopic>
       <odometryTopic>my_robot/odom_diffdrive</odometryTopic>
       <odometryFrame>odom</odometryFrame>
@@ -65,9 +67,9 @@
       <publishWheelTF>false</publishWheelTF>
       <publishWheelJointState>false</publishWheelJointState>
       <wheelAcceleration>0</wheelAcceleration>
-      <wheelTorque>5</wheelTorque>
+      <wheelTorque>50</wheelTorque>
       <publishTf>1</publishTf>
-      <odometrySource>encoder</odometrySource>
+      <odometrySource>world</odometrySource>
     </plugin>
   </gazebo>
 

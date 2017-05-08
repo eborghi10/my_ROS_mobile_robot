@@ -25,7 +25,7 @@
 
 	<!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
 	<param name="robot_description"
-		   command="$(find xacro)/xacro '$(find my_robot_description)/urdf/my_robot.xacro'" />
+		   command="$(find xacro)/xacro --inorder '$(find my_robot_description)/urdf/my_robot.xacro'" />
 
 	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">

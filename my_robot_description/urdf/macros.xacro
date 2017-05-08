@@ -4,9 +4,9 @@
 	definitions of some macros for easier description of the robot
 -->
 
-<robot>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
   
-  <macro name="cylinder_inertia" params="m r h">
+  <xacro:macro name="cylinder_inertia" params="m r h">
 
     <inertia  ixx="${m*(3*r*r+h*h)/12}" 
     			ixy = "0" 
@@ -15,9 +15,9 @@
     			iyz = "0"
     			izz="${m*r*r/2}"
     />
-  </macro>
+  </xacro:macro>
 
-  <macro name="box_inertia" params="m x y z">
+  <xacro:macro name="box_inertia" params="m x y z">
 
     <inertia  ixx="${m*(y*y+z*z)/12}" 
     			ixy = "0" 
@@ -26,9 +26,9 @@
     			iyz = "0"
     			izz="${m*(x*x+z*z)/12}"
     />
-  </macro>
+  </xacro:macro>
 
-  <macro name="sphere_inertia" params="m r">
+  <xacro:macro name="sphere_inertia" params="m r">
 
     <inertia  ixx="${2*m*r*r/5}" 
     			ixy = "0" 
@@ -37,13 +37,17 @@
     			iyz = "0"
     			izz="${2*m*r*r/5}"
     />
-  </macro>
+  </xacro:macro>
 
-  <macro name="wheel" params="lr tY">
+
+
+
+
+  <xacro:macro name="wheel" params="lr tY">
 
     <link name="${lr}_wheel">
       <collision>
-        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI}" />
+        <origin xyz="0 ${-tY*wheelWidth/6} 0" rpy="0 ${PI/2} ${PI/2}" />
         <geometry>
           <cylinder 
             length="${wheelWidth}" 
@@ -52,7 +56,7 @@
       </collision>
 
       <visual>
-        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI}" />
+        <origin xyz="0 ${-tY*wheelWidth/6} 0" rpy="0 ${PI/2} ${PI}" />
         <geometry>
           <!--cylinder 
             length="${wheelWidth}" 
@@ -63,7 +67,7 @@
       </visual>
 
       <inertial>
-        <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI}" />
+        <origin xyz="0 ${-tY*wheelWidth/6} 0" rpy="0 ${PI/2} ${PI/2}" />
         <mass value="${wheelMass}"/>
         <cylinder_inertia 
           m="${wheelMass}" 
@@ -78,7 +82,7 @@
       <kp  value="10000000.0" />
       <kd  value="1.0" />
       <fdir1 value="1 0 0"/>
-      <material>Gazebo/Black</material>
+      <material>Gazebo/White</material>
     </gazebo>
 
 
@@ -86,8 +90,8 @@
       <parent link="chassis"/>
       <child link="${lr}_wheel"/>
       <origin 
-        xyz = "${+wheelPos-chassisLength/4}
-               ${tY*wheelWidth/2+tY*chassisWidth/2} 
+        xyz = "${wheelWidth-chassisLength/4}
+               ${tY*wheelWidth/4+tY*chassisWidth/2} 
                ${wheelRadius}" 
         rpy = "0 0 0" /> 
       <axis xyz="0 1 0" rpy="0 0 0" />
@@ -112,6 +116,6 @@
       </actuator>
     </transmission>
 
-  </macro>
+  </xacro:macro>
 
 </robot>

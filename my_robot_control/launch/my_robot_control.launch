@@ -36,7 +36,7 @@
         output="screen">
 
   <param name="robot_description" 
-         command="$(find xacro)/xacro '$(find my_robot_description)/urdf/my_robot.xacro'" />
+         command="$(find xacro)/xacro --inorder '$(find my_robot_description)/urdf/my_robot.xacro'" />
   <remap from="/joint_states" to="/my_robot/joint_states" />
   </node>
 
