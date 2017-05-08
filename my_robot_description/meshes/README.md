@@ -16,10 +16,16 @@ From the complete 3D STEP model:
 
 - Draft → Point → [0,0,0]
 
-- Select the object to move → Move icon → Select the center of the object → Select the point in the origin
+- Select the object to move → Move the pice by hand (not the best option but it's fast and useful)
 
 **CONVERT TO COLLADA**
 
+- File → Export → Collada (.dae)
+
+**RESIZE WITH Blender**
+
 - File → Import → Collada (.dae)
 
-- Pull out the right-tab in blender (look for a plus sign near the upper right of the render window). Under the Dimensions section of this tab, divide the x,y,z components by 1000.
+- Pull out the right-tab in blender (look for a plus sign near the upper right of the render window). Under the Dimensions section of this tab, divide the x,y,z components by 1000. **NOTE:** Can be applied to the _scale_ section.
+
+- File → Export → Collada (.dae) → Export COLLADA

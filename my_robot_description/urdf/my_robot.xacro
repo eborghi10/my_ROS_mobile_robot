@@ -22,7 +22,7 @@
 	<xacro:property name="chassisWidth" value="0.115"/>
 	<xacro:property name="chassisMass" value="0.15"/>
 
-	<xacro:property name="casterRadius" value="0.005"/>
+	<xacro:property name="casterRadius" value="0.01"/>
 	<xacro:property name="casterMass" value="0.09"/>
 
 	<xacro:property name="wheelWidth" value="0.035"/>
@@ -54,17 +54,17 @@
 
 	<link name='chassis'>
 		<collision> 
-			<origin xyz="0 0 ${wheelRadius*2}" rpy="0 0 0"/> 
+			<origin xyz="0 0 ${wheelRadius+0.05}" rpy="0 0 0"/> 
 			<geometry> 
 				<!--box size="${chassisLength} 
 						   ${chassisWidth} 
-						   ${chassisHeight/6}"/-->
+						   ${chassisHeight}"/-->
 				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
 			</geometry> 
 		</collision>
 
 		<visual> 
-			<origin xyz="0 0 ${wheelRadius*2}" rpy="0 0 0"/> 
+			<origin xyz="0 0 ${wheelRadius+0.05}" rpy="0 0 0"/> 
 			<geometry> 
 				<!--box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/--> 
 				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
@@ -73,20 +73,20 @@
 		</visual>
 
 		<inertial> 
-			<origin xyz="0 0 ${wheelRadius*2}" rpy="0 0 0"/> 
+			<origin xyz="0 0 ${wheelRadius+0.05}" rpy="0 0 0"/> 
 			<mass value="${chassisMass}"/> 
 			<box_inertia 
 				m="${chassisMass}" 
 				x="${chassisLength}" 
 				y="${chassisWidth}" 
-				z="${chassisHeight/6}"/>
+				z="${chassisHeight}"/>
 		</inertial>
 	</link>
 
 
 
 
-	<!--joint name="fixed" type="fixed">
+	<joint name="fixed" type="fixed">
 		<parent link="chassis"/>
 		<child link="caster_wheel"/>
 	</joint>
@@ -97,27 +97,29 @@
 	<link name="caster_wheel">
 
 		<collision>
-			<origin xyz="${casterRadius+chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterRadius+3*chassisLength/8} 0 ${casterRadius+wheelRadius}" rpy="0 0 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
 	  		</geometry>
 		</collision>
 
 		<visual> 
-			<origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterRadius+3*chassisLength/8} 0 ${casterRadius+wheelRadius}" rpy="0 0 0"/>
 			<geometry>
-				<sphere radius="${casterRadius}"/>
+				<!--sphere radius="${casterRadius}"/-->
+				<mesh filename="package://my_robot_description/meshes/caster_wheel.dae" />
 			</geometry>
+			<material name="grey" />
 		</visual>
 
 		<inertial>
-			<origin xyz="${casterRadius+chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterRadius+3*chassisLength/8} 0 ${casterRadius+wheelRadius}" rpy="0 0 0"/>
 			<mass value="${casterMass}"/>
 			<sphere_inertia 
 				m="${casterMass}" 
 				r="${casterRadius}"/>
 		</inertial>
-	</link-->
+	</link>
 
 
 	<wheel lr="left" tY="-1"/>
