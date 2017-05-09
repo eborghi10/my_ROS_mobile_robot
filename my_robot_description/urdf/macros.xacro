@@ -47,7 +47,8 @@
 
     <link name="${lr}_wheel">
       <collision>
-        <origin xyz="0 ${-tY*wheelWidth/6} 0" rpy="0 ${PI/2} ${PI/2}" />
+        <origin xyz="0 0 0" 
+        		rpy="0 ${PI/2} ${PI/2}" />
         <geometry>
           <cylinder 
             length="${wheelWidth}" 
@@ -56,18 +57,19 @@
       </collision>
 
       <visual>
-        <origin xyz="0 ${-tY*wheelWidth/6} 0" rpy="0 ${PI/2} ${PI}" />
+        <origin xyz="0 0 0" 
+        		rpy="0 ${PI/2} ${PI}" />
         <geometry>
-          <!--cylinder 
+          <cylinder 
             length="${wheelWidth}" 
-            radius="${wheelRadius}"/-->
-          <mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" />
+            radius="${wheelRadius}"/>
+          <!--mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" /-->
         </geometry>
-        <material name="black"/>
       </visual>
 
       <inertial>
-        <origin xyz="0 ${-tY*wheelWidth/6} 0" rpy="0 ${PI/2} ${PI/2}" />
+        <origin xyz="0 0 0" 
+        		rpy="0 ${PI/2} ${PI/2}" />
         <mass value="${wheelMass}"/>
         <cylinder_inertia 
           m="${wheelMass}" 
@@ -90,11 +92,12 @@
       <parent link="chassis"/>
       <child link="${lr}_wheel"/>
       <origin 
-        xyz = "${wheelWidth-chassisLength/4}
+        xyz = "0
                ${tY*wheelWidth/4+tY*chassisWidth/2} 
                ${wheelRadius}" 
         rpy = "0 0 0" /> 
-      <axis xyz="0 1 0" rpy="0 0 0" />
+      <axis xyz="0 1 0" 
+      		rpy="0 0 0" />
       <!--limit effort="100" velocity="100"/-->
       <limit effort="10" velocity="10"/>
       <joint_properties damping="0.0" friction="0.0"/>

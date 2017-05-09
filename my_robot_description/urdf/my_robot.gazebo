@@ -52,7 +52,7 @@
       <leftJoint>left_wheel_hinge</leftJoint>
       <rightJoint>right_wheel_hinge</rightJoint>
       <!--wheelSeparation>${chassisWidth+wheelWidth}</wheelSeparation-->
-      <wheelSeparation>${chassisWidth}</wheelSeparation>
+      <wheelSeparation>${chassisWidth+2*wheelOffsetY}</wheelSeparation>
       <wheelDiameter>${2*wheelRadius}</wheelDiameter>
       <torque>20</torque>
       <!--torque>2</torque-->
