@@ -31,7 +31,7 @@
 	<!-- offset of the wheel respect to the center of the chassis -->
 	<!--xacro:property name="wheelPos" value="0"/-->
 	<xacro:property name="wheelMass" value="0.05"/>
-	<xacro:property name="wheelOffsetY" value="-0.047"/>
+	<xacro:property name="wheelOffsetY" value="0.047"/>
 
 	<!--xacro:property name="cameraSize" value="0.05"/>
 	<xacro:property name="cameraMass" value="0.1"/-->
@@ -98,23 +98,26 @@
 	<link name="caster_wheel">
 
 		<collision>
-			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
+					rpy="0 0 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
 	  		</geometry>
 		</collision>
 
 		<visual> 
-			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
+					rpy="0 0 0"/>
 			<geometry>
-				<!--sphere radius="${casterRadius}"/-->
-				<mesh filename="package://my_robot_description/meshes/caster_wheel.dae" />
+				<sphere radius="${2*casterRadius}"/>
+				<!--mesh filename="package://my_robot_description/meshes/caster_wheel.dae" /-->
 			</geometry>
 			<material name="grey" />
 		</visual>
 
 		<inertial>
-			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" rpy="0 0 0"/>
+			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
+					rpy="0 0 0"/>
 			<mass value="${casterMass}"/>
 			<sphere_inertia 
 				m="${casterMass}" 
