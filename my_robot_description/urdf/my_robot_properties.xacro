@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:property name="PI" value="3.1415926535897931"/>
+
+
+	<xacro:property name="chassisHeight" value="0.0623"/>
+	<xacro:property name="chassisLength" value="0.198"/>
+	<xacro:property name="chassisWidth" value="0.119"/>
+	<xacro:property name="chassisMass" value="0.15"/>
+
+	<!--xacro:property name="casterRadius" value="0.0165"/-->
+	<xacro:property name="casterRadius" value="0.022"/>
+	<xacro:property name="casterMass" value="0.09"/>
+	<xacro:property name="casterOffsetX" value="0.091"/>
+
+	<xacro:property name="wheelWidth" value="0.026"/>
+	<xacro:property name="wheelRadius" value="0.032"/>
+	<xacro:property name="wheelMass" value="0.05"/>
+	<xacro:property name="wheelOffsetY" value="0.047"/>
+
+	<xacro:property name="robotPitchAngle" value="0"/>
+
+	<!--xacro:property name="cameraSize" value="0.05"/>
+	<xacro:property name="cameraMass" value="0.1"/-->
+
+</robot>

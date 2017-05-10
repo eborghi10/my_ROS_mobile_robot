@@ -48,28 +48,29 @@
     <link name="${lr}_wheel">
       <collision>
         <origin xyz="0 0 0" 
-        		rpy="0 0 0" />
-        <geometry>
-          <cylinder 
-            length="${wheelWidth}" 
-            radius="${wheelRadius}"/>
-        </geometry>
-      </collision>
-
-      <visual>
-        <origin xyz="0 0 0" 
-        		rpy="0 0 0" />
+        		rpy="${-tY*PI/2} 0 0" />
         <geometry>
           <cylinder 
             length="${wheelWidth}" 
             radius="${wheelRadius}"/>
           <!--mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" /-->
         </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" 
+        		rpy="${-tY*PI/2} 0 0" />
+        <geometry>
+          <!--cylinder 
+            length="${wheelWidth}" 
+            radius="${wheelRadius}"/-->
+          <mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" />
+        </geometry>
       </visual>
 
       <inertial>
         <origin xyz="0 0 0" 
-        		rpy="0 0 0" />
+        		rpy="${-tY*PI/2} 0 0" />
         <mass value="${wheelMass}"/>
         <cylinder_inertia 
           m="${wheelMass}" 
@@ -91,15 +92,12 @@
     <joint name="${lr}_wheel_hinge" type="continuous">
       <parent link="chassis"/>
       <child link="${lr}_wheel"/>
-      <!--origin 
-        xyz = "0 ${-tY*(wheelOffsetY+wheelRadius/2)} 0" 
-        rpy = "${tY*PI/2} 0 0" /--> 
-      <origin
-      	xyz = "0 ${-tY*chassisWidth/2} 0"
-      	rpy = "${tY*PI/2} 0 0" /> 
-      <axis xyz="0 0 1" 
-      		rpy="0 0 0" />
-      <limit effort="100" velocity="100"/>
+      <origin 
+        xyz = "0 ${-tY*(wheelOffsetY+wheelRadius/2)} ${wheelRadius}" 
+        rpy = "0 0 0" /> 
+      <axis xyz="0 1 0" 
+      		  rpy="0 0 0" />
+      <limit effort="100" velocity="10"/>
       <!--limit effort="10" velocity="10"/-->
       <joint_properties damping="0.0" friction="0.0"/>
     </joint>
@@ -115,8 +113,8 @@
       </joint>
       <actuator name="${lr}Motor">
         <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-        <!--mechanicalReduction>10</mechanicalReduction-->
-        <mechanicalReduction>1</mechanicalReduction>
+        <mechanicalReduction>10</mechanicalReduction>
+        <!--mechanicalReduction>1</mechanicalReduction-->
       </actuator>
     </transmission>
 

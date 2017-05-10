@@ -19,14 +19,14 @@
     The plugin broadcasts a body's pose and rates through ROS nav_msgs::Odometry message.
     The plugin broadcasts pose and rate of a body named "chassis" over ROS topic name "my_robot/odom".
   -->
-  <gazebo>
+  <!--gazebo>
     <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
       <frameName>map</frameName>
       <bodyName>chassis</bodyName>
       <topicName>my_robot/odom</topicName>
       <updateRate>30.0</updateRate>
     </plugin>
-  </gazebo>
+  </gazebo-->
 
 
   <!-- Chassis -->
@@ -51,11 +51,9 @@
       <updateRate>100</updateRate>
       <leftJoint>left_wheel_hinge</leftJoint>
       <rightJoint>right_wheel_hinge</rightJoint>
-      <!--wheelSeparation>${chassisWidth+wheelWidth}</wheelSeparation-->
-      <wheelSeparation>${chassisWidth+2*wheelOffsetY}</wheelSeparation>
+      <wheelSeparation>${chassisWidth-2*wheelOffsetY}</wheelSeparation>
       <wheelDiameter>${2*wheelRadius}</wheelDiameter>
-      <torque>20</torque>
-      <!--torque>2</torque-->
+      <torque>1</torque>
       <commandTopic>my_robot/cmd_vel</commandTopic>
       <odometryTopic>my_robot/odom_diffdrive</odometryTopic>
       <odometryFrame>odom</odometryFrame>
@@ -64,10 +62,10 @@
       <legacyMode>true</legacyMode>
       
       <rosDebugLevel>na</rosDebugLevel>
-      <publishWheelTF>false</publishWheelTF>
-      <publishWheelJointState>false</publishWheelJointState>
-      <wheelAcceleration>0</wheelAcceleration>
-      <wheelTorque>50</wheelTorque>
+      <publishWheelTF>true</publishWheelTF>
+      <publishWheelJointState>true</publishWheelJointState>
+      <wheelAcceleration>5</wheelAcceleration>
+      <wheelTorque>500</wheelTorque>
       <publishTf>1</publishTf>
       <odometrySource>world</odometrySource>
     </plugin>

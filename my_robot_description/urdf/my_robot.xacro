@@ -6,7 +6,7 @@
 	#######################################################
 
     To run:
-    $ roslaunch my_robot_gazebo my_robot_world.launch
+    $ roslaunch my_robot_gazebo my_robot_world.launch paused:=true
 
     $ rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/my_robot/cmd_vel
 
@@ -14,27 +14,8 @@
 
 <robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-	<xacro:property name="PI" value="3.1415926535897931"/>
-
-
-	<!--xacro:property name="chassisHeight" value="0.0623"/-->
-	<xacro:property name="chassisHeight" value="0.02" />
-	<xacro:property name="chassisLength" value="0.198"/>
-	<xacro:property name="chassisWidth" value="0.119"/>
-	<xacro:property name="chassisMass" value="0.15"/>
-
-	<xacro:property name="casterRadius" value="0.0165"/>
-	<xacro:property name="casterMass" value="0.09"/>
-	<xacro:property name="casterOffsetX" value="0.091"/>
-
-	<xacro:property name="wheelWidth" value="0.026"/>
-	<xacro:property name="wheelRadius" value="0.032"/>
-	<xacro:property name="wheelMass" value="0.05"/>
-	<xacro:property name="wheelOffsetY" value="0.047"/>
-
-	<!--xacro:property name="cameraSize" value="0.05"/>
-	<xacro:property name="cameraMass" value="0.1"/-->
-
+	<!-- Robot constants and properties -->
+	<xacro:include filename="$(find my_robot_description)/urdf/my_robot_properties.xacro" />
 
 	<!-- Import Rviz colors -->
 	<xacro:include filename="$(find my_robot_description)/urdf/materials.xacro" />
@@ -54,27 +35,29 @@
 
 	<link name='chassis'>
 
-		<collision name="chassis_collision"> 
-			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+		<collision> 
+			<origin xyz="0 0 ${wheelRadius}" 
+					rpy="0 ${robotPitchAngle} 0"/> 
 			<geometry> 
-				<box size="${chassisLength} 
+				<!--box size="${chassisLength} 
 						   ${chassisWidth} 
-						   ${chassisHeight}"/>
-				<!--mesh filename="package://my_robot_description/meshes/chassis.dae" /-->
+						   ${chassisHeight}"/-->
+				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
 			</geometry> 
 		</collision>
 
-		<visual name="chassis_visual"> 
-			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
-			<geometry> 
-				<box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/> 
-				<!--mesh filename="package://my_robot_description/meshes/chassis.dae" /-->
+		<visual> 
+			<origin xyz="0 0 ${wheelRadius}" 
+					rpy="0 ${robotPitchAngle} 0"/> 
+			<geometry>  
+				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
 			</geometry> 
 			<material name="red"/>
 		</visual>
 
-		<inertial name="chassis_inertia"> 
-			<origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+		<inertial> 
+			<origin xyz="0 0 ${wheelRadius}" 
+					rpy="0 ${robotPitchAngle} 0"/> 
 			<mass value="${chassisMass}"/> 
 			<box_inertia 
 				m="${chassisMass}" 
@@ -83,20 +66,34 @@
 				z="${chassisHeight}"/>
 		</inertial>
 
+	</link>
 
 
-	
-		<collision name="caster_collision">
-			<origin xyz="${casterOffsetX} 0 0" 
-					rpy="0 0 0"/>
+
+
+	<joint name="caster_joint" type="fixed">
+		<parent link="chassis"/>
+		<child link="caster_wheel"/>
+	</joint>
+
+
+
+
+
+	<link name="caster_wheel">
+
+		<collision>
+			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
+					rpy="0 ${robotPitchAngle} 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
+				<!--mesh filename="package://my_robot_description/meshes/caster_wheel.dae" /-->
 	  		</geometry>
 		</collision>
 
-		<visual name="caster_visual"> 
-			<origin xyz="${casterOffsetX} 0 0" 
-					rpy="0 0 0"/>
+		<visual> 
+			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
+					rpy="0 ${robotPitchAngle} 0"/>
 			<geometry>
 				<sphere radius="${casterRadius}"/>
 				<!--mesh filename="package://my_robot_description/meshes/caster_wheel.dae" /-->
@@ -104,14 +101,15 @@
 			<material name="grey" />
 		</visual>
 
-		<inertial name="caster_inertia">
-			<origin xyz="${casterOffsetX} 0 0" 
-					rpy="0 0 0"/>
+		<inertial>
+			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
+					rpy="0 ${robotPitchAngle} 0"/>
 			<mass value="${casterMass}"/>
 			<sphere_inertia 
 				m="${casterMass}" 
 				r="${casterRadius}"/>
 		</inertial>
+
 	</link>
 
 
