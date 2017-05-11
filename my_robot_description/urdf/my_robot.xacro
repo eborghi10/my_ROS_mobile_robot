@@ -37,7 +37,7 @@
 
 		<collision> 
 			<origin xyz="0 0 ${wheelRadius}" 
-					rpy="0 ${robotPitchAngle} 0"/> 
+					rpy="0 0 0"/> 
 			<geometry> 
 				<!--box size="${chassisLength} 
 						   ${chassisWidth} 
@@ -48,7 +48,7 @@
 
 		<visual> 
 			<origin xyz="0 0 ${wheelRadius}" 
-					rpy="0 ${robotPitchAngle} 0"/> 
+					rpy="0 0 0"/> 
 			<geometry>  
 				<mesh filename="package://my_robot_description/meshes/chassis.dae" />
 			</geometry> 
@@ -57,7 +57,7 @@
 
 		<inertial> 
 			<origin xyz="0 0 ${wheelRadius}" 
-					rpy="0 ${robotPitchAngle} 0"/> 
+					rpy="0 0 0"/> 
 			<mass value="${chassisMass}"/> 
 			<box_inertia 
 				m="${chassisMass}" 
@@ -83,27 +83,27 @@
 	<link name="caster_wheel">
 
 		<collision>
-			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
-					rpy="0 ${robotPitchAngle} 0"/>
+			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" 
+					rpy="0 0 0"/>
 			<geometry>
-				<sphere radius="${casterRadius}"/>
-				<!--mesh filename="package://my_robot_description/meshes/caster_wheel.dae" /-->
+				<!--sphere radius="${casterRadius}"/-->
+				<mesh filename="package://my_robot_description/meshes/caster_wheel.dae" />
 	  		</geometry>
 		</collision>
 
 		<visual> 
-			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
-					rpy="0 ${robotPitchAngle} 0"/>
+			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" 
+					rpy="0 0 0"/>
 			<geometry>
-				<sphere radius="${casterRadius}"/>
-				<!--mesh filename="package://my_robot_description/meshes/caster_wheel.dae" /-->
+				<!--sphere radius="${casterRadius}"/-->
+				<mesh filename="package://my_robot_description/meshes/caster_wheel.dae" />
 			</geometry>
 			<material name="grey" />
 		</visual>
 
 		<inertial>
-			<origin xyz="${casterOffsetX} 0 ${casterRadius}" 
-					rpy="0 ${robotPitchAngle} 0"/>
+			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" 
+					rpy="0 0 0"/>
 			<mass value="${casterMass}"/>
 			<sphere_inertia 
 				m="${casterMass}" 

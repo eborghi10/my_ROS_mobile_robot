@@ -2,6 +2,8 @@
 
 <!--
 	all the gazebo-specific aspects of our robot
+
+  http://gazebosim.org/tutorials/?tut=ros_urdf
 -->
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
@@ -50,7 +52,7 @@
     <minDepth>0.001</minDepth>
     <maxVel>1.0</maxVel>
 
-    <material>Gazebo/Grey</material>
+    <material>Gazebo/Chrome</material>
   </gazebo>
 
 

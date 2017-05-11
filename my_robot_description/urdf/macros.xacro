@@ -91,7 +91,7 @@
       
       <!--kd  value="1.0" />
       <fdir1 value="1 0 0"/-->
-      <material>Gazebo/White</material>
+      <material>Gazebo/FlatBlack</material>
     </gazebo>
 
 
