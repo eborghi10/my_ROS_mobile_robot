@@ -11,7 +11,9 @@
 
   <!-- ###################################################################### -->
 
-  <!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
+  <!-- 
+    Converts the xacro robot information to UDRF and use it as a robot_description parameter
+  -->
   <param name="robot_description" 
   		   command="$(find xacro)/xacro --inorder $(arg model)" />
 
@@ -20,15 +22,19 @@
 
   <!-- ###################################################################### -->
 
-  <!-- send fake joint values -->
+  <!--
+    Reads the robot model description, finds all joints, and publishes joint values to all nonfixed joints using GUI sliders. 
+  -->
   <node name="joint_state_publisher" 
     		pkg="joint_state_publisher" 
     		type="joint_state_publisher" />
 
-  <!-- Combine joint values -->
-  <!--node name="robot_state_publisher" 
+  <!-- 
+    Reads the current robot joint states and publishes the 3D poses of each robot link using the kinematics tree build from the URDF. The 3D pose of the robot is published as ROS tf (transform). 
+  -->
+  <node name="robot_state_publisher" 
     		pkg="robot_state_publisher" 
-    		type="state_publisher" /-->
+    		type="state_publisher" />
 
   <!-- Show in Rviz -->
   <node name="rviz" 

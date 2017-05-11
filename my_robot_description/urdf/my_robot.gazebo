@@ -82,7 +82,7 @@
       <wheelAcceleration>5</wheelAcceleration>
       <wheelTorque>20</wheelTorque>
       <publishTf>1</publishTf>
-      <odometrySource>world</odometrySource>
+      <odometrySource>encoder</odometrySource>
     </plugin>
   </gazebo>
 

@@ -1,36 +1,46 @@
 <launch>
 
-<!--
-	if you do a “rostopic list” you should see the topics corresponding to your controllers. You can send commands manually to your robot:
+	<!-- 
+		these are the arguments you can pass through the launch file, for example paused:=true 
+	-->
 
-  		rostopic pub -1 /my_robot/leftWheel_effort_controller/command std_msgs/Float64 "data: 1.5"
-  
-  		rostopic pub -1 /my_robot/rightWheel_effort_controller/command std_msgs/Float64 "data: 1.0"
+	<arg name="paused" 
+		 default="false"/>
 
-	The robot should start moving.
+	<arg name="use_sim_time" 
+		 default="true"/>
 
-	You can also monitor the joint states by doing :
+	<arg name="gui" 
+		 default="true"/>
 
-	rostopic echo /my_robot/joint_states
--->
+	<arg name="headless" 
+		 default="false"/>
+
+	<arg name="debug" 
+		 default="false"/>
+
+	<arg name="model" 
+  	   	 default="$(find my_robot_description)/urdf/my_robot.xacro"/>
+
+	<arg name="rvizconfig" 
+  	   	 default="$(find my_robot_description)/rviz/my_robot.rviz" />
 
 
-
-	<!-- these are the arguments you can pass this launch file, for example paused:=true -->
-	<arg name="paused" default="false"/>
-	<arg name="use_sim_time" default="true"/>
-	<arg name="gui" default="true"/>
-	<arg name="headless" default="false"/>
-	<arg name="debug" default="false"/>
 
 	<env name="GAZEBO_MODEL_PATH" 
          value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
 
-	<!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
-	<param name="robot_description"
-		   command="$(find xacro)/xacro --inorder '$(find my_robot_description)/urdf/my_robot.xacro'" />
 
-	<!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+
+	<!-- 
+		Converts the xacro robot information to UDRF and use it as a robot_description parameter
+	-->
+	<param name="robot_description"
+		   command="$(find xacro)/xacro --inorder $(arg model)" />
+
+	<!-- 
+		Launch Gazebo world 
+	-->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
 		<arg name="world_name" value="$(find my_robot_gazebo)/worlds/my_robot.world"/>
 		<arg name="debug" value="$(arg debug)" />
@@ -40,14 +50,29 @@
 		<arg name="headless" value="$(arg headless)"/>
 	</include>
 
-	<!-- push robot_description to factory and spawn robot in gazebo -->
+	<!-- 
+		push robot_description to factory and spawn robot in gazebo 
+	-->
 	<node name="urdf_spawner" 
 		  pkg="gazebo_ros" 
 		  type="spawn_model" 
 		  output="screen"
  		  args="-urdf -model my_robot -param robot_description" />
 
- 	<!-- ros_control mybot launch file -->
+ 	<!-- 
+ 		Open Rviz 
+
+ 		- required="false" : if the program is closed, the simulation doesn't shutdown 
+ 	-->
+ 	<node name="rviz" 
+    		pkg="rviz" 
+    		type="rviz" 
+    		args="-d $(arg rvizconfig)" 
+    		required="false" />
+
+ 	<!-- 
+ 		ros_control my_robot launch file 
+ 	-->
 	<include file="$(find my_robot_control)/launch/my_robot_control.launch" />
 
 </launch>

@@ -1,6 +1,11 @@
 # my_robot_description package
 
-Based on the book _Learning ROS for Robotics Programming_ by Aaron Martinez and Enrique Fernández, chapter 5: _3D Modeling and simulation_.
+### xacro
+
+To convert the xacro file into a URDF file:
+```
+$ rosrun xacro xacro my_robot.xacro > my_robot.urdf
+```
 
 ### URDF
 
@@ -14,7 +19,11 @@ To get the Graphviz in pdf:
 $ urdf_to_graphviz my_robot.urdf
 ```
 
-To run:
+### Test
+
+To run rviz test:
 ```
 $ roslaunch my_robot_description my_robot_rviz.launch
 ```
+
+![Chassis](../../resources/robot_chassis.jpg)
