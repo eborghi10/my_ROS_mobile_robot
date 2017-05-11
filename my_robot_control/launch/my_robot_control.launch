@@ -19,9 +19,7 @@
         respawn="false"
         output="screen"
         ns="/my_robot" 
-        args="joint_state_controller 
-              rightWheel_effort_controller 
-              leftWheel_effort_controller"
+        args="joint_state_controller rightWheel_effort_controller leftWheel_effort_controller"
   />
 
 

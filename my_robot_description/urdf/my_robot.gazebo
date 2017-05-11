@@ -10,6 +10,7 @@
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/my_robot</robotNamespace>
+      <robotParam>/robot_description</robotParam>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
@@ -19,19 +20,23 @@
     The plugin broadcasts a body's pose and rates through ROS nav_msgs::Odometry message.
     The plugin broadcasts pose and rate of a body named "chassis" over ROS topic name "my_robot/odom".
   -->
-  <!--gazebo>
+  <gazebo>
     <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
       <frameName>map</frameName>
       <bodyName>chassis</bodyName>
       <topicName>my_robot/odom</topicName>
       <updateRate>30.0</updateRate>
     </plugin>
-  </gazebo-->
+  </gazebo>
 
 
   <!-- Chassis -->
   <gazebo reference="chassis">
-    <material>Gazebo/Orange</material>
+
+    <mu1>0.3</mu1>
+    <mu2>0.3</mu2>
+
+    <material>Gazebo/Red</material>
   </gazebo>
 
 
@@ -39,6 +44,12 @@
   <gazebo reference="caster_wheel">
     <mu1>0.0</mu1>
     <mu2>0.0</mu2>
+
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+
     <material>Gazebo/Grey</material>
   </gazebo>
 
@@ -46,6 +57,8 @@
   <gazebo>
     <plugin name="differential_drive_controller" 
     		  filename="libgazebo_ros_diff_drive.so">
+
+      <robotNamespace>/</robotNamespace>
     		  
       <alwaysOn>true</alwaysOn>
       <updateRate>100</updateRate>
@@ -53,19 +66,19 @@
       <rightJoint>right_wheel_hinge</rightJoint>
       <wheelSeparation>${chassisWidth-2*wheelOffsetY}</wheelSeparation>
       <wheelDiameter>${2*wheelRadius}</wheelDiameter>
-      <torque>1</torque>
+      <torque>20</torque>
       <commandTopic>my_robot/cmd_vel</commandTopic>
-      <odometryTopic>my_robot/odom_diffdrive</odometryTopic>
+      <odometryTopic>my_robot/odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
-      <robotBaseFrame>world</robotBaseFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
       
-      <legacyMode>true</legacyMode>
+      <legacyMode>false</legacyMode>
       
-      <rosDebugLevel>na</rosDebugLevel>
+      <rosDebugLevel>Debug</rosDebugLevel>
       <publishWheelTF>true</publishWheelTF>
       <publishWheelJointState>true</publishWheelJointState>
       <wheelAcceleration>5</wheelAcceleration>
-      <wheelTorque>500</wheelTorque>
+      <wheelTorque>20</wheelTorque>
       <publishTf>1</publishTf>
       <odometrySource>world</odometrySource>
     </plugin>

@@ -23,6 +23,9 @@
 	<arg name="headless" default="false"/>
 	<arg name="debug" default="false"/>
 
+	<env name="GAZEBO_MODEL_PATH" 
+         value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+
 	<!-- urdf xml robot description loaded on the Parameter Server, converting the xacro into a proper urdf file-->
 	<param name="robot_description"
 		   command="$(find xacro)/xacro --inorder '$(find my_robot_description)/urdf/my_robot.xacro'" />

@@ -25,10 +25,10 @@
 
 
 	<!-- Used for fixing robot to Gazebo 'chassis' -->
-	<link name="world" />
+	<link name="base_footprint" />
 
 	<joint name="base_joint" type="fixed">
-		<parent link="world"/>
+		<parent link="base_footprint"/>
 		<child link="chassis"/>
 	</joint>
 

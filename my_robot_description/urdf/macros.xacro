@@ -83,8 +83,14 @@
       <mu1 value="1.0"/>
       <mu2 value="1.0"/>
       <kp  value="10000000.0" />
-      <kd  value="1.0" />
-      <fdir1 value="1 0 0"/>
+      
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <maxVel>1.0</maxVel>
+
+      
+      <!--kd  value="1.0" />
+      <fdir1 value="1 0 0"/-->
       <material>Gazebo/White</material>
     </gazebo>
 
@@ -97,8 +103,8 @@
         rpy = "0 0 0" /> 
       <axis xyz="0 1 0" 
       		  rpy="0 0 0" />
-      <limit effort="100" velocity="10"/>
-      <!--limit effort="10" velocity="10"/-->
+      <!--limit effort="100" velocity="10"/-->
+      <limit effort="0.0" velocity="0.0"/>
       <joint_properties damping="0.0" friction="0.0"/>
     </joint>
 
