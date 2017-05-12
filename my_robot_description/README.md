@@ -26,4 +26,6 @@ To run rviz test:
 $ roslaunch my_robot_description my_robot_rviz.launch
 ```
 
-![Chassis](../../resources/robot_chassis.jpg)
+![Chassis](../resources/robot_chassis.jpg)
+
+![GraphViz](../resources/graphviz.png)

@@ -18,3 +18,5 @@ Move with the keyboard:
 ```
 $ rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/my_robot/cmd_vel
 ```
+
+![Gazebo simulation](../resources/gazebo.jpg)
