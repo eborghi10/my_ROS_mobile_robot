@@ -24,7 +24,7 @@ To launch the robot use: `$ roslaunch pid_wheels execute.launch`
 
 ## New approach
 
-![NewApproach](resources/software.png)
+![NewApproach](../resources/software.png)
 
 The _turtlebot_teleop_ package is used to send, from the keyboard, the linear and angular velocity needed (_geometry_msgs::Twist_).
 
@@ -38,4 +38,4 @@ Besides, the action server sends the current velocity for each loop, also known 
 
 All the information managed by the Arduino is a custom message package (_robot_msgs::Arduino_) which consists of two parameters: a string (left or right, wheel or encoder indistinctly), and a float32 data value.
 
-![RqtGraph](resources/rqt_graph.png)
+![RqtGraph](../resources/rqt_graph.png)
