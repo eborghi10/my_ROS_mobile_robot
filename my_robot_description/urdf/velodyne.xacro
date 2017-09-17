@@ -3,6 +3,9 @@
 <!-- 
   Velpdyme HDL-32E 
   http://velodynelidar.com/hdl-32e.html
+
+  http://gazebosim.org/tutorials?cat=guided_i&tut=guided_i1
+  http://gazebosim.org/tutorials
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -98,5 +101,44 @@
                   radius="${velodyneRadius}" />
       </geometry>
     </visual>
+
+    <!-- Add a ray sensor, and give it a name -->
+    <sensor type="ray" name="sensor">
+      <!-- Position the ray sensor based on the specification. Also rotate it by 90 degrees around the X-axis so that the <horizontal> rays become vertical -->
+      <pose>0 0 -0.004645 1.5707 0 0</pose>
+      <!-- Enable visualization to see the rays in the GUI -->
+      <visualize>true</visualize>
+      <!-- Set the update rate of the sensor -->
+      <update_rate>30</update_rate>
+
+      <ray>
+        <!-- The scan element contains the horizontal and vertical beams. We are leaving out the vertical beams for this tutorial. -->
+        <scan>
+          <!-- The horizontal beams -->
+          <horizontal>
+            <!-- The velodyne has 32 beams(samples) -->
+            <samples>32</samples>
+            <!-- Resolution is multiplied by samples to determine number of simulated beams vs interpolated beams. See:
+                 http://sdformat.org/spec?ver=1.6&elem=sensor#horizontal_resolution
+                 -->
+            <resolution>1</resolution>
+            <!-- Minimum angle in radians -->
+            <min_angle>-0.53529248</min_angle>
+            <!-- Maximum angle in radians -->
+            <max_angle>0.18622663</max_angle>
+          </horizontal>
+        </scan>
+        <!-- Range defines characteristics of an individual beam -->
+        <range>
+          <!-- Minimum distance of the beam -->
+          <min>0.05</min>
+          <!-- Maximum distance of the beam -->
+          <max>70</max>
+          <!-- Linear resolution of the beam -->
+          <resolution>0.02</resolution>
+        </range>
+      </ray>
+    </sensor>
+
   </link>
 </robot>
