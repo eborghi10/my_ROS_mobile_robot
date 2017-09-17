@@ -1,24 +1,35 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+	<!-- Constants -->
 	<xacro:property name="PI" value="3.1415926535897931"/>
 
-
+	<!-- Chassis properties -->
 	<xacro:property name="chassisHeight" value="0.0623"/>
 	<xacro:property name="chassisLength" value="0.198"/>
 	<xacro:property name="chassisWidth" value="0.119"/>
 	<xacro:property name="chassisMass" value="0.15"/>
 
+	<!-- Caster wheel properties -->
 	<xacro:property name="casterRadius" value="0.021"/>
 	<xacro:property name="casterMass" value="0.09"/>
 	<xacro:property name="casterOffsetX" value="0.091"/>
 
+	<!-- Differential-drive wheels properties -->
 	<xacro:property name="wheelWidth" value="0.026"/>
 	<xacro:property name="wheelRadius" value="0.032"/>
 	<xacro:property name="wheelMass" value="0.05"/>
 	<xacro:property name="wheelOffsetY" value="0.047"/>
 
-	<!--xacro:property name="cameraSize" value="0.05"/>
-	<xacro:property name="cameraMass" value="0.1"/-->
+	<!-- Velodyne properties -->
+	<xacro:property name="velodyneLengthBottom" value="0.05867"/>
+	<xacro:property name="velodyneLengthTop" value="0.07357"/>
+	<xacro:property name="velodyneMassBottom" value="1.2"/>
+	<xacro:property name="velodyneMassTop" value="0.1"/>
+	<xacro:property name="velodyneRadius" value="0.04267"/>
+
+	<!-- Camera properties -->
+	<xacro:property name="cameraSize" value="0.05"/>
+	<xacro:property name="cameraMass" value="0.1"/>
 
 </robot>

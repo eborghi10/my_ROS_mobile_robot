@@ -28,4 +28,6 @@ $ roslaunch my_robot_description my_robot_rviz.launch
 
 ![Chassis](../resources/robot_chassis.jpg)
 
+![Velodyne](../resources/velodyne_drawing.png)
+
 ![GraphViz](../resources/graphviz.png)

@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+
+<!-- 
+  Velpdyme HDL-32E 
+  http://velodynelidar.com/hdl-32e.html
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Robot constants and properties -->
+  <xacro:include filename="$(find my_robot_description)/urdf/my_robot_properties.xacro" />
+  <!-- Inertia matrices -->
+  <xacro:include filename="$(find my_robot_description)/urdf/inertias.xacro" />
+
+
+  <joint name="robot_to_velodyne_joint" type="fixed">
+    <origin xyz="${-velodyneLengthBottom+chassisLength/2} 
+                0 
+                ${wheelRadius+chassisHeight}" 
+            rpy="0 0 0"/>
+    <parent link="chassis"/>
+    <child link="velodyne_bottom"/>
+  </joint>
+
+  <!-- Give the base link a unique name -->
+  <link name="velodyne_bottom">
+
+    <!-- Offset the base by half the lenght of the cylinder -->
+    <pose>0 0 ${velodyneLengthBottom/2} 0 0 0</pose>
+
+    <inertial>
+      <mass value="${velodyneMassBottom}"/>
+      <cylinder_inertia 
+        m="${velodyneMassBottom}" 
+        r="${velodyneRadius}"
+        h="${velodyneLengthBottom}" />
+    </inertial>
+
+    <collision name="vbase_collision">
+      <geometry>
+        <!-- Radius and length provided by Velodyne -->
+          <cylinder length="${velodyneLengthBottom}" 
+                    radius="${velodyneRadius}" />
+      </geometry>
+    </collision>
+
+    <!-- The visual is mostly a copy of the collision -->
+    <visual name="vbase_visual">
+      <geometry>
+        <cylinder length="${velodyneLengthBottom}" 
+                  radius="${velodyneRadius}" />
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Revolute joint for velodyne -->
+  <joint name="velodyne_joint" type="revolute">
+    <origin xyz="0 0 ${velodyneLengthBottom}"/>
+    <!-- The axis defines the joint's degree of freedom -->
+    <!-- Revolve around the z-axis -->
+    <axis xyz="0 0 1"/>
+    <parent link="velodyne_bottom"/>
+    <child link="velodyne_top"/>
+    <!-- Limit refers to the range of motion of the joint -->
+    <!-- Use a very large number to indicate a continuous revolution -->
+    <limit effort="0" 
+           velocity="1.0" 
+           lower="-10000000000000000" 
+           upper="10000000000000000"/>
+  </joint>
+
+  <!-- Give the base link a unique name -->
+  <link name="velodyne_top">
+    <!-- Vertically offset the top cylinder by the length of the bottom
+        cylinder and half the length of this cylinder. -->
+    <pose>0 0 ${velodyneLengthBottom+velodyneLengthTop/2} 0 0 0</pose>
+
+    <inertial>
+      <mass value="${velodyneMassTop}"/>
+      <cylinder_inertia 
+        m="${velodyneMassTop}" 
+        r="${velodyneRadius}"
+        h="${velodyneLengthTop}" />
+    </inertial>
+
+    <collision name="top_collision">
+      <geometry>
+        <!-- Radius and length provided by Velodyne -->
+        <cylinder length="${velodyneLengthTop}" 
+                  radius="${velodyneRadius}" />
+      </geometry>
+    </collision>
+
+    <!-- The visual is mostly a copy of the collision -->
+    <visual name="top_visual">
+      <geometry>
+        <cylinder length="${velodyneLengthTop}" 
+                  radius="${velodyneRadius}" />
+      </geometry>
+    </visual>
+  </link>
+</robot>
