@@ -19,7 +19,7 @@
 	<xacro:property name="wheelWidth" value="0.026"/>
 	<xacro:property name="wheelRadius" value="0.032"/>
 	<xacro:property name="wheelMass" value="0.05"/>
-	<xacro:property name="wheelOffsetY" value="0.047"/>
+	<xacro:property name="wheelOffsetY" value="0.037"/>
 
 	<!-- Velodyne properties -->
 	<xacro:property name="velodyneLengthBottom" value="0.05867"/>

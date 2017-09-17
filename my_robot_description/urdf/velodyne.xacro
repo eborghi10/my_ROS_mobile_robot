@@ -6,6 +6,10 @@
 
   http://gazebosim.org/tutorials?cat=guided_i&tut=guided_i1
   http://gazebosim.org/tutorials
+
+  Another approach:
+    https://github.com/richardw05/mybot_ws/tree/master/src
+    Nav: http://moorerobots.com/blog/post/3
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -13,7 +17,7 @@
   <!-- Robot constants and properties -->
   <xacro:include filename="$(find my_robot_description)/urdf/my_robot_properties.xacro" />
   <!-- Inertia matrices -->
-  <xacro:include filename="$(find my_robot_description)/urdf/inertias.xacro" />
+  <xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
 
 
   <joint name="robot_to_velodyne_joint" type="fixed">
@@ -39,7 +43,7 @@
         h="${velodyneLengthBottom}" />
     </inertial>
 
-    <collision name="vbase_collision">
+    <collision name="velodyne_bottom_collision">
       <geometry>
         <!-- Radius and length provided by Velodyne -->
           <cylinder length="${velodyneLengthBottom}" 
@@ -48,7 +52,7 @@
     </collision>
 
     <!-- The visual is mostly a copy of the collision -->
-    <visual name="vbase_visual">
+    <visual name="velodyne_bottom_visual">
       <geometry>
         <cylinder length="${velodyneLengthBottom}" 
                   radius="${velodyneRadius}" />

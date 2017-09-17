@@ -56,7 +56,6 @@
           <cylinder 
             length="${wheelWidth}" 
             radius="${wheelRadius}"/>
-          <!--mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" /-->
         </geometry>
       </collision>
 
@@ -64,9 +63,6 @@
         <origin xyz="0 0 0" 
         		rpy="${-tY*PI/2} 0 0" />
         <geometry>
-          <!--cylinder 
-            length="${wheelWidth}" 
-            radius="${wheelRadius}"/-->
           <mesh filename="package://my_robot_description/meshes/${lr}_wheel.dae" />
         </geometry>
       </visual>
@@ -102,7 +98,7 @@
       <parent link="chassis"/>
       <child link="${lr}_wheel"/>
       <origin 
-        xyz = "0 ${-tY*(wheelOffsetY+wheelRadius/2)} ${wheelRadius}" 
+        xyz = "0 ${-tY*(wheelOffsetY+wheelWidth)} ${wheelRadius}" 
         rpy = "0 0 0" /> 
       <axis xyz="0 1 0" 
       		  rpy="0 0 0" />
