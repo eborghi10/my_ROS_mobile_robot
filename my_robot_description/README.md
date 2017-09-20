@@ -4,7 +4,7 @@
 
 To convert the xacro file into a URDF file:
 ```
-$ rosrun xacro xacro my_robot.xacro > my_robot.urdf
+$ rosrun xacro xacro --inorder my_robot.xacro > my_robot.urdf
 ```
 
 ### URDF

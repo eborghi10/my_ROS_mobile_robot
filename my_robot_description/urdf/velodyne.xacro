@@ -10,6 +10,16 @@
   Another approach:
     https://github.com/richardw05/mybot_ws/tree/master/src
     Nav: http://moorerobots.com/blog/post/3
+
+
+  - Control plugin: http://gazebosim.org/tutorials?tut=guided_i5
+  - Hokuyo LIDAR: http://amanbreakingthings.blogspot.com.ar/2014/11/adding-hokuyo-lidar-to-turtlebot-in-ros.html
+  - RRBot plugins: http://gazebosim.org/tutorials?tut=ros_gzplugins
+  - Modelling PPT: https://ni.www.techfak.uni-bielefeld.de/files/URDF-XACRO.pdf
+  - URDF PPT: http://wustl.probablydavid.com/publications/URDFandYou.pdf
+  - Gazebo Links: http://gazebosim.org/tutorials/?tut=ros_urdf#Links
+  - Turtlebot 3: https://github.com/ROBOTIS-GIT/turtlebot3/blob/master/turtlebot3_description/urdf/turtlebot3_waffle.urdf.xacro
+  - Turtlebot: https://github.com/turtlebot/turtlebot/blob/kinetic/turtlebot_description/urdf/sensors/kinect.urdf.xacro
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -23,7 +33,7 @@
   <joint name="robot_to_velodyne_joint" type="fixed">
     <origin xyz="${-velodyneLengthBottom+chassisLength/2} 
                 0 
-                ${wheelRadius+chassisHeight}" 
+                ${wheelRadius*3/2+chassisHeight}" 
             rpy="0 0 0"/>
     <parent link="chassis"/>
     <child link="velodyne_bottom"/>
@@ -108,6 +118,7 @@
 
     <!-- Add a ray sensor, and give it a name -->
     <sensor type="ray" name="sensor">
+      <parent link="optical_frame_link_name"/>
       <!-- Position the ray sensor based on the specification. Also rotate it by 90 degrees around the X-axis so that the <horizontal> rays become vertical -->
       <pose>0 0 -0.004645 1.5707 0 0</pose>
       <!-- Enable visualization to see the rays in the GUI -->
@@ -142,6 +153,8 @@
           <resolution>0.02</resolution>
         </range>
       </ray>
+      <!-- Attach the plugin to this model -->
+      <plugin name="velodyne_control" filename="libvelodyne_plugin.so"/>
     </sensor>
 
   </link>
