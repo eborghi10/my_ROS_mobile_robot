@@ -7,12 +7,6 @@
 
   https://github.com/richardw05/mybot_ws/tree/master/src
 
-  https://github.com/richardw05/mybot_ws/blob/master/src/mybot_description/launch/mybot_rviz.launch
-
-  https://github.com/richardw05/mybot_ws/blob/master/src/mybot_description/launch/mybot_rviz_amcl.launch
-
-  https://github.com/richardw05/mybot_ws/blob/master/src/mybot_description/launch/mybot_rviz_gmapping.launch
-
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -23,12 +17,56 @@
   <xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
 
 
+  <link name="camera">
+    <collision>
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
+      <geometry>
+        <box size="${cameraSize} 
+                   ${cameraSize} 
+                   ${cameraSize}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
+      <geometry>
+        <box size="${cameraSize} 
+                   ${cameraSize} 
+                   ${cameraSize}"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+
+    <inertial>
+      <mass value="${cameraMass}" />
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
+      <box_inertia m="${cameraMass}" 
+                   x="${cameraSize}" 
+                   y="${cameraSize}" 
+                   z="${cameraSize}" />
+    </inertial>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${cameraOffsetX} 0 ${2*wheelRadius}" 
+            rpy="0 0 0"/>
+    <parent link="chassis"/>
+    <child link="camera"/>
+  </joint>
+
+
   <joint name="hokuyo_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="${casterOffsetX} 0 ${hokuyoOffsetZ}" rpy="0 0 0"/>
+    <origin xyz="0 0 ${hokuyoOffsetZ}" 
+            rpy="0 0 0"/>
     <parent link="chassis"/>
     <child link="hokuyo"/>
   </joint>
+
 
   <!-- Hokuyo Laser -->
   <link name="hokuyo">
@@ -36,10 +74,9 @@
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
       <geometry>
-        <box size="
-          ${hokuyoLength} 
-          ${hokuyoWidth} 
-          ${hokuyoHeight}"/>
+        <box size="${hokuyoLength} 
+                   ${hokuyoWidth} 
+                   ${hokuyoHeight}"/>
       </geometry>
     </collision>
 
