@@ -21,15 +21,15 @@
 	<xacro:property name="wheelMass" value="0.05"/>
 	<xacro:property name="wheelOffsetY" value="0.037"/>
 
-	<!-- Velodyne properties -->
-	<xacro:property name="velodyneLengthBottom" value="0.05867"/>
-	<xacro:property name="velodyneLengthTop" value="0.07357"/>
-	<xacro:property name="velodyneMassBottom" value="1.2"/>
-	<xacro:property name="velodyneMassTop" value="0.1"/>
-	<xacro:property name="velodyneRadius" value="0.04267"/>
+	<!-- Hokuyo laser properties -->
+	<xacro:property name="hokuyoMass" value="1e-5"/>
+	<xacro:property name="hokuyoLength" value="0.1"/>
+	<xacro:property name="hokuyoWidth" value="0.1"/>
+	<xacro:property name="hokuyoHeight" value="0.1"/>
+	<xacro:property name="hokuyoOffsetZ" value="0.1"/>
 
 	<!-- Camera properties -->
 	<xacro:property name="cameraSize" value="0.05"/>
-	<xacro:property name="cameraMass" value="0.1"/>
+	<xacro:property name="cameraMass" value="0.9"/>
 
 </robot>

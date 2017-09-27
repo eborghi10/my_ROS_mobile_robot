@@ -109,10 +109,7 @@
 	<wheel lr="right" tY="1"/>
 
 
-	<!-- Including Velodyne model -->
-	<xacro:include filename="$(find my_robot_description)/urdf/velodyne.xacro" />
-
-	<!-- Camera model -->
-	<!--xacro:include filename="$(find my_robot_description)/urdf/camera.xacro" /-->
+	<!-- Sensor models -->
+	<xacro:include filename="$(find my_robot_description)/urdf/sensors.xacro" />
 
 </robot>
