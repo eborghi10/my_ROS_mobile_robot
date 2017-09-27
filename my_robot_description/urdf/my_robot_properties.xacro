@@ -30,7 +30,7 @@
 
 	<!-- Camera properties -->
 	<xacro:property name="cameraSize" value="0.05"/>
-	<xacro:property name="cameraMass" value="0.9"/>
+	<xacro:property name="cameraMass" value="0.05"/>
 	<xacro:property name="cameraOffsetX" value="0.095"/>
 
 </robot>
