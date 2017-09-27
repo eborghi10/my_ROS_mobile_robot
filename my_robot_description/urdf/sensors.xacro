@@ -1,25 +1,18 @@
 <?xml version="1.0" ?>
 
 <!-- 
-  Velpdyme HDL-32E 
-  http://velodynelidar.com/hdl-32e.html
+  https://www.youtube.com/watch?v=HIK1KBw-Jn4
 
-  http://gazebosim.org/tutorials?cat=guided_i&tut=guided_i1
-  http://gazebosim.org/tutorials
+  http://moorerobots.com/blog/post/3
 
-  Another approach:
-    https://github.com/richardw05/mybot_ws/tree/master/src
-    Nav: http://moorerobots.com/blog/post/3
+  https://github.com/richardw05/mybot_ws/tree/master/src
 
+  https://github.com/richardw05/mybot_ws/blob/master/src/mybot_description/launch/mybot_rviz.launch
 
-  - Control plugin: http://gazebosim.org/tutorials?tut=guided_i5
-  - Hokuyo LIDAR: http://amanbreakingthings.blogspot.com.ar/2014/11/adding-hokuyo-lidar-to-turtlebot-in-ros.html
-  - RRBot plugins: http://gazebosim.org/tutorials?tut=ros_gzplugins
-  - Modelling PPT: https://ni.www.techfak.uni-bielefeld.de/files/URDF-XACRO.pdf
-  - URDF PPT: http://wustl.probablydavid.com/publications/URDFandYou.pdf
-  - Gazebo Links: http://gazebosim.org/tutorials/?tut=ros_urdf#Links
-  - Turtlebot 3: https://github.com/ROBOTIS-GIT/turtlebot3/blob/master/turtlebot3_description/urdf/turtlebot3_waffle.urdf.xacro
-  - Turtlebot: https://github.com/turtlebot/turtlebot/blob/kinetic/turtlebot_description/urdf/sensors/kinect.urdf.xacro
+  https://github.com/richardw05/mybot_ws/blob/master/src/mybot_description/launch/mybot_rviz_amcl.launch
+
+  https://github.com/richardw05/mybot_ws/blob/master/src/mybot_description/launch/mybot_rviz_gmapping.launch
+
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
