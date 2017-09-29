@@ -19,6 +19,9 @@
 	<arg name="debug" 
 		 default="false"/>
 
+	<arg name="world"
+		 default="$(find my_robot_gazebo)/worlds/playground.world"/>
+
 	<arg name="model" 
   	   	 default="$(find my_robot_description)/urdf/my_robot.xacro"/>
 
@@ -42,7 +45,7 @@
 		Launch Gazebo world 
 	-->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
-		<arg name="world_name" value="$(find my_robot_gazebo)/worlds/my_robot.world"/>
+		<arg name="world_name" value="$(arg world)"/>
 		<arg name="debug" value="$(arg debug)" />
 		<arg name="gui" value="$(arg gui)" />
 		<arg name="paused" value="$(arg paused)"/>

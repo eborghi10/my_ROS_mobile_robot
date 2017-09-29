@@ -7,6 +7,12 @@
 
   https://github.com/richardw05/mybot_ws/tree/master/src
 
+  https://github.com/qboticslabs/Chefbot_ROS_pkg
+
+  https://answers.ros.org/question/249568/no-such-file-or-directory-gmappinglaunchxml-or-amcllaunchxml-under-turtlebot_navigationlaunchincludes/
+
+  http://wiki.ros.org/navigation/Tutorials
+
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 

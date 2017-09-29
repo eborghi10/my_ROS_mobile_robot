@@ -2,8 +2,10 @@
 <launch>
 
   <include file="$(find my_robot_description)/launch/my_robot_rviz.launch">
+
     <arg name="rvizconfig" 
        value="$(find my_robot_description)/rviz/mapping.rviz"/>
+  
   </include>
 
 </launch>
