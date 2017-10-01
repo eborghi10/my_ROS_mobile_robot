@@ -2,7 +2,7 @@
 <!--
     - Base      : kobuki
     - Stacks    : hexagons
-    - 3d Sensor : kinect
+    - 3d Sensor : astra
 -->    
 <robot name="turtlebot" xmlns:xacro="http://ros.org/wiki/xacro">
 

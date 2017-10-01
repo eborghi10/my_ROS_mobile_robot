@@ -44,7 +44,7 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 10
-      Reference Frame: <Fixed Frame>
+      Reference Frame: base_footprint
       Value: true
     - Alpha: 0.5
       Class: rviz/RobotModel
