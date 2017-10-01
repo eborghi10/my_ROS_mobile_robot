@@ -70,12 +70,12 @@
     <origin xyz="0 0 ${hokuyoOffsetZ}" 
             rpy="0 0 0"/>
     <parent link="chassis"/>
-    <child link="hokuyo"/>
+    <child link="hokuyo_link"/>
   </joint>
 
 
   <!-- Hokuyo Laser -->
-  <link name="hokuyo">
+  <link name="hokuyo_link">
     <collision>
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
@@ -102,6 +102,10 @@
         y="${hokuyoWidth}" 
         z="${hokuyoHeight}"/>
     </inertial>
+
+    <!-- Gazebo plugin -->
+    <!--my_robot_sim_laser_range_finder/-->
+
   </link>
 
 </robot>
