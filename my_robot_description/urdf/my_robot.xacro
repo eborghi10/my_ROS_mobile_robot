@@ -22,8 +22,7 @@
 	<xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
 	<!-- Inertia matrices -->
 	<xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
-
-
+	
 
 	<!-- Used for fixing robot to Gazebo 'chassis' -->
 	<link name="base_footprint" />

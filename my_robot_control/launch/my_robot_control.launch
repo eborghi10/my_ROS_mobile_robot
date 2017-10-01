@@ -7,7 +7,8 @@
   -->
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find my_robot_control)/config/my_robot_control.yaml" command="load"/>
+  <rosparam file="$(find my_robot_control)/config/my_robot_control.yaml"
+            command="load"/>
 
   <!-- load the controllers -->
   <!--

@@ -23,7 +23,7 @@
   <xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
 
 
-  <link name="camera">
+  <link name="camera_link">
     <collision>
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
@@ -54,14 +54,19 @@
                    y="${cameraSize}" 
                    z="${cameraSize}" />
     </inertial>
+
+    <!-- Gazebo plugin -->
+    <my_robot_sim_camera/>
+
   </link>
+
 
   <joint name="camera_joint" type="fixed">
     <axis xyz="0 1 0" />
     <origin xyz="${cameraOffsetX} 0 ${2*wheelRadius}" 
             rpy="0 0 0"/>
     <parent link="chassis"/>
-    <child link="camera"/>
+    <child link="camera_link"/>
   </joint>
 
 
@@ -104,7 +109,7 @@
     </inertial>
 
     <!-- Gazebo plugin -->
-    <!--my_robot_sim_laser_range_finder/-->
+    <my_robot_sim_laser_range_finder/>
 
   </link>
 

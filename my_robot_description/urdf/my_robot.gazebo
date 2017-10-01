@@ -10,7 +10,8 @@
 
   <!-- ros_control plugin -->
   <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <plugin name="gazebo_ros_control" 
+            filename="libgazebo_ros_control.so">
       <robotNamespace>/my_robot</robotNamespace>
       <robotParam>/robot_description</robotParam>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
@@ -23,7 +24,8 @@
     The plugin broadcasts pose and rate of a body named "chassis" over ROS topic name "my_robot/odom".
   -->
   <gazebo>
-    <plugin name="ground_truth" filename="libgazebo_ros_p3d.so">
+    <plugin name="ground_truth" 
+            filename="libgazebo_ros_p3d.so">
       <frameName>map</frameName>
       <bodyName>chassis</bodyName>
       <topicName>my_robot/odom</topicName>
@@ -87,7 +89,10 @@
   </gazebo>
 
 
-  <gazebo reference="camera">
+<xacro:macro name="my_robot_sim_camera">
+  <gazebo reference="camera_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
     <material>Gazebo/Green</material>
     <sensor type="camera" 
             name="camera1">
@@ -111,7 +116,7 @@
         <cameraName>my_robot/camera1</cameraName>
         <imageTopicName>image_raw</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>camera</frameName>
+        <frameName>camera_link</frameName>
         <hackBaseline>0.07</hackBaseline>
         <distortionK1>0.0</distortionK1>
         <distortionK2>0.0</distortionK2>
@@ -121,11 +126,13 @@
       </plugin>
     </sensor>
   </gazebo>
+</xacro:macro>
 
-<!--xacro:macro name="my_robot_sim_laser_range_finder"-->
+<xacro:macro name="my_robot_sim_laser_range_finder">
   <!-- hokuyo -->
   <gazebo reference="hokuyo_link">
-    <sensor type="gpu_ray" 
+    <!-- Don't use type="gpy_ray" -->
+    <sensor type="ray" 
             name="head_hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>true</visualize>
@@ -154,13 +161,14 @@
           <stddev>0.01</stddev>
         </noise>
       </ray>
+      
       <plugin name="gazebo_ros_head_hokuyo_controller" 
-              filename="libgazebo_ros_gpu_laser.so">
+              filename="libgazebo_ros_laser.so">
         <topicName>/my_robot/laser/scan</topicName>
         <frameName>hokuyo_link</frameName>
       </plugin>
     </sensor>
   </gazebo>
-<!--/xacro:macro-->
+</xacro:macro>
 
 </robot>

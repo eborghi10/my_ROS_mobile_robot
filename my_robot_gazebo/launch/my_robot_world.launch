@@ -30,8 +30,8 @@
 
 
 
-	<env name="GAZEBO_MODEL_PATH" 
-         value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
+	<!--env name="GAZEBO_MODEL_PATH" 
+         value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/-->
 
 
 
@@ -56,11 +56,11 @@
 	<!-- 
 		push robot_description to factory and spawn robot in gazebo 
 	-->
-	<node name="urdf_spawner" 
+	<!--node name="urdf_spawner" 
 		  pkg="gazebo_ros" 
 		  type="spawn_model" 
 		  output="screen"
- 		  args="-urdf -model my_robot -param robot_description" />
+ 		  args="-urdf -model my_robot -param robot_description" /-->
 
  	<!-- 
  		Open Rviz 
