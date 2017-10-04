@@ -30,9 +30,8 @@
 
 
 
-	<!--env name="GAZEBO_MODEL_PATH" 
-         value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/-->
-
+	<env name="GAZEBO_MODEL_PATH" 
+         value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
 
 
 	<!-- 
