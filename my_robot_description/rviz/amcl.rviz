@@ -62,7 +62,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        camera:
+        camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -77,7 +77,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        hokuyo:
+        hokuyo_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false

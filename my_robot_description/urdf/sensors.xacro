@@ -21,6 +21,8 @@
   <xacro:include filename="$(find my_robot_description)/urdf/my_robot_properties.xacro" />
   <!-- Inertia matrices -->
   <xacro:include filename="$(find my_robot_description)/urdf/macros.xacro" />
+  <!-- Gazebo aspects of the robot -->
+  <xacro:include filename="$(find my_robot_description)/urdf/my_robot.gazebo" />
 
 
   <link name="camera_link">
@@ -54,9 +56,6 @@
                    y="${cameraSize}" 
                    z="${cameraSize}" />
     </inertial>
-
-    <!-- Gazebo plugin -->
-    <my_robot_sim_camera/>
 
   </link>
 
@@ -92,7 +91,8 @@
     </collision>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://my_robot_description/meshes/hokuyo.dae"/>
       </geometry>
@@ -100,16 +100,14 @@
 
     <inertial>
       <mass value="${hokuyoMass}" />
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0 0 0" 
+              rpy="0 0 0"/>
       <box_inertia 
         m="${hokuyoMass}" 
         x="${hokuyoLength}" 
         y="${hokuyoWidth}" 
         z="${hokuyoHeight}"/>
     </inertial>
-
-    <!-- Gazebo plugin -->
-    <my_robot_sim_laser_range_finder/>
 
   </link>
 

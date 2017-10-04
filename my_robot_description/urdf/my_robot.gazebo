@@ -89,7 +89,6 @@
   </gazebo>
 
 
-<xacro:macro name="my_robot_sim_camera">
   <gazebo reference="camera_link">
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
@@ -126,13 +125,11 @@
       </plugin>
     </sensor>
   </gazebo>
-</xacro:macro>
 
-<xacro:macro name="my_robot_sim_laser_range_finder">
   <!-- hokuyo -->
   <gazebo reference="hokuyo_link">
     <!-- Don't use type="gpy_ray" -->
-    <sensor type="ray" 
+    <sensor type="ray"
             name="head_hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>true</visualize>
@@ -169,6 +166,5 @@
       </plugin>
     </sensor>
   </gazebo>
-</xacro:macro>
 
 </robot>

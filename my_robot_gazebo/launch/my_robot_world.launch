@@ -56,11 +56,12 @@
 	<!-- 
 		push robot_description to factory and spawn robot in gazebo 
 	-->
-	<!--node name="urdf_spawner" 
+	<node name="urdf_spawner" 
 		  pkg="gazebo_ros" 
 		  type="spawn_model" 
+		  respawn="false"
 		  output="screen"
- 		  args="-urdf -model my_robot -param robot_description" /-->
+ 		  args="-urdf -model my_robot -param robot_description" />
 
  	<!-- 
  		Open Rviz 
