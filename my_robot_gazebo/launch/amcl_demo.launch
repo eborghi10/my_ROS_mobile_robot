@@ -11,6 +11,12 @@
         <param name="frame_id" value="/odom" />
   </node>
 
+  <!-- Publish a static transformation between /odom and /map -->
+  <node name="tf"
+        pkg="tf"
+        type="static_transform_publisher"
+        args="0 0 0 0 0 0 /map /odom 100"/>
+
   <!-- Localization -->
   <arg name="initial_pose_x" default="0.0"/>
   <arg name="initial_pose_y" default="0.0"/>
@@ -30,5 +36,7 @@
 
   <!-- Move base -->
   <include file="$(find my_robot_bringup)/launch/includes/move_base.launch.xml"/>
+
+  <include file="$(find my_robot_gazebo)/launch/my_robot_world.launch"/>
 
 </launch>
