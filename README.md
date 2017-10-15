@@ -12,9 +12,10 @@ Nonsense tip to record the screen: `ffmpeg -f x11grab -s 1366x768 -r 15 -i :0.0 
 
 ```
 $ sudo apt-get install ros-kinetic-depthimage-to-laserscan
-$ sudo apt-get install ros-indigo-joint-state-controller
-$ sudo apt-get install ros-indigo-effort-controllers
-$ sudo apt-get install ros-indigo-position-controllers
+$ sudo apt-get install ros-kinetic-joint-state-controller
+$ sudo apt-get install ros-kinetic-effort-controllers
+$ sudo apt-get install ros-kinetic-position-controllers
+$ sudo apt-get install ros-kinetic-controller-manager
 ```
 
 # ToDo
