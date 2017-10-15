@@ -29,8 +29,11 @@
 	<xacro:property name="hokuyoOffsetZ" value="0.1125"/>
 
 	<!-- Camera properties -->
-	<xacro:property name="cameraSize" value="0.05"/>
+	<xacro:property name="cameraLength" value="0.04"/>
+	<xacro:property name="cameraWidth" value="0.08"/>
+	<xacro:property name="cameraHeight" value="0.03"/>
 	<xacro:property name="cameraMass" value="0.05"/>
 	<xacro:property name="cameraOffsetX" value="0.095"/>
+	<xacro:property name="cameraOffsetZ" value="0.06"/>
 
 </robot>

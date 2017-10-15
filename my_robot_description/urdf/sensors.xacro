@@ -30,9 +30,9 @@
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
       <geometry>
-        <box size="${cameraSize} 
-                   ${cameraSize} 
-                   ${cameraSize}"/>
+        <box size="${cameraLength} 
+                   ${cameraWidth} 
+                   ${cameraHeight}"/>
       </geometry>
     </collision>
 
@@ -40,9 +40,9 @@
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
       <geometry>
-        <box size="${cameraSize} 
-                   ${cameraSize} 
-                   ${cameraSize}"/>
+        <box size="${cameraLength} 
+                   ${cameraWidth} 
+                   ${cameraHeight}"/>
       </geometry>
       <material name="green"/>
     </visual>
@@ -52,9 +52,9 @@
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
       <box_inertia m="${cameraMass}" 
-                   x="${cameraSize}" 
-                   y="${cameraSize}" 
-                   z="${cameraSize}" />
+                   x="${cameraLength}" 
+                   y="${cameraWidth}" 
+                   z="${cameraHeight}" />
     </inertial>
 
   </link>
@@ -62,7 +62,7 @@
 
   <joint name="camera_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="${cameraOffsetX} 0 ${2*wheelRadius}" 
+    <origin xyz="${cameraOffsetX} 0 ${cameraOffsetZ}" 
             rpy="0 0 0"/>
     <parent link="chassis"/>
     <child link="camera_link"/>

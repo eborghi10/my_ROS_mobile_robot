@@ -41,6 +41,6 @@
     		pkg="rviz" 
     		type="rviz" 
     		args="-d $(arg rvizconfig)" 
-    		required="true" />
+    		required="false" />
 
 </launch>
