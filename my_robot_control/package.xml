@@ -1,19 +1,27 @@
 <?xml version="1.0"?>
 <package>
   <name>my_robot_control</name>
-  <version>0.0.0</version>
-  <description>The my_robot_control package</description>
+  <version>0.0.1</version>
+  <description>Hardware interface for the robot</description>
 
-  <maintainer email="emiliano@todo.todo">emiliano</maintainer>
+  <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-
+  <build_depend>controller_manager</build_depend>
+  <build_depend>hardware_interface</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
 
   <run_depend>controller_manager</run_depend>
   <run_depend>joint_state_controller</run_depend>
   <run_depend>robot_state_publisher</run_depend>
+
+  <run_depend>controller_manager</run_depend>
+  <run_depend>hardware_interface</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>trajectory_msgs</run_depend>
 
   <run_depend>effort_controllers</run_depend>
 
