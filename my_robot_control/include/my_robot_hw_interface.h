@@ -39,6 +39,7 @@
 
 #pragma once
 
+#include <ros/ros.h>
 #include <controller_manager/controller_manager.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
@@ -50,29 +51,9 @@
 class MyRobotHWInterface : public hardware_interface::RobotHW
 {
 public:
-  MyRobotHWInterface() {
-  // connect and register the joint state interface
-  hardware_interface::JointStateHandle state_handle_left("left_joint", &pos[0], &vel[0], &eff[0]);
-  jnt_state_interface.registerHandle(state_handle_left);
+  MyRobotHWInterface();
 
-  hardware_interface::JointStateHandle state_handle_right("right_joint", &pos[1], &vel[1], &eff[1]);
-  jnt_state_interface.registerHandle(state_handle_right);
-
-  registerInterface(&jnt_state_interface);
-
-  // connect and register the joint velocity interface
-  hardware_interface::JointHandle vel_handle_left(jnt_state_interface.getHandle("left_joint"), &cmd[0]);
-  jnt_vel_interface.registerHandle(vel_handle_left);
-
-  hardware_interface::JointHandle vel_handle_right(jnt_state_interface.getHandle("right_joint"), &cmd[1]);
-  jnt_vel_interface.registerHandle(vel_handle_right);
-
-  registerInterface(&jnt_vel_interface);
-}
-
-void write() {
-
-}
+void write() {}
 
 void read() {
   pos[0] = cmd[0];
@@ -111,3 +92,23 @@ private:
   }
 
 };  // class
+
+MyRobotHWInterface::MyRobotHWInterface() {
+  // connect and register the joint state interface
+  hardware_interface::JointStateHandle state_handle_left("left_joint", &pos[0], &vel[0], &eff[0]);
+  jnt_state_interface.registerHandle(state_handle_left);
+
+  hardware_interface::JointStateHandle state_handle_right("right_joint", &pos[1], &vel[1], &eff[1]);
+  jnt_state_interface.registerHandle(state_handle_right);
+
+  registerInterface(&jnt_state_interface);
+
+  // connect and register the joint velocity interface
+  hardware_interface::JointHandle vel_handle_left(jnt_state_interface.getHandle("left_joint"), &cmd[0]);
+  jnt_vel_interface.registerHandle(vel_handle_left);
+
+  hardware_interface::JointHandle vel_handle_right(jnt_state_interface.getHandle("right_joint"), &cmd[1]);
+  jnt_vel_interface.registerHandle(vel_handle_right);
+
+  registerInterface(&jnt_vel_interface);
+}
