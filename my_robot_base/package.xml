@@ -21,7 +21,7 @@
   <run_depend>hardware_interface</run_depend>
   <run_depend>effort_controllers</run_depend>
   <run_depend>trajectory_msgs</run_depend>
-  <!-- Very important for the robot!! -->
+  <!-- Very important for this kind of robot!! -->
   <run_depend>diff_drive_controller</run_depend>
 
   <export>

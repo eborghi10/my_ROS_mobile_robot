@@ -146,12 +146,12 @@ private:
     return true;
   }
 
-  void leftWheelAngleCallback(const std_msgs::Float32::ConstPtr& msg) {
-    _wheel_angle[0] = msg->data;
+  void leftWheelAngleCallback(const std_msgs::Float32& msg) {
+    _wheel_angle[0] = msg.data;
   }
 
-  void rightWheelAngleCallback(const std_msgs::Float32::ConstPtr& msg) {
-    _wheel_angle[1] = msg->data;
+  void rightWheelAngleCallback(const std_msgs::Float32& msg) {
+    _wheel_angle[1] = msg.data;
   }
 
   void limitDifferentialSpeed(double &diff_speed_left, double &diff_speed_right)
@@ -196,9 +196,9 @@ MyRobotHWInterface::MyRobotHWInterface()
     registerInterface(&jnt_vel_interface);
 
 	// Initialize publishers and subscribers
-	left_wheel_angle_sub_ = nh.subscribe("my_robot/left_wheel_angle", 1, &MyRobotHWInterface::leftWheelAngleCallback, this);
-	right_wheel_angle_sub_ = nh.subscribe("my_robot/right_wheel_angle", 1, &MyRobotHWInterface::rightWheelAngleCallback, this);
-
 	left_wheel_vel_pub_ = nh.advertise<std_msgs::Float32>("my_robot/left_wheel_vel", 1);
 	right_wheel_vel_pub_ = nh.advertise<std_msgs::Float32>("my_robot/right_wheel_vel", 1);
+
+	left_wheel_angle_sub_ = nh.subscribe("my_robot/left_wheel_angle", 1, &MyRobotHWInterface::leftWheelAngleCallback, this);
+	right_wheel_angle_sub_ = nh.subscribe("my_robot/right_wheel_angle", 1, &MyRobotHWInterface::rightWheelAngleCallback, this);
 }

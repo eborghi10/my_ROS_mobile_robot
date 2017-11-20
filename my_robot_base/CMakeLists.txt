@@ -26,7 +26,10 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES my_robot_base
-  CATKIN_DEPENDS controller_manager roscpp hardware_interface
+  CATKIN_DEPENDS 
+  	controller_manager 
+  	roscpp 
+  	hardware_interface
 #  DEPENDS system_lib
 )
 
@@ -41,24 +44,25 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-# my_robot Hardware Interface
-add_library(${PROJECT_NAME}_node
+## Declare a C++ executable
+## With catkin_make all packages are built within a single CMake context
+## The recommended prefix ensures that target names across packages don't collide
+add_executable(${PROJECT_NAME}_node 
 #  src/my_robot_hw_interface.cpp
   src/my_robot_base.cpp
+)
+
+target_link_libraries(${PROJECT_NAME}_node 
+  ${catkin_LIBRARIES}
 )
 
 add_dependencies(${PROJECT_NAME}_node
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
-target_link_libraries(${PROJECT_NAME}_node 
-  ${catkin_LIBRARIES}
-)
 
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
-#add_executable(${PROJECT_NAME}_node 
+# my_robot Hardware Interface
+#add_library(${PROJECT_NAME}_node
 #  src/my_robot_hw_interface.cpp
 #  src/my_robot_base.cpp
 #)
@@ -71,23 +75,23 @@ target_link_libraries(${PROJECT_NAME}_node
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
 ## Mark cpp header files for installation
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+#install(DIRECTORY include/${PROJECT_NAME}/
+#  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 #   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
-)
+#)
 
 
 # Install libraries
-install(TARGETS ${PROJECT_NAME}_node
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+#install(TARGETS ${PROJECT_NAME}_node
+#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
 # Install header files
-install(DIRECTORY include/my_robot_control/   
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+#install(DIRECTORY include/my_robot_base/   
+#  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-install(DIRECTORY config
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+#install(DIRECTORY config
+#  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
-install(DIRECTORY launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+#install(DIRECTORY launch
+#  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
