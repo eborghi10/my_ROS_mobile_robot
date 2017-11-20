@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <name>arduino_peripherals</name>
+  <version>0.0.1</version>
+  <description>The arduino_peripherals package</description>
+
+  <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <run_depend>roscpp</run_depend>
+
+  <export>
+  </export>
+</package>

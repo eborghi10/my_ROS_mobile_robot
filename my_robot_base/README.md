@@ -37,3 +37,6 @@ This file will execute a node named `my_robot_base_node` with the following para
  * /controller_manager/list_controllers
  * /stop
 ```
+
+Besides, you can publish sensor data with Arduino and receive motor velocities using:
+`roslaunch arduino_peripherals run_arduino_node.launch`

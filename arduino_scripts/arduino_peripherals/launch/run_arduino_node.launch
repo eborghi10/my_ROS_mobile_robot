@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- Execute Arduino node -->
+
+  	<node 
+  		pkg  = "rosserial_python" 
+	  	type = "serial_node.py" 
+	  	name = "serial_node"
+	  	args = "/dev/ttyACM0"
+  	/>
+
+</launch>
