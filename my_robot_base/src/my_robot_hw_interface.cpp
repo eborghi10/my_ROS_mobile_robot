@@ -40,6 +40,7 @@
 #include <my_robot_hw_interface.h>
 
 int main(int argc, char** argv) {
+  /*
   ros::init(argc, argv, "my_robot_hw_interface_node");
   ros::NodeHandle nh;
   
@@ -58,6 +59,7 @@ int main(int argc, char** argv) {
     robot.write();
     loop_rate.sleep();
   }
-
+  spinner.stop();
+  */
   return 0;
 }

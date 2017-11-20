@@ -4,7 +4,7 @@
   <version>0.0.1</version>
   <description>The my_robot_base package</description>
 
-  <maintainer email="emiliano.borghi@gmail.com">emiliano</maintainer>
+  <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 
   <license>TODO</license>
 
@@ -14,10 +14,13 @@
   <build_depend>roscpp</build_depend>
   <build_depend>roslaunch</build_depend>
   <build_depend>hardware_interface</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
   
   <run_depend>controller_manager</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>hardware_interface</run_depend>
+  <run_depend>effort_controllers</run_depend>
+  <run_depend>trajectory_msgs</run_depend>
   <!-- Very important for the robot!! -->
   <run_depend>diff_drive_controller</run_depend>
 

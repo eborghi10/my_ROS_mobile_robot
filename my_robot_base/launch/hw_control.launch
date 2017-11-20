@@ -1,0 +1,25 @@
+<!-- https://answers.ros.org/question/221093/basic-diff_drive-question/ -->
+<!-- https://github.com/ros-controls/ros_controllers/tree/kinetic-devel/diff_drive_controller/test -->
+
+<launch>
+
+    <node name="my_robot_hw" 
+          pkg="my_robot_base" 
+          type="my_robot_hw">
+    
+        <!--remap from="/my_robot/cmd_vel" 
+           to="/my_robot_controller/cmd_vel"/-->
+
+    </node>
+
+    <!-- Load controller config -->
+    <rosparam command="load" 
+              file="$(find my_robot_control)/config/my_robot_common.yaml"/>
+
+    <node name="controller_spawner" 
+          pkg="controller_manager" 
+          type="spawner" 
+          output="screen" 
+          args="mobile_base_controller"/> 
+          
+</launch>
