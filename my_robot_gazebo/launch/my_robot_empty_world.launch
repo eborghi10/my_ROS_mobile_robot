@@ -1,13 +1,13 @@
 <launch>
 
-  <arg name="base"
-       value="$(optenv MY_ROBOT_BASE my_robot_base)"/> 
+  <!--arg name="base"
+       value="$(optenv MY_ROBOT_BASE my_robot_base)"/--> 
   <!-- circles --> 
-  <arg name="stacks"
-       value="$(optenv MY_ROBOT_STACKS circles)"/>  
+  <!--arg name="stacks"
+       value="$(optenv MY_ROBOT_STACKS circles)"/-->  
   <!-- kinect, asus_xtion_pro -->
-  <arg name="3d_sensor" 
-       value="$(optenv MY_ROBOT_3D_SENSOR astra)"/>   
+  <!--arg name="3d_sensor" 
+       value="$(optenv MY_ROBOT_3D_SENSOR astra)"/-->   
 
   <arg name="model" 
        default="$(find my_robot_description)/urdf/my_robot.xacro"/>
@@ -49,7 +49,7 @@
 <!-- ////////////////////////////////////////////////////////////// -->
 
   <!-- Fake laser -->
-  <node pkg="nodelet" 
+  <!--node pkg="nodelet" 
         type="nodelet" 
         name="laserscan_nodelet_manager" 
         args="manager"/>
@@ -68,7 +68,7 @@
            to="/camera/depth/image_raw"/>
     <remap from="scan" 
            to="/scan"/>
-  </node>
+  </node-->
 
 <!-- ////////////////////////////////////////////////////////////// -->
 
