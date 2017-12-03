@@ -2,7 +2,12 @@
 
 ## Debugging
 
-Install: `sudo apt-get install ros-kinetic-rqt-controller-manager`
+Install: 
+
+```
+sudo apt-get install ros-kinetic-ros-controllers
+sudo apt-get install ros-kinetic-rqt-controller-manager
+```
 
 Execute: `rosrun rqt_controller_manager rqt_controller_manager`
 

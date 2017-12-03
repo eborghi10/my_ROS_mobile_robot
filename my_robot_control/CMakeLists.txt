@@ -11,8 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  INCLUDE_DIRS 
-    include
+#  INCLUDE_DIRS 
+#    include
   CATKIN_DEPENDS
     controller_manager
     hardware_interface
@@ -20,16 +20,7 @@ catkin_package(
     trajectory_msgs
 )
 
-include_directories(
-  include/
-  ${catkin_INCLUDE_DIRS}
-)
-
 ## Install ------------------------------------------------------------
-
-# Install header files
-install(DIRECTORY include/my_robot_control/   
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 install(DIRECTORY config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
