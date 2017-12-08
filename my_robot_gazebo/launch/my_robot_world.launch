@@ -20,15 +20,13 @@
 		 default="false"/>
 
 	<arg name="world"
-		 default="$(find my_robot_gazebo)/worlds/playground.world"/>
+		 default="$(find turtlebot_gazebo)/worlds/corridor.world"/>
 
 	<arg name="model" 
   	   	 default="$(find my_robot_description)/urdf/my_robot.xacro"/>
 
 	<arg name="rvizconfig" 
   	   	 default="$(find my_robot_description)/rviz/my_robot.rviz" />
-
-
 
 	<env name="GAZEBO_MODEL_PATH" 
          value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
@@ -64,7 +62,6 @@
 
  	<!-- 
  		Open Rviz 
-
  		- required="false" : if the program is closed, the simulation doesn't shutdown 
  	-->
  	<node name="rviz" 
@@ -73,7 +70,7 @@
     		args="-d $(arg rvizconfig)" 
     		required="false" />
 
- 	<!-- 
+	<!-- 
  		ros_control my_robot launch file 
  	-->
 	<include file="$(find my_robot_control)/launch/my_robot_control.launch" />

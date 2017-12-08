@@ -1,23 +1,26 @@
 <?xml version="1.0"?>
 <package>
   <name>my_robot_gazebo</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>The my_robot_gazebo package</description>
 
-  <maintainer email="andif@todo.todo">andif</maintainer>
+  <maintainer email="emiliano.borghi@gmail.com">Emiliano Borghi</maintainer>
 
   <license>TODO</license>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>gazebo</build_depend>
+  
   <run_depend>gazebo</run_depend>
-
   <run_depend>gazebo_plugins</run_depend>
   <run_depend>gazebo_ros</run_depend>
   <run_depend>gazebo_ros_control</run_depend>
   <run_depend>my_robot_control</run_depend>
+  <run_depend>controller_manager</run_depend>
   <run_depend>my_robot_description</run_depend>
   <run_depend>xacro</run_depend>
+  <!-- worlds -->
+  <run_depend>turtlebot_gazebo</run_depend>
 
   <export>
   </export>

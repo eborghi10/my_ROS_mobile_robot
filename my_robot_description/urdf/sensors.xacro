@@ -71,7 +71,7 @@
 
   <joint name="hokuyo_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="0 0 ${hokuyoOffsetZ}" 
+    <origin xyz="${hokuyoOffsetX} 0 ${hokuyoOffsetZ}" 
             rpy="0 0 0"/>
     <parent link="chassis"/>
     <child link="hokuyo_link"/>
