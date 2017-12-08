@@ -26,7 +26,7 @@ $ roslaunch arduino_peripherals run_arduino_node.launch
 $ rostopic pub -r 100 /mobile_base_controller/cmd_vel geometry_msgs/Twist TAB-TAB
 ```
 
-**NOTE:** Linear movements are need testing
+**NOTE:** Linear movements need testing
 
 # ToDo
 
