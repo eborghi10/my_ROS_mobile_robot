@@ -9,7 +9,6 @@ my_robot:
   joint_state_controller:
     type: joint_state_controller/JointStateController
     publish_rate: 50  
-  
 
   # Effort Controllers ---------------------------------------
   leftWheel_effort_controller:
@@ -22,38 +21,3 @@ my_robot:
     joint: right_wheel_hinge
     pid: {p: 100.0, i: 0.1, d: 10.0}
     #pid: {p: 50.0, i: 0.1, d: 0.0}
-
-# Settings for ros_control control loop
-generic_hw_control_loop:
-  loop_hz: 300
-  cycle_time_error_threshold: 0.01
-
-# Settings for ros_control hardware interface
-hardware_interface:
-   joints:
-      - left_wheel_joint
-      - right_wheel_joint
-
-joint_left_position_controller:
-  type: position_controllers/JointPositionController
-  joint: left_joint
-
-joint_right_position_controller:
-  type: position_controllers/JointPositionController
-  joint: right_joint
-
-joint_left_velocity_controller:
-  type: velocity_controllers/JointVelocityController
-  joint: left_joint
-
-joint_right_velocity_controller:
-  type: velocity_controllers/JointVelocityController
-  joint: right_joint
-
-trajectory_controller:
-  type: position_controller/JointTrajectoryController
-  default: true
-  joints:
-    - left_joint
-    - right_joint
-
