@@ -2,7 +2,7 @@ mobile_base_controller:
   type        : "diff_drive_controller/DiffDriveController"
   left_wheel  : 'wheel_0_joint'
   right_wheel : 'wheel_1_joint'
-  publish_rate: 50.0               # default: 50
+  publish_rate: 100.0 #50.0               # default: 50
   pose_covariance_diagonal : [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
   twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
 
@@ -27,18 +27,28 @@ mobile_base_controller:
   linear:
     x:
       has_velocity_limits    : true
-      max_velocity           : 1.0  # m/s
-      min_velocity           : -0.5 # m/s
+      max_velocity           : 50.0 #1.0  # m/s
+      min_velocity           : -5.0 #-0.5 # m/s
       has_acceleration_limits: true
-      max_acceleration       : 0.8  # m/s^2
-      min_acceleration       : -0.4 # m/s^2
+      max_acceleration       : 5.0 #0.8  # m/s^2
+      min_acceleration       : -1.0 #-0.4 # m/s^2
       has_jerk_limits        : true
       max_jerk               : 5.0  # m/s^3
   angular:
     z:
       has_velocity_limits    : true
-      max_velocity           : 1.7  # rad/s
+      max_velocity           : 50.0 #1.7  # rad/s
       has_acceleration_limits: true
       max_acceleration       : 1.5  # rad/s^2
       has_jerk_limits        : true
       max_jerk               : 2.5  # rad/s^3
+
+#Publish to TF directly or not
+enable_odom_tf: true
+
+#Name of frame to publish odometry in
+odom_frame_id: odom
+
+# Publish the velocity command to be executed. 
+# It is to monitor the effect of limiters on the controller input.
+publish_cmd: true

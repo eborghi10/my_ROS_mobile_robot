@@ -22,11 +22,11 @@ void setup()
 
     motor_left = new DCMotor(IN1, IN2, 
                  new MagneticEncoder(CS1, LEFT),
-                 "left");
+                 (char*)"left");
 
     motor_right = new DCMotor(IN3, IN4,
                   new MagneticEncoder(CS2, RIGHT),
-                  "right");
+                  (char*)"right");
 }
 
 void loop() 

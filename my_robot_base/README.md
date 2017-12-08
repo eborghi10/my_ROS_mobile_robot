@@ -18,19 +18,19 @@ Execute: `rosrun rqt_controller_manager rqt_controller_manager`
 This file will execute a node named `my_robot_base_node` with the following parameters:
 
 ```
-**Publications: **
+**Publications:**
  * /my_robot/left_wheel_vel [std_msgs/Float32]
  * /rosout [rosgraph_msgs/Log]
  * /mobile_base_controller/odom [nav_msgs/Odometry]
  * /tf [tf/tfMessage]
  * /my_robot/right_wheel_vel [std_msgs/Float32]
 
-**Subscriptions: ** 
+**Subscriptions:** 
  * /my_robot/right_wheel_angle [unknown type]
  * /mobile_base_controller/cmd_vel [unknown type]
  * /my_robot/left_wheel_angle [unknown type]
 
-**Services: **
+**Services:**
  * /controller_manager/list_controller_types
  * /controller_manager/reload_controller_libraries
  * /controller_manager/switch_controller

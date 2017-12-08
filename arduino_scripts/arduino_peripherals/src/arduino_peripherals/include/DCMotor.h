@@ -70,7 +70,7 @@ void DCMotor::CCW(INT_PWM val) {
 INT_PWM DCMotor::protectOutput(INT_PWM val) {
 
   // For security reasons
-  val > MAX_VALUE? val = MAX_VALUE : val;
+  //val > MAX_VALUE? val = MAX_VALUE : val;
 
   return val;
 }

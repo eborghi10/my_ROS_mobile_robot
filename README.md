@@ -18,6 +18,16 @@ $ sudo apt-get install ros-kinetic-position-controllers
 $ sudo apt-get install ros-kinetic-controller-manager
 ```
 
+## Run `ros_control` package
+
+```bash
+$ roslaunch my_robot_base hw_control.launch
+$ roslaunch arduino_peripherals run_arduino_node.launch
+$ rostopic pub -r 100 /mobile_base_controller/cmd_vel geometry_msgs/Twist TAB-TAB
+```
+
+**NOTE:** Linear movements are need testing
+
 # ToDo
 
 Adding sensors:
