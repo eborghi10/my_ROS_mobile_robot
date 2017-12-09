@@ -1,14 +1,13 @@
 <launch>
 
-    <!-- start up wg world -->
     <include file="$(find my_robot_gazebo)/launch/my_robot_world.launch"/>
 
     <node name="slam_gmapping" 
-        pkg="gmapping" 
-        type="slam_gmapping">
+          pkg="gmapping" 
+          type="slam_gmapping">
 
-        <rosparam file="$(find my_robot_navigation)/config/slam_gmapping_params.yaml" />
-        <remap from="scan" to="/my_robot/laser/scan" />
+          <rosparam file="$(find my_robot_navigation)/config/slam_gmapping_params.yaml" />
+          <remap from="scan" to="/my_robot/laser/scan" />
 
     </node>
 

@@ -11,8 +11,11 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>move_base</build_depend>
+
   <run_depend>my_robot_gazebo</run_depend>
   <run_depend>gmapping</run_depend>
+  <run_depend>move_base</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

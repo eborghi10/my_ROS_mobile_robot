@@ -12,6 +12,14 @@ $ source devel/setup.bash
 
 ### Test
 
+#### Simultaneous Localization and Mapping (SLAM)
+
 ```bash
 $ roslaunch my_robot_navigation slam_gmapping.launch
+```
+
+#### Navigation
+
+```bash
+$ roslaunch my_robot_navigation navigate.launch
 ```
