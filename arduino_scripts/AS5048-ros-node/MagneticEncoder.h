@@ -14,8 +14,6 @@
 #define ZERO_TO_2PI		(uint8_t)0	// 0 to +2*Pi
 #define PLUS_MINUS_PI	(uint8_t)1	// -Pi to +Pi
 
-#define M_PI 	3.14159265359
-
 class MagneticEncoder
 {
 	float read2angle(uint16_t);
@@ -51,7 +49,7 @@ MagneticEncoder::MagneticEncoder(
 
 MagneticEncoder::MagneticEncoder(
 	uint8_t digitalPin, uint8_t position, uint8_t mode)
-	: MagneticEncoder::MagneticEncoder(digitalPin, position, mode, "/encoder") {}
+	: MagneticEncoder::MagneticEncoder(digitalPin, position, mode, (char*)"/encoder") {}
 
 MagneticEncoder::MagneticEncoder(
 	uint8_t digitalPin, uint8_t position, uint8_t mode, char* topic)

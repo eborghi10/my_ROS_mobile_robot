@@ -1,0 +1,4 @@
+# Config file used by slam_gmapping
+# http://wiki.ros.org/gmapping#Parameters
+
+base_frame: base_footprint

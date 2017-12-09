@@ -19,14 +19,14 @@ void setup()
 		CS1, 
 		LEFT,
 		ZERO_TO_2PI,
-		"/encoder/left"
+		(char*)"/encoder/left"
 	);
 
 	encoder_right = new MagneticEncoder(
 		CS2, 
 		RIGHT,
 		ZERO_TO_2PI,
-		"/encoder/right"
+		(char*)"/encoder/right"
 	);
 }
 
