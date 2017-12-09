@@ -15,4 +15,3 @@ $ source devel/setup.bash
 ```bash
 $ roslaunch my_robot_navigation slam_gmapping.launch
 ```
-
