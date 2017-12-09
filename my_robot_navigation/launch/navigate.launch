@@ -3,8 +3,13 @@
     <arg name="cmd_vel_topic" default="my_robot/cmd_vel"/>
     <arg name="odom_topic" default="my_robot/odom" /> 
 
+    <arg name="rvizconfig"
+         default="$(find my_robot_description)/rviz/navigation.rviz"/>
+
     <!-- Run slamp_gmapping -->
-    <include file="$(find my_robot_navigation)/launch/slam_gmapping.launch"/>
+    <include file="$(find my_robot_navigation)/launch/slam_gmapping.launch">
+        <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+    </include>
 
     <node pkg="move_base"
           type="move_base"

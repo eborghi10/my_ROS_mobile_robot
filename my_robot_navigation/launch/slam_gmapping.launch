@@ -1,6 +1,11 @@
 <launch>
 
-    <include file="$(find my_robot_gazebo)/launch/my_robot_world.launch"/>
+    <arg name="rvizconfig"
+         default="$(find my_robot_description)/rviz/slam.rviz"/>
+
+    <include file="$(find my_robot_gazebo)/launch/my_robot_world.launch">
+        <arg name="rvizconfig" value="$(arg rvizconfig)"/>
+    </include>
 
     <node name="slam_gmapping" 
           pkg="gmapping" 
