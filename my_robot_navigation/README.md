@@ -22,4 +22,5 @@ $ roslaunch my_robot_navigation slam_gmapping.launch
 
 ```bash
 $ roslaunch my_robot_navigation navigate.launch
+$ rosrun my_robot_navigation send_goal <x y w>
 ```

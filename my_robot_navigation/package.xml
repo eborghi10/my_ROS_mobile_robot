@@ -8,18 +8,28 @@
 
   <license>TODO</license>
 
-
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>move_base</build_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>tf</build_depend>
 
   <run_depend>my_robot_gazebo</run_depend>
   <run_depend>gmapping</run_depend>
   <run_depend>move_base</run_depend>
+  <run_depend>actionlib</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>tf</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
-
   </export>
 </package>
