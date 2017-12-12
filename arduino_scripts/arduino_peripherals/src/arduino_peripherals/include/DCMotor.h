@@ -13,9 +13,9 @@ class DCMotor {
 
   void initPins();
   void Stop();
-  void CW(INT_PWM);
-  void CCW(INT_PWM);
-  INT_PWM protectOutput(INT_PWM);
+  void CW(float);
+  void CCW(float);
+  int mapToInt(float);
 
   void motorCb(const std_msgs::Float32&);
 
@@ -55,24 +55,16 @@ void DCMotor::Stop() {
   analogWrite (this->INH, LOW);
 }
 
-void DCMotor::CW(INT_PWM val) {
+void DCMotor::CW(float val) {
   // Motor turns forward or CW
   analogWrite(this->INL, LOW);
-  analogWrite(this->INH, protectOutput(val));
+  analogWrite(this->INH, DCMotor::mapToInt(val));
 }
 
-void DCMotor::CCW(INT_PWM val) {
+void DCMotor::CCW(float val) {
   // Motor turns in the inverse direction or CCW
-  analogWrite (this->INL, protectOutput(val));
+  analogWrite (this->INL, DCMotor::mapToInt(val));
   analogWrite (this->INH, LOW);
-}
-
-INT_PWM DCMotor::protectOutput(INT_PWM val) {
-
-  // For security reasons
-  //val > MAX_VALUE? val = MAX_VALUE : val;
-
-  return val;
 }
 
 void DCMotor::PublishAngle() {
@@ -81,12 +73,6 @@ void DCMotor::PublishAngle() {
 }
 
 void DCMotor::motorCb(const std_msgs::Float32& msg) {
-
-//  INT_PWM right_map = 
-//    map(static_cast<INT_PWM>(u_r), 0, boundRight, 0, MAX_VALUE);
-//  INT_PWM left_map = 
-//    map(static_cast<INT_PWM>(u_l), 0, boundLeft, 0, MAX_VALUE);
-
   if (strcmp(this->name, "left") == 0) 
   {  
     msg.data? DCMotor::CW(msg.data) : DCMotor::CCW(msg.data);
@@ -94,4 +80,15 @@ void DCMotor::motorCb(const std_msgs::Float32& msg) {
   {
     msg.data? DCMotor::CCW(msg.data) : DCMotor::CW(msg.data);
   }
+}
+
+/**
+ * Maps the positive velocity command from
+ * [0, 1.0] to [0, 255].
+ *
+ * @param val The velocity command
+ * @return The mapped velocity command
+ */
+int DCMotor::mapToInt(float val) {
+  return map(static_cast<int>(val), 0, 1, 0, 255);
 }
