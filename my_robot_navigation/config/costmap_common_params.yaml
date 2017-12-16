@@ -1,11 +1,9 @@
-obstacle_range: 2.5
-raytrace_range: 3.0
+obstacle_range: 1.0
+raytrace_range: 1.5
 
 # Obstacle Cost Shaping (http://wiki.ros.org/costmap_2d/hydro/inflation)
 # distance a circular robot should be clear of the obstacle
-# (kobuki: 0.18)
-robot_radius: 0.20  
-#robot_radius: 0.4509 # ArloBot
+robot_radius: 0.2 
 # if the robot is not circular
 # footprint: [[x0, y0], [x1, y1], ... [xn, yn]] 
 # max. distance from an obstacle at which costs are incurred for
