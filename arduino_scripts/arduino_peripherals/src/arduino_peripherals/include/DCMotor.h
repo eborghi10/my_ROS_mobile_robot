@@ -75,10 +75,10 @@ void DCMotor::PublishAngle() {
 void DCMotor::motorCb(const std_msgs::Float32& msg) {
   if (strcmp(this->name, "left") == 0) 
   {  
-    msg.data? DCMotor::CW(msg.data) : DCMotor::CCW(msg.data);
+    msg.data? DCMotor::CCW(msg.data) : DCMotor::CW(msg.data);
   } else 
   {
-    msg.data? DCMotor::CCW(msg.data) : DCMotor::CW(msg.data);
+    msg.data? DCMotor::CW(msg.data) : DCMotor::CCW(msg.data);
   }
 }
 

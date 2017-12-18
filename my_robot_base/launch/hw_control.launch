@@ -3,14 +3,13 @@
 
 <launch>
 
+	<!-- Load robot model -->
+	<param name="robot_description"
+    	   command="$(find xacro)/xacro '$(find my_robot_description)/urdf/my_robot.xacro' --inorder"/>
+
     <node name="my_robot_base_node" 
           pkg="my_robot_base" 
-          type="my_robot_base_node">
-    
-        <!--remap from="/my_robot/cmd_vel" 
-           to="/my_robot_controller/cmd_vel"/-->
-
-    </node>
+          type="my_robot_base_node"/>
 
     <!-- Load controller config -->
     <rosparam command="load" 
