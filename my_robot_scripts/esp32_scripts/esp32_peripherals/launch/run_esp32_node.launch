@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- Execute ESP32 node -->
+
+  	<node 
+  		pkg  = "rosserial_python" 
+	  	type = "serial_node.py" 
+	  	name = "serial_node"
+	  	args = "tcp"
+  	/>
+
+</launch>
