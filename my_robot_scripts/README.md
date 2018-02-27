@@ -4,6 +4,6 @@
 
 Deprecated
 
-## Version 2: ESP32 Kit (WiFi + [espros](https://github.com/agnunez/espros))
+## Version 2: ESP32 Kit (WiFi)
 
 Current version

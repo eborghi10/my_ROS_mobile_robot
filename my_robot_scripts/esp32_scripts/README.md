@@ -41,7 +41,41 @@ Don't forget to setup your network configuration and your ROS master IP.
 $ roslaunch esp32_peripherals run_esp32_node.launch
 ```
 
-![ESP32 dev kit](../../resources/esp32-devkit.jpg)
+---
 
+## Hardware connection
+
+This version of the robot consists of an ESP32 dev kit and two DC motors DAGU DG01D both with an AS5048A magnetic encoder attached to each motor shaft. For managing the control signals of the motors, it uses a L298N board.
+
+The magnetic encoders use SPI wiring and share the same channel (`MOSI`,`MISO`,`SCK`). It's powered with 5V and the signals on the left correspond to Arduino pins on the right:
+
+> `MOSI`: `D23`
+
+> `MISO`: `D19`
+
+> `SCK`: `D18`
+
+> `CS`: `D16` (left wheel)
+>     : `D17` (right wheel)
+
+![AS5048A magnetic encoder](../../resources/AS5048.png)
+
+The motor driver has the following connection:
+
+> `Button`: pressed for 5V motors
+
+> `ENx`: connected to 5V through jumpers
+
+> `IN1`: D34
+
+> `IN1`: D35
+
+> `IN1`: D32
+
+> `IN1`: D33
+
+![L298N motor driver](../../resources/Motor.png)
+
+![ESP32 dev kit](../../resources/esp32-devkit.jpg)
 
 ![ESP32 pinout](../../resources/esp32-pinout.png)
