@@ -17,8 +17,6 @@ cd tools && \
 python get.py
 ```
 
-Also, install [`ArduinoJson`](https://github.com/bblanchon/ArduinoJson) package from Library Manager.
-
 ## Preparation
 
 Create a file `user_data.h` in: `/esp32_scripts/esp32_peripherals/src/esp32_peripherals/include/` with the following structure as example:
