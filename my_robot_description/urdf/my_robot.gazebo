@@ -30,6 +30,7 @@
       <bodyName>chassis</bodyName>
       <topicName>my_robot/odom</topicName>
       <updateRate>30.0</updateRate>
+      <gaussianNoise>0.0</gaussianNoise>
     </plugin>
   </gazebo>
 
@@ -165,6 +166,18 @@
         <frameName>hokuyo_link</frameName>
       </plugin>
     </sensor>
+  </gazebo>
+
+  <!-- IMU plugin -->
+  <gazebo>
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+      <alwaysOn>true</alwaysOn>
+      <bodyName>chassis</bodyName>
+      <topicName>/my_robot/imu</topicName>
+      <serviceName>imu_service</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>20.0</updateRate>
+    </plugin>
   </gazebo>
 
 </robot>
