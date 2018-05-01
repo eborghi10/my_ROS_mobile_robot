@@ -31,12 +31,11 @@
 	<env name="GAZEBO_MODEL_PATH" 
          value="$(find my_robot_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)"/>
 
-
 	<!-- 
 		Converts the xacro robot information to UDRF and use it as a robot_description parameter
 	-->
-	<param name="robot_description"
-		   command="$(find xacro)/xacro --inorder $(arg model)" />
+  	<param name="robot_description" 
+         command="$(find xacro)/xacro --inorder $(arg model)" />
 
 	<!-- 
 		Launch Gazebo world 
@@ -71,8 +70,10 @@
     		required="false" />
 
 	<!-- 
- 		ros_control my_robot launch file 
+ 		spawn robot and load controllers
  	-->
-	<include file="$(find my_robot_control)/launch/my_robot_control.launch" />
+	<include file="$(find my_robot_control)/launch/my_robot_control.launch">
+		<arg name="model" value="$(arg model)"/>
+	</include>
 
 </launch>

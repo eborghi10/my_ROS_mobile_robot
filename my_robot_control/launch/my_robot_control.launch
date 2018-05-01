@@ -6,6 +6,8 @@
 
   -->
 
+  <arg name="model" default="$(find my_robot_description)/urdf/my_robot.xacro" />
+
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find my_robot_control)/config/my_robot_control.yaml"
             command="load"/>
@@ -34,8 +36,11 @@
         respawn="false" 
         output="screen">
 
+  <!-- 
+		Converts the xacro robot information to UDRF and use it as a robot_description parameter
+	-->
   <param name="robot_description" 
-         command="$(find xacro)/xacro --inorder '$(find my_robot_description)/urdf/my_robot.xacro'" />
+         command="$(find xacro)/xacro --inorder $(arg model)" />
         <remap from="/joint_states" to="/my_robot/joint_states" />
   </node>
 
