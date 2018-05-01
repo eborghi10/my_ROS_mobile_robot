@@ -74,7 +74,7 @@
       <torque>20</torque>
       <commandTopic>my_robot/cmd_vel</commandTopic>
       <odometryTopic>my_robot/odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
+      <odometryFrame>map</odometryFrame>
       <robotBaseFrame>base_footprint</robotBaseFrame>
       
       <legacyMode>false</legacyMode>
