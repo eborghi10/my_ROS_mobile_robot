@@ -10,31 +10,38 @@
 
 // Include libraries
 #include "include/ArduinoHW.h"
-#include "include/DCMotor.h"
+#include "include/DCMotorWithEncoder.h"
 #include "include/MagneticEncoder.h"
 
-DCMotor *motor_left;
-DCMotor *motor_right;
+DCMotorWithEncoder *motor_left;
+DCMotorWithEncoder *motor_right;
 
 void setup()
 {
     nh.initNode();
 
-    motor_left = new DCMotor(IN1, IN2, 
-                 new MagneticEncoder(CS1, LEFT),
-                 (char*)"left");
+    motor_left = new DCMotorWithEncoder(IN1, IN2, ENA, 
+                 new MagneticEncoder(CS1, LEFT), 
+                 LEFT);
 
-    motor_right = new DCMotor(IN3, IN4,
-                  new MagneticEncoder(CS2, RIGHT),
-                  (char*)"right");
+    motor_right = new DCMotorWithEncoder(IN3, IN4, ENB, 
+                  new MagneticEncoder(CS2, RIGHT), 
+                  RIGHT);
+
+    last_time = millis();
 }
 
 void loop() 
 {
+    const double current_time = millis() / 1E3;
+    const double delta_time = (current_time - last_time);
+    if(delta_time >= 1.0/rate)
+    {
+        // Publish angles
+        motor_left->PublishAngle();
+        motor_right->PublishAngle();
+        // Update last time
+        last_time = current_time;
+    }
     nh.spinOnce();
-
-    motor_left->PublishAngle();
-    motor_right->PublishAngle();
-
-    delay(50);
 }
