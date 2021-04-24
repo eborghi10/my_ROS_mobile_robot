@@ -14,8 +14,8 @@ $ source devel/setup.bash
 Install dependencies: 
 
 ```bash
-$ sudo apt-get install ros-kinetic-ros-control
-$ sudo apt-get install ros-kinetic-controller-manager
+$ sudo apt-get install ros-noetic-ros-control
+$ sudo apt-get install ros-noetic-controller-manager
 ```
 
 ### Test
