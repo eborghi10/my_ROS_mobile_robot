@@ -1,3 +1,8 @@
+# Install build dependency
+
+sudo apt install ros-noetic-move-base-msgs
+
+
 # Differential-drive mobile robot using ROS
 
 To see the robot in rviz, read the _README_ file inside the `my_robot_description` package.
