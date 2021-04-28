@@ -51,7 +51,7 @@
       <mass value="${cameraMass}" />
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
-      <box_inertia m="${cameraMass}" 
+      <xacro:box_inertia m="${cameraMass}" 
                    x="${cameraLength}" 
                    y="${cameraWidth}" 
                    z="${cameraHeight}" />
@@ -102,7 +102,7 @@
       <mass value="${hokuyoMass}" />
       <origin xyz="0 0 0" 
               rpy="0 0 0"/>
-      <box_inertia 
+      <xacro:box_inertia 
         m="${hokuyoMass}" 
         x="${hokuyoLength}" 
         y="${hokuyoWidth}" 

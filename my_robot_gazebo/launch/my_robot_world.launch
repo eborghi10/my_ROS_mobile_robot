@@ -20,7 +20,7 @@
 		 default="false"/>
 
 	<arg name="world"
-		 default="$(find turtlebot_gazebo)/worlds/corridor.world"/>
+		 default="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
 
 	<arg name="model" 
   	   	 default="$(find my_robot_description)/urdf/my_robot.xacro"/>

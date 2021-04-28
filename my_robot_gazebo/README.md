@@ -16,6 +16,7 @@ Install dependencies:
 ```bash
 $ sudo apt-get install ros-noetic-ros-control
 $ sudo apt-get install ros-noetic-controller-manager
+$ sudo apt-get install ros-noetic-effort-controllers
 ```
 
 ### Test
@@ -32,7 +33,7 @@ $ roslaunch my_robot_gazebo my_robot_world.launch
 
 Move with the keyboard:
 ```
-$ rosrun turtlebot_teleop turtlebot_teleop_key /turtlebot_teleop/cmd_vel:=/my_robot/cmd_vel
+$ rosrun turtlebot3_teleop turtlebot3_teleop_key /cmd_vel:=/my_robot/cmd_vel
 ```
 
 ![Gazebo simulation](../resources/gazebo.jpg)

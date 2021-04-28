@@ -56,7 +56,7 @@
 			<origin xyz="0 0 ${wheelRadius}" 
 					rpy="0 0 0"/> 
 			<mass value="${chassisMass}"/> 
-			<box_inertia 
+			<xacro:box_inertia 
 				m="${chassisMass}" 
 				x="${chassisLength}" 
 				y="${chassisWidth}" 
@@ -95,7 +95,7 @@
 			<origin xyz="${casterOffsetX} 0 ${2*casterRadius}" 
 					rpy="0 0 0"/>
 			<mass value="${casterMass}"/>
-			<sphere_inertia 
+			<xacro:sphere_inertia 
 				m="${casterMass}" 
 				r="${casterRadius}"/>
 		</inertial>
@@ -104,8 +104,8 @@
 
 
 
-	<wheel lr="left" tY="-1"/>
-	<wheel lr="right" tY="1"/>
+	<xacro:wheel lr="left" tY="-1"/>
+	<xacro:wheel lr="right" tY="1"/>
 
 
 	<!-- Sensor models -->
