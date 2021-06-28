@@ -15,7 +15,7 @@
     Converts the xacro robot information to UDRF and use it as a robot_description parameter
   -->
   <param name="robot_description" 
-  		   command="$(find xacro)/xacro --inorder $(arg model)" />
+  		   command="$(find xacro)/xacro $(arg model)" />
 
   <param name="use_gui" 
   		   value="$(arg gui)"/>

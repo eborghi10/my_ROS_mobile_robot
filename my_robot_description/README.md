@@ -5,7 +5,7 @@
 To convert the xacro file into a URDF file:
 ```bash
 $ roscd my_robot_description/urdf/
-$ rosrun xacro xacro --inorder my_robot.xacro > my_robot.urdf
+$ rosrun xacro xacro my_robot.xacro > my_robot.urdf
 ```
 
 ### URDF
@@ -18,7 +18,7 @@ $ check_urdf my_robot.urdf
 To get the Graphviz in pdf:
 ```bash
 $ sudo apt-get install graphviz
-$ urdf_to_graphviz my_robot.urdf
+$ urdf_to_graphiz my_robot.urdf
 ```
 
 ### Test
