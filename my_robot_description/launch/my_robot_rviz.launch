@@ -27,7 +27,7 @@
 
   <!--
     Reads the robot model description, finds all joints, and publishes joint values to all nonfixed joints using GUI sliders. 
-  --> 
+  -->
   <node name="joint_state_publisher" 
     		pkg="joint_state_publisher" 
     		type="joint_state_publisher"
